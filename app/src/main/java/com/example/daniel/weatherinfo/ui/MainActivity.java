@@ -10,12 +10,15 @@ import android.view.MenuItem;
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.adapter.SectionsPagerAdapter;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
+    @BindView(R.id.view_pager)
+    ViewPager mViewPager;
+
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,12 +27,11 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setUpViewPager();
+        setViewPager();
     }
 
-    private void setUpViewPager() {
+    private void setViewPager() {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 
@@ -43,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-
                 break;
         }
         return super.onOptionsItemSelected(item);
