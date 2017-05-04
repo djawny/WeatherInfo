@@ -6,7 +6,7 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.io.Serializable;
 
 @DatabaseTable(tableName = CityWeather.TABLE_NAME)
-public class CityWeather implements Serializable{
+public class CityWeather implements Serializable {
 
     public static final String TABLE_NAME = "cityweather";
 
@@ -139,6 +139,4 @@ public class CityWeather implements Serializable{
     public void setmDate(int mDate) {
         this.mDate = mDate;
     }
-
-
 }
