@@ -9,9 +9,14 @@ import android.view.MenuItem;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.adapter.SectionsPagerAdapter;
+import com.example.daniel.weatherinfo.api.WeatherService;
+import com.example.daniel.weatherinfo.model.WeatherData;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +33,27 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setViewPager();
+
+        WeatherService.Factory.makeWeatherService().getWeatherByCity("Wrocław")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<WeatherData>() {
+                    @Override
+                    public void onNext(WeatherData value) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
     }
 
     private void setViewPager() {
