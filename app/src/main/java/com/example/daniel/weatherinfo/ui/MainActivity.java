@@ -10,6 +10,10 @@ import android.view.MenuItem;
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.adapter.CityPagerAdapter;
 import com.example.daniel.weatherinfo.api.OpenWeatherMapService;
+import com.example.daniel.weatherinfo.application.AndroidApplication;
+import com.example.daniel.weatherinfo.database.Database;
+import com.example.daniel.weatherinfo.mapper.CityMapper;
+import com.example.daniel.weatherinfo.model.City;
 import com.example.daniel.weatherinfo.model.OWMResponse;
 
 import butterknife.BindView;
@@ -19,6 +23,8 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Database mDatabase;
 
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
@@ -34,13 +40,18 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setViewPager();
 
+        if (mDatabase == null) {
+            mDatabase = AndroidApplication.getDatabase();
+        }
+
         OpenWeatherMapService.Factory.makeWeatherService().getWeatherByCity("Wrocław")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<OWMResponse>() {
                     @Override
-                    public void onNext(OWMResponse value) {
-
+                    public void onNext(OWMResponse owmResponse) {
+                        City city = CityMapper.mapCity(owmResponse);
+                        mDatabase.saveCity(city);
                     }
 
                     @Override

@@ -6,7 +6,7 @@ import com.example.daniel.weatherinfo.database.Database;
 import com.example.daniel.weatherinfo.database.DatabaseImpl;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
-public class WeatherApplication extends Application {
+public class AndroidApplication extends Application {
 
     private static Database mDatabase;
 
