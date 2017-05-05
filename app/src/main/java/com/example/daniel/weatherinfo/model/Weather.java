@@ -1,41 +1,127 @@
 package com.example.daniel.weatherinfo.model;
 
-public class Weather {
 
-    private int id;
-    private String main;
-    private String description;
-    private String icon;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+import java.io.Serializable;
+
+@DatabaseTable(tableName = Weather.TABLE_NAME)
+public class Weather implements Serializable {
+
+    public static final String TABLE_NAME = "weather";
+
+    @DatabaseField(columnName = "id", generatedId = true)
+    private int mId;
+
+    @DatabaseField(columnName = "temp", canBeNull = false)
+    private double mTemp;
+
+    @DatabaseField(columnName = "tempMin", canBeNull = false)
+    private double mTempMin;
+
+    @DatabaseField(columnName = "tempMax", canBeNull = false)
+    private double mTempMax;
+
+    @DatabaseField(columnName = "humidity", canBeNull = false)
+    private int mHumidity;
+
+    @DatabaseField(columnName = "pressure", canBeNull = false)
+    private int mPressure;
+
+    @DatabaseField(columnName = "description", canBeNull = false)
+    private String mDescription;
+
+    @DatabaseField(columnName = "icon", canBeNull = false)
+    private String mIcon;
+
+    @DatabaseField(columnName = "date", canBeNull = false)
+    private int mDate;
+
+    public Weather() {
+    }
+
+    public Weather(int id, double temp, double tempMin, double tempMax, int humidity, int pressure, String description, String icon, int date) {
+        mId = id;
+        mTemp = temp;
+        mTempMin = tempMin;
+        mTempMax = tempMax;
+        mHumidity = humidity;
+        mPressure = pressure;
+        mDescription = description;
+        mIcon = icon;
+        mDate = date;
+    }
 
     public int getId() {
-        return id;
+        return mId;
     }
 
     public void setId(int id) {
-        this.id = id;
+        mId = id;
     }
 
-    public String getMain() {
-        return main;
+    public double getTemp() {
+        return mTemp;
     }
 
-    public void setMain(String main) {
-        this.main = main;
+    public void setTemp(double temp) {
+        mTemp = temp;
+    }
+
+    public double getTempMin() {
+        return mTempMin;
+    }
+
+    public void setTempMin(double tempMin) {
+        mTempMin = tempMin;
+    }
+
+    public double getTempMax() {
+        return mTempMax;
+    }
+
+    public void setTempMax(double tempMax) {
+        mTempMax = tempMax;
+    }
+
+    public int getHumidity() {
+        return mHumidity;
+    }
+
+    public void setHumidity(int humidity) {
+        mHumidity = humidity;
+    }
+
+    public int getPressure() {
+        return mPressure;
+    }
+
+    public void setPressure(int pressure) {
+        mPressure = pressure;
     }
 
     public String getDescription() {
-        return description;
+        return mDescription;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        mDescription = description;
     }
 
     public String getIcon() {
-        return icon;
+        return mIcon;
     }
 
     public void setIcon(String icon) {
-        this.icon = icon;
+        mIcon = icon;
+    }
+
+    public int getDate() {
+        return mDate;
+    }
+
+    public void setDate(int date) {
+        mDate = date;
     }
 }

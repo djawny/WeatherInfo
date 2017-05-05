@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.adapter.SectionsPagerAdapter;
 import com.example.daniel.weatherinfo.api.WeatherService;
-import com.example.daniel.weatherinfo.model.WeatherData;
+import com.example.daniel.weatherinfo.model.api.WeatherData;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

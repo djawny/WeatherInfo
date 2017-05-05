@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.model;
+package com.example.daniel.weatherinfo.model.api;
 
 public class Clouds {
 

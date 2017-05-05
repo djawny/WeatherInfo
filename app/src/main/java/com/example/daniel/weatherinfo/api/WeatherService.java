@@ -1,6 +1,6 @@
 package com.example.daniel.weatherinfo.api;
 
-import com.example.daniel.weatherinfo.model.WeatherData;
+import com.example.daniel.weatherinfo.model.api.WeatherData;
 
 import io.reactivex.Observable;
 import retrofit2.Retrofit;
