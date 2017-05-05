@@ -22,7 +22,7 @@ public abstract class BasePresenter<V extends BaseView> {
 
     public void setView(V view) {
         if (view == null) {
-            throw new IllegalArgumentException("Null view in Presenter");
+            throw new IllegalArgumentException("Null view in PageFragmentPresenter");
         }
         mView = view;
     }
