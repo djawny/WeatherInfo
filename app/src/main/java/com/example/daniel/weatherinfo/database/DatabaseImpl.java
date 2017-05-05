@@ -7,7 +7,6 @@ import com.example.daniel.weatherinfo.model.City;
 import com.example.daniel.weatherinfo.model.Weather;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
-import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -65,9 +64,9 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
         try {
             getWritableDatabase().beginTransaction();
             for (City city : cities) {
-                mCityDao.createOrUpdate(city);
                 Weather weather = city.getWeather();
                 mWeatherDao.createOrUpdate(weather);
+                mCityDao.createOrUpdate(city);
             }
             getWritableDatabase().setTransactionSuccessful();
         } finally {
