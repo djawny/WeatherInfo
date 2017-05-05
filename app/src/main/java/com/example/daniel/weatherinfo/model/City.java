@@ -16,16 +16,16 @@ public class City implements Serializable {
     @DatabaseField(columnName = "name", canBeNull = false)
     private String mName;
 
-    @DatabaseField(columnName = "cityId", foreign = true, foreignAutoRefresh = true)
-    private Weather mAddress;
+    @DatabaseField(columnName = "weatherId", foreign = true, foreignAutoRefresh = true)
+    private Weather mWeather;
 
     public City() {
     }
 
-    public City(String id, String name, Weather address) {
+    public City(String id, String name, Weather weather) {
         mId = id;
         mName = name;
-        mAddress = address;
+        mWeather = weather;
     }
 
     public String getId() {
@@ -44,11 +44,11 @@ public class City implements Serializable {
         mName = name;
     }
 
-    public Weather getAddress() {
-        return mAddress;
+    public Weather getWeather() {
+        return mWeather;
     }
 
-    public void setAddress(Weather address) {
-        mAddress = address;
+    public void setWeather(Weather weather) {
+        mWeather = weather;
     }
 }
