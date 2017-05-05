@@ -6,9 +6,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.daniel.weatherinfo.ui.PageFragment;
 
-public class SectionsPagerAdapter extends FragmentPagerAdapter{
+public class CityPagerAdapter extends FragmentPagerAdapter{
 
-    public SectionsPagerAdapter(FragmentManager fm) {
+    public CityPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 

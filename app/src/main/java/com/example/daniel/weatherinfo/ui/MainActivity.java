@@ -8,7 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.daniel.weatherinfo.R;
-import com.example.daniel.weatherinfo.adapter.SectionsPagerAdapter;
+import com.example.daniel.weatherinfo.adapter.CityPagerAdapter;
 import com.example.daniel.weatherinfo.api.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.model.OWMResponse;
 
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private CityPagerAdapter mCityPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setViewPager() {
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mCityPagerAdapter = new CityPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mCityPagerAdapter);
     }
 
     @Override
