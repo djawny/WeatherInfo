@@ -1,6 +1,6 @@
-package com.example.daniel.weatherinfo.model.api;
+package com.example.daniel.weatherinfo.model;
 
-public class Sys {
+public class OWMResponseSys {
 
     private int type;
     private int id;

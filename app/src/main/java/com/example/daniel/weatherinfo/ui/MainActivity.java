@@ -9,8 +9,8 @@ import android.view.MenuItem;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.adapter.SectionsPagerAdapter;
-import com.example.daniel.weatherinfo.api.WeatherService;
-import com.example.daniel.weatherinfo.model.api.WeatherData;
+import com.example.daniel.weatherinfo.api.OpenWeatherMapService;
+import com.example.daniel.weatherinfo.model.OWMResponse;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,12 +34,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setViewPager();
 
-        WeatherService.Factory.makeWeatherService().getWeatherByCity("Wrocław")
+        OpenWeatherMapService.Factory.makeWeatherService().getWeatherByCity("Wrocław")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<WeatherData>() {
+                .subscribeWith(new DisposableObserver<OWMResponse>() {
                     @Override
-                    public void onNext(WeatherData value) {
+                    public void onNext(OWMResponse value) {
 
                     }
 

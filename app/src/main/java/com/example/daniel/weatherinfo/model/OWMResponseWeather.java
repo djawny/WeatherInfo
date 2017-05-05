@@ -1,6 +1,6 @@
-package com.example.daniel.weatherinfo.model.api;
+package com.example.daniel.weatherinfo.model;
 
-public class Weather {
+public class OWMResponseWeather {
 
     private int id;
     private String main;

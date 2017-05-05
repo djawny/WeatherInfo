@@ -1,35 +1,35 @@
-package com.example.daniel.weatherinfo.model.api;
+package com.example.daniel.weatherinfo.model;
 
 import java.util.List;
 
-public class WeatherData {
+public class OWMResponse {
 
-    private Coordinates coord;
-    private List<Weather> weather;
+    private OWMResponseCoordinates coord;
+    private List<OWMResponseWeather> weather;
     private String base;
-    private Main main;
+    private OWMResponseMain main;
     private int visibility;
-    private Wind wind;
-    private Clouds clouds;
+    private OWMResponseWind wind;
+    private OWMResponseClouds clouds;
     private int dt;
-    private Sys sys;
+    private OWMResponseSys sys;
     private int id;
     private String name;
     private int cod;
 
-    public Coordinates getCoord() {
+    public OWMResponseCoordinates getCoord() {
         return coord;
     }
 
-    public void setCoord(Coordinates coord) {
+    public void setCoord(OWMResponseCoordinates coord) {
         this.coord = coord;
     }
 
-    public List<Weather> getWeather() {
+    public List<OWMResponseWeather> getWeather() {
         return weather;
     }
 
-    public void setWeather(List<Weather> weather) {
+    public void setWeather(List<OWMResponseWeather> weather) {
         this.weather = weather;
     }
 
@@ -41,11 +41,11 @@ public class WeatherData {
         this.base = base;
     }
 
-    public Main getMain() {
+    public OWMResponseMain getMain() {
         return main;
     }
 
-    public void setMain(Main main) {
+    public void setMain(OWMResponseMain main) {
         this.main = main;
     }
 
@@ -57,19 +57,19 @@ public class WeatherData {
         this.visibility = visibility;
     }
 
-    public Wind getWind() {
+    public OWMResponseWind getWind() {
         return wind;
     }
 
-    public void setWind(Wind wind) {
+    public void setWind(OWMResponseWind wind) {
         this.wind = wind;
     }
 
-    public Clouds getClouds() {
+    public OWMResponseClouds getClouds() {
         return clouds;
     }
 
-    public void setClouds(Clouds clouds) {
+    public void setClouds(OWMResponseClouds clouds) {
         this.clouds = clouds;
     }
 
@@ -81,11 +81,11 @@ public class WeatherData {
         this.dt = dt;
     }
 
-    public Sys getSys() {
+    public OWMResponseSys getSys() {
         return sys;
     }
 
-    public void setSys(Sys sys) {
+    public void setSys(OWMResponseSys sys) {
         this.sys = sys;
     }
 

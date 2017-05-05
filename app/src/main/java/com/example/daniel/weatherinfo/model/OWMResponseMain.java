@@ -1,8 +1,8 @@
-package com.example.daniel.weatherinfo.model.api;
+package com.example.daniel.weatherinfo.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Main {
+public class OWMResponseMain {
 
     private double temp;
     private int humidity;

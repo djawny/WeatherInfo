@@ -11,7 +11,7 @@ public class City implements Serializable {
     public static final String TABLE_NAME = "city";
 
     @DatabaseField(columnName = "id")
-    private String mId;
+    private int mId;
 
     @DatabaseField(columnName = "name", canBeNull = false)
     private String mName;
@@ -22,17 +22,17 @@ public class City implements Serializable {
     public City() {
     }
 
-    public City(String id, String name, Weather weather) {
+    public City(int id, String name, Weather weather) {
         mId = id;
         mName = name;
         mWeather = weather;
     }
 
-    public String getId() {
+    public int getId() {
         return mId;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         mId = id;
     }
 
