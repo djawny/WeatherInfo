@@ -9,26 +9,12 @@ import android.view.MenuItem;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.adapter.CityPagerAdapter;
-import com.example.daniel.weatherinfo.api.OpenWeatherMapService;
-import com.example.daniel.weatherinfo.application.AndroidApplication;
-import com.example.daniel.weatherinfo.database.Database;
-import com.example.daniel.weatherinfo.mapper.CityMapper;
 import com.example.daniel.weatherinfo.model.City;
-import com.example.daniel.weatherinfo.model.OWMResponse;
-
-import java.util.concurrent.Callable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
-
-    private Database mDatabase;
 
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
@@ -44,32 +30,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setViewPager();
-
-        if (mDatabase == null) {
-            mDatabase = AndroidApplication.getDatabase();
-        }
-
-        OpenWeatherMapService.Factory.makeWeatherService().getWeatherByCity("London")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<OWMResponse>() {
-                    @Override
-                    public void onNext(OWMResponse owmResponse) {
-                        city = CityMapper.mapCity(owmResponse);
-                        mDatabase.saveCity(city);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-
     }
 
     private void setViewPager() {

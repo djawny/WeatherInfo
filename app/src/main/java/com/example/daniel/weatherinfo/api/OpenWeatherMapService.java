@@ -12,7 +12,6 @@ import retrofit2.http.Query;
 public interface OpenWeatherMapService {
 
     String BASE_URL = "http://api.openweathermap.org/data/2.5/";
-//    String API_KEY = "779bcb1c99f4dcd8ffe6b596d5dc919d";
 
     @GET("weather?appid=779bcb1c99f4dcd8ffe6b596d5dc919d&units=metric")
     Observable<OWMResponse> getWeatherByCity(@Query("q") String city);
