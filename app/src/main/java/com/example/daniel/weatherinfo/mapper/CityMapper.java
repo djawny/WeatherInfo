@@ -15,7 +15,7 @@ public class CityMapper {
             city.setId(owmResponse.getId());
             city.setName(owmResponse.getName());
             Weather weather = new Weather();
-            weather.setId(0);
+            weather.setId(owmResponse.getId());
             weather.setTemp(owmResponse.getMain().getTemp());
             weather.setTempMin(owmResponse.getMain().getTempMin());
             weather.setTempMax(owmResponse.getMain().getTempMax());

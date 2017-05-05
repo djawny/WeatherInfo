@@ -11,7 +11,7 @@ public class Weather implements Serializable {
 
     public static final String TABLE_NAME = "weather";
 
-    @DatabaseField(columnName = "id", generatedId = true)
+    @DatabaseField(columnName = "id", id = true)
     private int mId;
 
     @DatabaseField(columnName = "temp", canBeNull = false)

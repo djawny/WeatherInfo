@@ -10,7 +10,7 @@ public class City implements Serializable {
 
     public static final String TABLE_NAME = "city";
 
-    @DatabaseField(columnName = "id")
+    @DatabaseField(columnName = "id", id = true)
     private int mId;
 
     @DatabaseField(columnName = "name", canBeNull = false)

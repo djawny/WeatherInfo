@@ -78,9 +78,9 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
     public void saveCity(City city) {
         try {
             getWritableDatabase().beginTransaction();
-            mCityDao.createOrUpdate(city);
             Weather weather = city.getWeather();
             mWeatherDao.createOrUpdate(weather);
+            mCityDao.createOrUpdate(city);
             getWritableDatabase().setTransactionSuccessful();
         } finally {
             getWritableDatabase().endTransaction();
