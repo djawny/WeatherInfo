@@ -9,7 +9,6 @@ import android.view.MenuItem;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.adapter.CityPagerAdapter;
-import com.example.daniel.weatherinfo.model.City;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
     ViewPager mViewPager;
 
     private CityPagerAdapter mCityPagerAdapter;
-    private City city;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
