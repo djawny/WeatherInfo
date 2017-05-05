@@ -15,4 +15,6 @@ public interface Database {
     void saveCity(City city);
 
     void removeCity(int cityId);
+
+    void removeAllCities();
 }

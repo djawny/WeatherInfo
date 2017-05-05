@@ -7,6 +7,7 @@ import com.example.daniel.weatherinfo.model.City;
 import com.example.daniel.weatherinfo.model.Weather;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -56,8 +57,7 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
 
     @Override
     public City getCity(int cityId) {
-
-        return null;
+        return mCityDao.queryForId(cityId);
     }
 
     @Override
@@ -65,9 +65,9 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
         try {
             getWritableDatabase().beginTransaction();
             for (City city : cities) {
+                mCityDao.createOrUpdate(city);
                 Weather weather = city.getWeather();
-                mWeatherDao.createIfNotExists(weather);
-                mCityDao.create(city);
+                mWeatherDao.createOrUpdate(weather);
             }
             getWritableDatabase().setTransactionSuccessful();
         } finally {
@@ -77,33 +77,31 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
 
     @Override
     public void saveCity(City city) {
-
+        try {
+            getWritableDatabase().beginTransaction();
+            mCityDao.createOrUpdate(city);
+            Weather weather = city.getWeather();
+            mWeatherDao.createOrUpdate(weather);
+            getWritableDatabase().setTransactionSuccessful();
+        } finally {
+            getWritableDatabase().endTransaction();
+        }
     }
 
     @Override
     public void removeCity(int cityId) {
+        City city = mCityDao.queryForId(cityId);
         mCityDao.deleteById(cityId);
+        mWeatherDao.deleteById(city.getWeather().getId());
     }
 
-//    @Override
-//    public List<Person> getCityPerson(final String city) {
-//        try {
-//            QueryBuilder<Person, Integer> queryBuilder = mCityDao.queryBuilder();
-//            QueryBuilder<Address, Integer> addressBuilder = mWeatherDao.queryBuilder();
-//
-//            Where where = addressBuilder.where();
-//            where.like("city", "%" + city + "%");
-//
-//            queryBuilder.join(addressBuilder);
-//
-//            //queryBuilder query will get all data because we doesn't provide any where
-//            //addressBuilder query will get only data where city contains our query city
-//
-//            return queryBuilder.query();
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return new ArrayList<>();
-//    }
+    @Override
+    public void removeAllCities() {
+        try {
+            TableUtils.clearTable(getConnectionSource(), City.class);
+            TableUtils.clearTable(getConnectionSource(), Weather.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
