@@ -38,10 +38,16 @@ public class Weather implements Serializable {
     @DatabaseField(columnName = "date", canBeNull = false)
     private int mDate;
 
+    @DatabaseField(columnName = "sunrise", canBeNull = false)
+    private int mSunrise;
+
+    @DatabaseField(columnName = "sunset", canBeNull = false)
+    private int mSunset;
+
     public Weather() {
     }
 
-    public Weather(int id, double temp, double tempMin, double tempMax, int humidity, int pressure, String description, String icon, int date) {
+    public Weather(int id, double temp, double tempMin, double tempMax, int humidity, int pressure, String description, String icon, int date, int sunrise, int sunset) {
         mId = id;
         mTemp = temp;
         mTempMin = tempMin;
@@ -51,6 +57,8 @@ public class Weather implements Serializable {
         mDescription = description;
         mIcon = icon;
         mDate = date;
+        mSunrise = sunrise;
+        mSunset = sunset;
     }
 
     public int getId() {
@@ -123,5 +131,21 @@ public class Weather implements Serializable {
 
     public void setDate(int date) {
         mDate = date;
+    }
+
+    public int getSunrise() {
+        return mSunrise;
+    }
+
+    public void setSunrise(int sunrise) {
+        mSunrise = sunrise;
+    }
+
+    public int getSunset() {
+        return mSunset;
+    }
+
+    public void setSunset(int sunset) {
+        mSunset = sunset;
     }
 }

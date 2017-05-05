@@ -14,6 +14,7 @@ public class CityMapper {
         if (owmResponse != null) {
             city.setId(owmResponse.getId());
             city.setName(owmResponse.getName());
+            city.setCountry(owmResponse.getSys().getCountry());
             Weather weather = new Weather();
             weather.setId(owmResponse.getId());
             weather.setTemp(owmResponse.getMain().getTemp());
@@ -24,6 +25,8 @@ public class CityMapper {
             weather.setDescription(owmResponse.getWeather().get(0).getDescription());
             weather.setIcon(owmResponse.getWeather().get(0).getIcon());
             weather.setDate(owmResponse.getDt());
+            weather.setSunrise(owmResponse.getSys().getSunrise());
+            weather.setSunset(owmResponse.getSys().getSunset());
             city.setWeather(weather);
         }
         return city;
