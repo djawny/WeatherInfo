@@ -8,9 +8,9 @@ import com.example.daniel.weatherinfo.model.Weather;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CityMapper {
+public class Mapper {
 
-    public CityMapper() {
+    public Mapper() {
     }
 
     public static City mapCity(ResponseByCity response) {

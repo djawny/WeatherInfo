@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setViewPager() {
-        mCityPagerAdapter = new CityPagerAdapter(getSupportFragmentManager());
+        mCityPagerAdapter = new CityPagerAdapter(getSupportFragmentManager(), null);
         mViewPager.setAdapter(mCityPagerAdapter);
     }
 
