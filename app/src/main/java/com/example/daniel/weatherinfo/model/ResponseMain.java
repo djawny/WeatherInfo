@@ -2,7 +2,7 @@ package com.example.daniel.weatherinfo.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class OWMResponseMain {
+public class ResponseMain {
 
     private double temp;
     private int humidity;

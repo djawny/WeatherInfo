@@ -1,6 +1,6 @@
 package com.example.daniel.weatherinfo.model;
 
-public class OWMResponseWind {
+public class ResponseWind {
 
     private double speed;
     private int deg;

@@ -1,7 +1,7 @@
 package com.example.daniel.weatherinfo.util;
 
 import com.example.daniel.weatherinfo.model.City;
-import com.example.daniel.weatherinfo.model.OWMResponse;
+import com.example.daniel.weatherinfo.model.ResponseByCity;
 import com.example.daniel.weatherinfo.model.Weather;
 
 public class CityMapper {
@@ -9,24 +9,24 @@ public class CityMapper {
     public CityMapper() {
     }
 
-    public static City mapCity(OWMResponse owmResponse) {
+    public static City mapCity(ResponseByCity response) {
         City city = new City();
-        if (owmResponse != null) {
-            city.setId(owmResponse.getId());
-            city.setName(owmResponse.getName());
-            city.setCountry(owmResponse.getSys().getCountry());
+        if (response != null) {
+            city.setId(response.getId());
+            city.setName(response.getName());
+            city.setCountry(response.getSys().getCountry());
             Weather weather = new Weather();
-            weather.setId(owmResponse.getId());
-            weather.setTemp(owmResponse.getMain().getTemp());
-            weather.setTempMin(owmResponse.getMain().getTempMin());
-            weather.setTempMax(owmResponse.getMain().getTempMax());
-            weather.setHumidity(owmResponse.getMain().getHumidity());
-            weather.setPressure(owmResponse.getMain().getPressure());
-            weather.setDescription(owmResponse.getWeather().get(0).getDescription());
-            weather.setIcon(owmResponse.getWeather().get(0).getIcon());
-            weather.setDate(owmResponse.getDt());
-            weather.setSunrise(owmResponse.getSys().getSunrise());
-            weather.setSunset(owmResponse.getSys().getSunset());
+            weather.setId(response.getId());
+            weather.setTemp(response.getMain().getTemp());
+            weather.setTempMin(response.getMain().getTempMin());
+            weather.setTempMax(response.getMain().getTempMax());
+            weather.setHumidity(response.getMain().getHumidity());
+            weather.setPressure(response.getMain().getPressure());
+            weather.setDescription(response.getWeather().get(0).getDescription());
+            weather.setIcon(response.getWeather().get(0).getIcon());
+            weather.setDate(response.getDt());
+            weather.setSunrise(response.getSys().getSunrise());
+            weather.setSunset(response.getSys().getSunset());
             city.setWeather(weather);
         }
         return city;

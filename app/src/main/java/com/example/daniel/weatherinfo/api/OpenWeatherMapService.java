@@ -1,6 +1,7 @@
 package com.example.daniel.weatherinfo.api;
 
-import com.example.daniel.weatherinfo.model.OWMResponse;
+import com.example.daniel.weatherinfo.model.ResponseByCity;
+import com.example.daniel.weatherinfo.model.ResponseByIds;
 
 import io.reactivex.Observable;
 import retrofit2.Retrofit;
@@ -14,10 +15,10 @@ public interface OpenWeatherMapService {
     String BASE_URL = "http://api.openweathermap.org/data/2.5/";
 
     @GET("weather?appid=779bcb1c99f4dcd8ffe6b596d5dc919d&units=metric")
-    Observable<OWMResponse> getWeatherByCity(@Query("q") String city);
+    Observable<ResponseByCity> getWeatherByCity(@Query("q") String city);
 
-    @GET("weather?appid=779bcb1c99f4dcd8ffe6b596d5dc919d&units=metric&lang=pl")
-    Observable<OWMResponse> getWeatherById(@Query("id") int id);
+    @GET("group?appid=779bcb1c99f4dcd8ffe6b596d5dc919d&units=metric")
+    Observable<ResponseByIds> getWeatherByIds(@Query("id") String ids);
 
     class Factory {
         public static OpenWeatherMapService makeWeatherService() {

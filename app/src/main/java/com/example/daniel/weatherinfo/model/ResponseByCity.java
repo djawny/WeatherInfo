@@ -2,34 +2,35 @@ package com.example.daniel.weatherinfo.model;
 
 import java.util.List;
 
-public class OWMResponse {
+public class ResponseByCity {
 
-    private OWMResponseCoordinates coord;
-    private List<OWMResponseWeather> weather;
+    private ResponseCoordinates coord;
+    private List<ResponseWeather> weather;
+
     private String base;
-    private OWMResponseMain main;
+    private ResponseMain main;
     private int visibility;
-    private OWMResponseWind wind;
-    private OWMResponseClouds clouds;
+    private ResponseWind wind;
+    private ResponseClouds clouds;
     private int dt;
-    private OWMResponseSys sys;
+    private ResponseSys sys;
     private int id;
     private String name;
     private int cod;
 
-    public OWMResponseCoordinates getCoord() {
+    public ResponseCoordinates getCoord() {
         return coord;
     }
 
-    public void setCoord(OWMResponseCoordinates coord) {
+    public void setCoord(ResponseCoordinates coord) {
         this.coord = coord;
     }
 
-    public List<OWMResponseWeather> getWeather() {
+    public List<ResponseWeather> getWeather() {
         return weather;
     }
 
-    public void setWeather(List<OWMResponseWeather> weather) {
+    public void setWeather(List<ResponseWeather> weather) {
         this.weather = weather;
     }
 
@@ -41,11 +42,11 @@ public class OWMResponse {
         this.base = base;
     }
 
-    public OWMResponseMain getMain() {
+    public ResponseMain getMain() {
         return main;
     }
 
-    public void setMain(OWMResponseMain main) {
+    public void setMain(ResponseMain main) {
         this.main = main;
     }
 
@@ -57,19 +58,19 @@ public class OWMResponse {
         this.visibility = visibility;
     }
 
-    public OWMResponseWind getWind() {
+    public ResponseWind getWind() {
         return wind;
     }
 
-    public void setWind(OWMResponseWind wind) {
+    public void setWind(ResponseWind wind) {
         this.wind = wind;
     }
 
-    public OWMResponseClouds getClouds() {
+    public ResponseClouds getClouds() {
         return clouds;
     }
 
-    public void setClouds(OWMResponseClouds clouds) {
+    public void setClouds(ResponseClouds clouds) {
         this.clouds = clouds;
     }
 
@@ -81,11 +82,11 @@ public class OWMResponse {
         this.dt = dt;
     }
 
-    public OWMResponseSys getSys() {
+    public ResponseSys getSys() {
         return sys;
     }
 
-    public void setSys(OWMResponseSys sys) {
+    public void setSys(ResponseSys sys) {
         this.sys = sys;
     }
 

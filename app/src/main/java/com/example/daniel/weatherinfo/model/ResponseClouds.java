@@ -1,6 +1,6 @@
 package com.example.daniel.weatherinfo.model;
 
-public class OWMResponseClouds {
+public class ResponseClouds {
 
     private int all;
 

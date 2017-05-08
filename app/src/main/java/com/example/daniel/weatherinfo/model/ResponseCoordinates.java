@@ -1,6 +1,6 @@
 package com.example.daniel.weatherinfo.model;
 
-public class OWMResponseCoordinates {
+public class ResponseCoordinates {
 
     private double lon;
     private double lat;
