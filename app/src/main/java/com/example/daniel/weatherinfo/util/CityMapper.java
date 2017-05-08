@@ -25,6 +25,9 @@ public class CityMapper {
             weather.setTempMin(response.getMain().getTempMin());
             weather.setTempMax(response.getMain().getTempMax());
             weather.setHumidity(response.getMain().getHumidity());
+            weather.setCloudiness(response.getClouds().getAll());
+            weather.setWindSpeed(response.getWind().getSpeed());
+            weather.setWindDegree(response.getWind().getDeg());
             weather.setPressure(response.getMain().getPressure());
             weather.setDescription(response.getWeather().get(0).getDescription());
             weather.setIcon(response.getWeather().get(0).getIcon());
