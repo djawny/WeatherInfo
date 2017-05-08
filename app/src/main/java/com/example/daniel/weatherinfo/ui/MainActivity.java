@@ -8,10 +8,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.daniel.weatherinfo.R;
+import com.example.daniel.weatherinfo.model.City;
+import com.example.daniel.weatherinfo.repository.CityRepository;
 import com.example.daniel.weatherinfo.ui.adapter.CityPagerAdapter;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,8 +38,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setViewPager() {
-        mCityPagerAdapter = new CityPagerAdapter(getSupportFragmentManager(), null);
-        mViewPager.setAdapter(mCityPagerAdapter);
+        CityRepository.getInstance().getCitiesRx()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<List<City>>() {
+                    @Override
+                    public void onNext(List<City> cities) {
+                        mCityPagerAdapter = new CityPagerAdapter(getSupportFragmentManager(), cities);
+                        mViewPager.setAdapter(mCityPagerAdapter);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @Override
