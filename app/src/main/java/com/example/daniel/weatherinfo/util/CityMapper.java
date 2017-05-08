@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.mapper;
+package com.example.daniel.weatherinfo.util;
 
 import com.example.daniel.weatherinfo.model.City;
 import com.example.daniel.weatherinfo.model.OWMResponse;

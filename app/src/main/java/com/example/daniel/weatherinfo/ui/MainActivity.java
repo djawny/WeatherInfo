@@ -8,7 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.daniel.weatherinfo.R;
-import com.example.daniel.weatherinfo.adapter.CityPagerAdapter;
+import com.example.daniel.weatherinfo.ui.adapter.CityPagerAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
