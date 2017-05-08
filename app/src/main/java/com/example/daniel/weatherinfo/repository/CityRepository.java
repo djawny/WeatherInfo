@@ -12,7 +12,7 @@ import io.reactivex.ObservableSource;
 
 public class CityRepository implements CityRepositoryInterface {
 
-    private static CityRepository mInstance = mInstance = new CityRepository();
+    private static CityRepository mInstance = new CityRepository();
 
     private final Database mDatabase;
 
