@@ -6,8 +6,7 @@ public class ResponseByCity {
 
     private ResponseCoordinates coord;
     private List<ResponseWeather> weather;
-
-    private String base;
+    private transient String base;
     private ResponseMain main;
     private int visibility;
     private ResponseWind wind;

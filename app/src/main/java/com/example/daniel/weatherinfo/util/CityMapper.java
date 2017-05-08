@@ -2,7 +2,11 @@ package com.example.daniel.weatherinfo.util;
 
 import com.example.daniel.weatherinfo.model.City;
 import com.example.daniel.weatherinfo.model.ResponseByCity;
+import com.example.daniel.weatherinfo.model.ResponseByIds;
 import com.example.daniel.weatherinfo.model.Weather;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CityMapper {
 
@@ -30,5 +34,17 @@ public class CityMapper {
             city.setWeather(weather);
         }
         return city;
+    }
+
+    public static List<City> mapCities(ResponseByIds response) {
+        ArrayList<City> cities = new ArrayList<>();
+        if (response != null) {
+            List<ResponseByCity> responseByCityList = response.getList();
+            for (ResponseByCity responseByCity : responseByCityList) {
+                City city = mapCity(responseByCity);
+                cities.add(city);
+            }
+        }
+        return cities;
     }
 }
