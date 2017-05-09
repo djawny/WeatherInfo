@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.model.City;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -23,8 +24,8 @@ public class CityAdapter extends BaseAdapter<City> {
     }
 
     @Override
-    public void onBind(RecyclerView.ViewHolder holder, City item, int position) {
-
+    public void onBind(RecyclerView.ViewHolder holder, City city, int position) {
+        ((CityHolder) holder).bind(city, getContext());
     }
 
     @Override
@@ -45,7 +46,7 @@ public class CityAdapter extends BaseAdapter<City> {
         TextView mTemperature;
 
         @BindView(R.id.description)
-        TextView mDescriotion;
+        TextView mDescription;
 
         @BindView(R.id.delete_button)
         ImageButton mDeleteButton;
@@ -54,6 +55,15 @@ public class CityAdapter extends BaseAdapter<City> {
         public CityHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+
+        public void bind(City city, Context context) {
+            Picasso.with(context)
+                    .load("http://openweathermap.org/img/w/" + city.getWeather().getIcon() + ".png")
+                    .into(mIcon);
+            mNameCountry.setText(String.format("%s, %s", city.getName(), city.getCountry()));
+            mTemperature.setText(String.format("%s °C", String.valueOf(city.getWeather().getTemp())));
+            mDescription.setText(city.getWeather().getDescription());
         }
     }
 }
