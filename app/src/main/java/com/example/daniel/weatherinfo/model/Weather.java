@@ -45,18 +45,18 @@ public class Weather implements Serializable {
     private String mIcon;
 
     @DatabaseField(columnName = "date", canBeNull = false)
-    private int mDate;
+    private long mDate;
 
     @DatabaseField(columnName = "sunrise", canBeNull = false)
-    private int mSunrise;
+    private long mSunrise;
 
     @DatabaseField(columnName = "sunset", canBeNull = false)
-    private int mSunset;
+    private long mSunset;
 
     public Weather() {
     }
 
-    public Weather(int id, double temp, double tempMin, double tempMax, int humidity, int cloudiness, double windSpeed, int windDegree, int pressure, String description, String icon, int date, int sunrise, int sunset) {
+    public Weather(int id, double temp, double tempMin, double tempMax, int humidity, int cloudiness, double windSpeed, int windDegree, int pressure, String description, String icon, long date, long sunrise, long sunset) {
         mId = id;
         mTemp = temp;
         mTempMin = tempMin;
@@ -161,27 +161,27 @@ public class Weather implements Serializable {
         mIcon = icon;
     }
 
-    public int getDate() {
+    public long getDate() {
         return mDate;
     }
 
-    public void setDate(int date) {
+    public void setDate(long date) {
         mDate = date;
     }
 
-    public int getSunrise() {
+    public long getSunrise() {
         return mSunrise;
     }
 
-    public void setSunrise(int sunrise) {
+    public void setSunrise(long sunrise) {
         mSunrise = sunrise;
     }
 
-    public int getSunset() {
+    public long getSunset() {
         return mSunset;
     }
 
-    public void setSunset(int sunset) {
+    public void setSunset(long sunset) {
         mSunset = sunset;
     }
 }

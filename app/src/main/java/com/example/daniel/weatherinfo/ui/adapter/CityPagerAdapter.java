@@ -20,6 +20,10 @@ public class CityPagerAdapter extends FragmentPagerAdapter {
             mCities.addAll(cities);
     }
 
+    public List<City> getCities() {
+        return mCities;
+    }
+
     @Override
     public Fragment getItem(int position) {
         City city = mCities.get(position);

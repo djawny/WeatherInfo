@@ -21,7 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         setViewPager();
+        mViewPager.addOnPageChangeListener(this);
     }
 
     private void setViewPager() {
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onNext(List<City> cities) {
                         mCityPagerAdapter = new CityPagerAdapter(getSupportFragmentManager(), cities);
                         mViewPager.setAdapter(mCityPagerAdapter);
+                        mToolbar.setTitle(String.format("%s, %s", cities.get(0).getName(), cities.get(0).getCountry()));
                     }
 
                     @Override
@@ -83,5 +85,21 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        City city = mCityPagerAdapter.getCities().get(position);
+        mToolbar.setTitle(String.format("%s, %s", city.getName(), city.getCountry()));
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

@@ -11,7 +11,7 @@ public class ResponseByCity {
     private int visibility;
     private ResponseWind wind;
     private ResponseClouds clouds;
-    private int dt;
+    private long dt;
     private ResponseSys sys;
     private int id;
     private String name;
@@ -73,11 +73,11 @@ public class ResponseByCity {
         this.clouds = clouds;
     }
 
-    public int getDt() {
+    public long getDt() {
         return dt;
     }
 
-    public void setDt(int dt) {
+    public void setDt(long dt) {
         this.dt = dt;
     }
 
