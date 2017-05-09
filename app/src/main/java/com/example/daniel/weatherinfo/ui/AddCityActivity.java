@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -42,6 +43,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
     ImageButton mAddButton;
 
     private AddCityActivityPresenter mPresenter;
+    private CityAdapter mCityAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,17 +64,28 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
 
     @Override
     public void showCities(List<City> cities) {
-
+        mRecycleView.setVisibility(View.VISIBLE);
+        mStatusInfo.setVisibility(View.GONE);
+        if (mCityAdapter == null) {
+            mCityAdapter = new CityAdapter(this, cities, this);
+            mRecycleView.setAdapter(mCityAdapter);
+        } else {
+            mCityAdapter.swapData(cities);
+        }
     }
 
     @Override
     public void showNoData() {
-
+        mRecycleView.setVisibility(View.GONE);
+        mStatusInfo.setVisibility(View.VISIBLE);
+        mStatusInfo.setText(R.string.message_no_data);
     }
 
     @Override
     public void showErrorInfo() {
-
+        mRecycleView.setVisibility(View.GONE);
+        mStatusInfo.setVisibility(View.VISIBLE);
+        mStatusInfo.setText(R.string.message_error);
     }
 
     @Override
