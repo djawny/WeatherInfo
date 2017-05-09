@@ -16,8 +16,9 @@ public class CityPagerAdapter extends FragmentPagerAdapter {
 
     public CityPagerAdapter(FragmentManager fm, List<City> cities) {
         super(fm);
-            mCities.clear();
+        if (cities != null) {
             mCities.addAll(cities);
+        }
     }
 
     public List<City> getCities() {
@@ -37,7 +38,10 @@ public class CityPagerAdapter extends FragmentPagerAdapter {
     }
 
     public void swapData(List<City> cities) {
-        mCities.clear();
-        mCities.addAll(cities);
+        if (cities != null) {
+            mCities.clear();
+            mCities.addAll(cities);
+            notifyDataSetChanged();
+        }
     }
 }

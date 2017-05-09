@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,6 +33,12 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
 
     @BindView(R.id.status_info)
     TextView mStatusInfo;
+
+    @BindView(R.id.new_city)
+    EditText mNewCity;
+
+    @BindView(R.id.add_button)
+    ImageButton mAddButton;
 
     private AddCityActivityPresenter mPresenter;
 
