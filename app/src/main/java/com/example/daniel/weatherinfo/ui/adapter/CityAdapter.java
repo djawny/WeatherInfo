@@ -64,7 +64,7 @@ public class CityAdapter extends BaseAdapter<City> {
         TextView mDescription;
 
         @BindView(R.id.delete_button)
-        ImageButton mDeleteButton;
+        ImageView mDeleteButton;
 
 
         public CityHolder(View itemView) {

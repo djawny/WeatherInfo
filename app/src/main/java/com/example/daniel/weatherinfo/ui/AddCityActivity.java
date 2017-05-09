@@ -2,6 +2,7 @@ package com.example.daniel.weatherinfo.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -53,6 +54,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
         ButterKnife.bind(this);
         mPresenter = new AddCityActivityPresenter(CityRepository.getInstance(), Schedulers.io(), AndroidSchedulers.mainThread());
         mPresenter.setView(this);
+        setRecycleView();
         mPresenter.loadCities();
     }
 
@@ -91,5 +93,12 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
     @Override
     public void onDelete(City city) {
         mPresenter.deleteCity(city);
+    }
+
+    private void setRecycleView() {
+        mRecycleView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecycleView.setLayoutManager(linearLayoutManager);
     }
 }

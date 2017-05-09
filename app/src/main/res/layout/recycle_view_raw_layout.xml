@@ -43,7 +43,6 @@
             android:layout_toRightOf="@+id/icon"
             android:textColor="@android:color/white"
             android:textSize="30sp"
-            android:textStyle="bold"
             tools:text="temperature"
             tools:textColor="@android:color/black" />
 
@@ -51,15 +50,15 @@
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/name_country"
-            android:layout_alignBottom="@+id/name_country"
-            android:layout_toEndOf="@+id/name_country"
-            android:layout_toRightOf="@+id/name_country"
             android:textColor="@android:color/white"
             android:textSize="16sp"
-            android:textStyle="bold"
             tools:text="description"
-            tools:textColor="@android:color/black" />
+            android:paddingLeft="4dp"
+            tools:textColor="@android:color/black"
+            android:layout_alignBaseline="@+id/name_country"
+            android:layout_alignBottom="@+id/name_country"
+            android:layout_toRightOf="@+id/name_country"
+            android:layout_toEndOf="@+id/name_country" />
 
         <ImageView
             android:id="@+id/delete_button"
