@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Weather Info</string>
-    <string name="menu_item_city">City</string>
+    <string name="menu_item_city">CITIES</string>
     <string name="manu_item_add">Add</string>
 </resources>
