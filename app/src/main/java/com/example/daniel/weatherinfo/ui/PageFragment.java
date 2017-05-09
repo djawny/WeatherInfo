@@ -118,7 +118,7 @@ public class PageFragment extends Fragment {
         mTemperature.setText(String.format("%s °C", String.valueOf(city.getWeather().getTemp())));
         mTemperatureRange.setText(String.format("Temperature from %s °C to %s °C", city.getWeather().getTempMin(), city.getWeather().getTempMax()));
         mWind.setText(String.format("Wind %s m/s", city.getWeather().getWindSpeed()));
-        mCloudiness.setText(String.format("Cloudiness %s", city.getWeather().getCloudiness()));
+        mCloudiness.setText(String.format("Cloudiness %s %%", city.getWeather().getCloudiness()));
         mPressure.setText(String.format("Pressure %s hpa", city.getWeather().getPressure()));
         String sunrise = DateConverter.getDateFromUTCTimestamp(city.getWeather().getSunrise(), "HH:mm:ss");
         mSunrise.setText(String.format("Sunrise %s", sunrise));
