@@ -22,7 +22,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, MainActivityView {
 
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private CityPagerAdapter mCityPagerAdapter;
     private boolean mPullRefreshing;
+    private MainActivityPresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
+        mPresenter = new MainActivityPresenter(CityRepository.getInstance(), Schedulers.io(), AndroidSchedulers.mainThread());
+        mPresenter.setView(this);
+
         setViewPager();
         mViewPager.addOnPageChangeListener(this);
         setPullRefresh();

@@ -6,11 +6,11 @@ import com.example.daniel.weatherinfo.repository.CityRepositoryInterface;
 
 import io.reactivex.Scheduler;
 
-public class PageFragmentPresenter extends BasePresenter<PageFragmentView> {
+public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
     private CityRepositoryInterface mProductRepository;
 
-    public PageFragmentPresenter(CityRepository repository, Scheduler subscriber, Scheduler observer) {
+    public MainActivityPresenter(CityRepository repository, Scheduler subscriber, Scheduler observer) {
         super(subscriber, observer);
         mProductRepository = repository;
     }
