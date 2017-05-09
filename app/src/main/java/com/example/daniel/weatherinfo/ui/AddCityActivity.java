@@ -8,7 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
+import com.example.daniel.weatherinfo.model.City;
 import com.example.daniel.weatherinfo.repository.CityRepository;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,11 +43,27 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
         ButterKnife.bind(this);
         mPresenter = new AddCityActivityPresenter(CityRepository.getInstance(), Schedulers.io(), AndroidSchedulers.mainThread());
         mPresenter.setView(this);
+        mPresenter.loadCities();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.clearDisposable();
+    }
+
+    @Override
+    public void showCities(List<City> cities) {
+
+    }
+
+    @Override
+    public void showNoData() {
+
+    }
+
+    @Override
+    public void showErrorInfo() {
+
     }
 }

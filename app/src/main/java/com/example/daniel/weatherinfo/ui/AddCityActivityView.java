@@ -1,6 +1,15 @@
 package com.example.daniel.weatherinfo.ui;
 
 import com.example.daniel.weatherinfo.base.BaseView;
+import com.example.daniel.weatherinfo.model.City;
 
-public interface AddCityActivityView extends BaseView{
+import java.util.List;
+
+public interface AddCityActivityView extends BaseView {
+
+    void showCities(List<City> cities);
+
+    void showNoData();
+
+    void showErrorInfo();
 }
