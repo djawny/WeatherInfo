@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.model.City;
@@ -25,6 +26,12 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
 
+    @BindView(R.id.main_background)
+    ImageView mImageView;
+
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
     private CityPagerAdapter mCityPagerAdapter;
 
     @Override
@@ -32,8 +39,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
         setViewPager();
     }
 
@@ -69,7 +75,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            case R.id.action_show_cities:
+
+                break;
+            case R.id.action_add:
+
                 break;
         }
         return super.onOptionsItemSelected(item);
