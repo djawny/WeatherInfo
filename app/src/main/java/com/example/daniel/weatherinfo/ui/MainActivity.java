@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.model.City;
 import com.example.daniel.weatherinfo.repository.CityRepository;
@@ -32,7 +33,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
+    @BindView(R.id.refresh_layout)
+    PullRefreshLayout mPullRefreshLayout;
+
     private CityPagerAdapter mCityPagerAdapter;
+    private boolean mPullRefreshing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         setSupportActionBar(mToolbar);
         setViewPager();
         mViewPager.addOnPageChangeListener(this);
+        setPullRefresh();
     }
 
     private void setViewPager() {
@@ -101,5 +107,17 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    private void setPullRefresh() {
+        mPullRefreshing = false;
+        mPullRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+        mPullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPullRefreshing = true;
+                //ToDo add something
+            }
+        });
     }
 }

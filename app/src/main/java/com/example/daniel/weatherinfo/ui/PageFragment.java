@@ -112,7 +112,7 @@ public class PageFragment extends Fragment {
         Picasso.with(mContext)
                 .load("http://openweathermap.org/img/w/" + city.getWeather().getIcon() + ".png")
                 .into(mIcon);
-        String date = DateConverter.getDateFromUTCTimestamp(city.getWeather().getDate(), "yyyy-MM-dd HH:mm:ss");
+        String date = DateConverter.getDateFromUTCTimestamp(city.getWeather().getDate(), "yyyy-MM-dd\nHH:mm:ss");
         mDate.setText(date);
         mDescription.setText(city.getWeather().getDescription());
         mTemperature.setText(String.format("%s °C", String.valueOf(city.getWeather().getTemp())));
