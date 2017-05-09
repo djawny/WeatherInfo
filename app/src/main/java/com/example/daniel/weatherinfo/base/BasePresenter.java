@@ -31,7 +31,7 @@ public abstract class BasePresenter<V extends BaseView> {
         mCompositeDisposable.add(disposable);
     }
 
-    public void clearDisposible() {
+    public void clearDisposable() {
         mCompositeDisposable.clear();
     }
 }

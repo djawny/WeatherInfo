@@ -8,6 +8,7 @@
     android:fitsSystemWindows="true"
     tools:context="com.example.daniel.weatherinfo.ui.MainActivity">
 
+
     <ImageView
         android:id="@+id/main_background"
         android:layout_width="match_parent"
@@ -46,5 +47,14 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </com.baoyz.widget.PullRefreshLayout>
+
+    <TextView
+        android:id="@+id/status_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="30sp"
+        android:textColor="@android:color/white"
+        tools:text="PRODUCT STATUS" />
 
 </android.support.design.widget.CoordinatorLayout>

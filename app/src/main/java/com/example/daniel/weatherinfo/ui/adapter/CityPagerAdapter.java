@@ -35,4 +35,9 @@ public class CityPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return mCities.size();
     }
+
+    public void swapData(List<City> cities) {
+        mCities.clear();
+        mCities.addAll(cities);
+    }
 }

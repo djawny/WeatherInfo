@@ -2,4 +2,6 @@
     <string name="app_name">Weather Info</string>
     <string name="menu_item_city">CITIES</string>
     <string name="manu_item_add">Add</string>
+    <string name="no_data">No data to display</string>
+    <string name="error">Error</string>
 </resources>
