@@ -8,10 +8,11 @@ import io.reactivex.Scheduler;
 
 public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
-    private CityRepositoryInterface mProductRepository;
+    private CityRepositoryInterface mCityRepository;
 
     public MainActivityPresenter(CityRepository repository, Scheduler subscriber, Scheduler observer) {
         super(subscriber, observer);
-        mProductRepository = repository;
+        mCityRepository = repository;
     }
+
 }

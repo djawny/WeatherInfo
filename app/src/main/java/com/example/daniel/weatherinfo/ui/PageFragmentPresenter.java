@@ -8,10 +8,11 @@ import io.reactivex.Scheduler;
 
 public class PageFragmentPresenter extends BasePresenter<PageFragmentView> {
 
-    private CityRepositoryInterface mProductRepository;
+    private CityRepositoryInterface mCityRepository;
 
     public PageFragmentPresenter(CityRepository repository, Scheduler subscriber, Scheduler observer) {
         super(subscriber, observer);
-        mProductRepository = repository;
+        mCityRepository = repository;
     }
+
 }
