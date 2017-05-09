@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.model.City;
 import com.example.daniel.weatherinfo.repository.CityRepository;
+import com.example.daniel.weatherinfo.ui.adapter.CityAdapter;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class AddCityActivity extends AppCompatActivity implements AddCityActivityView {
+public class AddCityActivity extends AppCompatActivity implements AddCityActivityView,CityAdapter.OnCityCrossClickedListener {
 
     @BindView(R.id.main_background)
     ImageView mImageView;
@@ -72,5 +73,10 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
     @Override
     public void showErrorInfo() {
 
+    }
+
+    @Override
+    public void onDelete(City city) {
+        mPresenter.deleteCity(city);
     }
 }

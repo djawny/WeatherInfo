@@ -50,7 +50,8 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
 
     }
 
-    public void removeCity(String cityId){
+
+    public void deleteCity(City city) {
 
     }
 }
