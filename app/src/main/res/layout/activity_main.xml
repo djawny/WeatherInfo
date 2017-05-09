@@ -52,8 +52,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textSize="30sp"
         android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:visibility="gone"
         tools:text="PRODUCT STATUS" />
 
 </android.support.design.widget.CoordinatorLayout>
