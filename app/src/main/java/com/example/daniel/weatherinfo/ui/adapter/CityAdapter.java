@@ -19,13 +19,28 @@ import butterknife.ButterKnife;
 
 public class CityAdapter extends BaseAdapter<City> {
 
-    public CityAdapter(Context context, List<City> list) {
+    public interface OnCityCrossClickedListener {
+        void onDelete(City city);
+    }
+
+    private OnCityCrossClickedListener mListener;
+
+    public CityAdapter(Context context, List<City> list, OnCityCrossClickedListener onCityCrossClickedListener) {
         super(context, list);
+        mListener = onCityCrossClickedListener;
     }
 
     @Override
-    public void onBind(RecyclerView.ViewHolder holder, City city, int position) {
+    public void onBind(RecyclerView.ViewHolder holder, final City city, int position) {
         ((CityHolder) holder).bind(city, getContext());
+        ((CityHolder) holder).mDeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onDelete(city);
+                }
+            }
+        });
     }
 
     @Override
