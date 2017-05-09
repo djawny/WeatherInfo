@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,16 +21,16 @@ import io.reactivex.schedulers.Schedulers;
 
 public class AddCityActivity extends AppCompatActivity implements AddCityActivityView {
 
-    @BindView(R.id.main_background_add_city_activity)
+    @BindView(R.id.main_background)
     ImageView mImageView;
 
     @BindView(R.id.cities_recycle_view)
     RecyclerView mRecycleView;
 
-    @BindView(R.id.toolbar_add_city_activity)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
-    @BindView(R.id.status_info_add_city_activity)
+    @BindView(R.id.status_info)
     TextView mStatusInfo;
 
     private AddCityActivityPresenter mPresenter;
@@ -39,10 +40,6 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_city);
         setSupportActionBar(mToolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
         ButterKnife.bind(this);
         mPresenter = new AddCityActivityPresenter(CityRepository.getInstance(), Schedulers.io(), AndroidSchedulers.mainThread());
         mPresenter.setView(this);
