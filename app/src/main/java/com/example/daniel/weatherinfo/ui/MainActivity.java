@@ -1,5 +1,6 @@
 package com.example.daniel.weatherinfo.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, MainActivityView {
+
+    private static final int ADD_CITY_REQUEST_CODE = 1;
 
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
@@ -76,11 +79,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_show_cities:
-
-                break;
             case R.id.action_add:
-
+                Intent intent = new Intent(this, AddCityActivity.class);
+                startActivityForResult(intent, ADD_CITY_REQUEST_CODE);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -123,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public void showNoData() {
         mPullRefreshLayout.setVisibility(View.GONE);
         mStatusInfo.setVisibility(View.VISIBLE);
-        mStatusInfo.setText(R.string.no_data);
+        mStatusInfo.setText(R.string.message_no_data);
         mToolbar.setTitle(getResources().getString(R.string.app_name));
     }
 
@@ -131,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public void showErrorInfo() {
         mPullRefreshLayout.setVisibility(View.GONE);
         mStatusInfo.setVisibility(View.VISIBLE);
-        mStatusInfo.setText(R.string.error);
+        mStatusInfo.setText(R.string.message_error);
         mToolbar.setTitle(getResources().getString(R.string.app_name));
     }
 
