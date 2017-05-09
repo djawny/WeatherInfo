@@ -12,17 +12,15 @@ import android.widget.TextView;
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.model.City;
 import com.example.daniel.weatherinfo.repository.CityRepository;
-import com.example.daniel.weatherinfo.repository.CityRepositoryInterface;
 import com.example.daniel.weatherinfo.util.DateConverter;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class PageFragment extends Fragment {
+public class PageFragment extends Fragment implements PageFragmentView{
 
     @BindView(R.id.icon)
     ImageView mIcon;
@@ -56,8 +54,8 @@ public class PageFragment extends Fragment {
 
     private static final String ARG_CITY_ID = "city_id";
 
-    public CityRepositoryInterface mCityRepository = CityRepository.getInstance();
     private Context mContext;
+    private PageFragmentPresenter mPresenter;
 
     public PageFragment() {
     }
@@ -76,7 +74,9 @@ public class PageFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_page, container, false);
         ButterKnife.bind(this, rootView);
         int cityId = getArguments().getInt(ARG_CITY_ID);
-        loadData(cityId);
+        mPresenter = new PageFragmentPresenter(CityRepository.getInstance(), Schedulers.io(), AndroidSchedulers.mainThread());
+        mPresenter.setView(this);
+        mPresenter.loadData(cityId);
         return rootView;
     }
 
@@ -86,29 +86,14 @@ public class PageFragment extends Fragment {
         mContext = context;
     }
 
-    private void loadData(int cityId) {
-        mCityRepository.getCityRx(cityId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<City>() {
-                    @Override
-                    public void onNext(City city) {
-                        setViews(city);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.clearDisposable();
     }
 
-    private void setViews(City city) {
+    @Override
+    public void showCity(City city) {
         Picasso.with(mContext)
                 .load("http://openweathermap.org/img/w/" + city.getWeather().getIcon() + ".png")
                 .into(mIcon);

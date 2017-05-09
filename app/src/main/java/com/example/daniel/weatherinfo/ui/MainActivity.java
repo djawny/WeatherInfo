@@ -100,18 +100,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public void onPageScrollStateChanged(int state) {
     }
 
-    private void setPullRefresh() {
-        mPullRefreshing = false;
-        mPullRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
-        mPullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPullRefreshing = true;
-                mPresenter.loadCities();
-            }
-        });
-    }
-
     @Override
     public void showCities(List<City> cities) {
         mPullRefreshLayout.setVisibility(View.VISIBLE);
@@ -145,5 +133,17 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mStatusInfo.setVisibility(View.VISIBLE);
         mStatusInfo.setText(R.string.error);
         mToolbar.setTitle(getResources().getString(R.string.app_name));
+    }
+
+    private void setPullRefresh() {
+        mPullRefreshing = false;
+        mPullRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+        mPullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPullRefreshing = true;
+                mPresenter.loadCities();
+            }
+        });
     }
 }
