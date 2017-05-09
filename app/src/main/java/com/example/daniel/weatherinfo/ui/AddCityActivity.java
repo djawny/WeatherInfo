@@ -23,7 +23,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
     @BindView(R.id.main_background)
     ImageView mImageView;
 
-    @BindView(R.id.cities_recycle_view)
+    @BindView(R.id.recycle_view)
     RecyclerView mRecycleView;
 
     @BindView(R.id.toolbar)
