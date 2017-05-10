@@ -34,18 +34,18 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                     @Override
                     public void onNext(ResponseByIds responseByIds) {
                         List<City> cities = Mapper.mapCities(responseByIds);
-                        saveCitiesToDatabase(cities);
-                        getView().displayCities(cities);
+                        if (!cities.isEmpty()) {
+                            saveCitiesToDatabase(cities);
+                            getView().displayCities(cities);
+                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
                     }
 
                     @Override
                     public void onComplete() {
-
                     }
                 }));
     }
