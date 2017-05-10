@@ -65,7 +65,7 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
 
                     @Override
                     public void onError(Throwable e) {
-
+                        //Todo
                     }
 
                     @Override
@@ -82,12 +82,10 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
                 .subscribeWith(new DisposableObserver<Void>() {
                     @Override
                     public void onNext(Void value) {
-
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
                     }
 
                     @Override

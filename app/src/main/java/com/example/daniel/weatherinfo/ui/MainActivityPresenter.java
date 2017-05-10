@@ -24,7 +24,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
     }
 
     public void loadCities() {
-
+        //Todo
     }
 
     public void loadCitiesFromDatabase() {

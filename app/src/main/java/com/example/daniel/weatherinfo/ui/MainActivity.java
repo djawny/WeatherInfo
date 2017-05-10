@@ -17,7 +17,6 @@ import com.example.daniel.weatherinfo.api.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.model.City;
 import com.example.daniel.weatherinfo.repository.CityRepository;
 import com.example.daniel.weatherinfo.ui.adapter.CityPagerAdapter;
-import com.example.daniel.weatherinfo.util.NetworkUtils;
 
 import java.util.List;
 
@@ -64,11 +63,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     private void loadCities() {
-        if (NetworkUtils.isNetAvailable(this)) {
-            mPresenter.loadCities();
-        } else {
-            mPresenter.loadCitiesFromDatabase();
-        }
+        mPresenter.loadCitiesFromDatabase();
+//        if (NetworkUtils.isNetAvailable(this)) {
+//            mPresenter.loadCities();
+//        } else {
+//            mPresenter.loadCitiesFromDatabase();
+//        }
     }
 
     @Override
@@ -132,9 +132,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         if (mPullRefreshing) {
             mPullRefreshLayout.setRefreshing(false);
             mPullRefreshing = false;
-        } else {
-            mToolbar.setTitle(String.format("%s, %s", cities.get(0).getName(), cities.get(0).getCountry()));
         }
+
+        int currentPage = mViewPager.getCurrentItem();
+        mToolbar.setTitle(String.format("%s, %s", cities.get(currentPage).getName(), cities.get(currentPage).getCountry()));
     }
 
     @Override
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             @Override
             public void onRefresh() {
                 mPullRefreshing = true;
-                mPresenter.loadCities();
+                loadCities();
             }
         });
     }
