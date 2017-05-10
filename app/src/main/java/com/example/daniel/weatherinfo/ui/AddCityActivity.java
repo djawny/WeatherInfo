@@ -39,8 +39,8 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
     @BindView(R.id.status_info)
     TextView mStatusInfo;
 
-    @BindView(R.id.new_city)
-    EditText mNewCity;
+    @BindView(R.id.city_edit_text)
+    EditText mEditText;
 
     private AddCityActivityPresenter mPresenter;
     private CityAdapter mCityAdapter;
@@ -120,9 +120,10 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
 
     @OnClick(R.id.add_button)
     public void onAddButtonClicked() {
-        String cityName = mNewCity.getText().toString().trim();
+        String cityName = mEditText.getText().toString().trim();
         if (!TextUtils.isEmpty(cityName)) {
             mPresenter.addCityFromNetwork(cityName);
+            mEditText.setText("");
         }
     }
 
