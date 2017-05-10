@@ -20,7 +20,10 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class PageFragment extends Fragment implements PageFragmentView{
+public class PageFragment extends Fragment implements PageFragmentView {
+
+    @BindView(R.id.city_country)
+    TextView mCityCountry;
 
     @BindView(R.id.icon)
     ImageView mIcon;
@@ -105,6 +108,7 @@ public class PageFragment extends Fragment implements PageFragmentView{
         Picasso.with(mContext)
                 .load("http://openweathermap.org/img/w/" + city.getWeather().getIcon() + ".png")
                 .into(mIcon);
+        mCityCountry.setText(String.format("%s, %s", city.getName(), city.getCountry()));
         String date = DateConverter.getDateFromUTCTimestamp(city.getWeather().getDate(), "yyyy-MM-dd\nHH:mm:ss");
         mDate.setText(date);
         mDescription.setText(city.getWeather().getDescription());

@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, MainActivityView {
+public class MainActivity extends AppCompatActivity implements MainActivityView {
 
     private static final int ADD_CITY_REQUEST_CODE = 1;
 
@@ -55,10 +55,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
+        mToolbar.setTitle("");
         initializePresenter();
         initializePullRefresh();
-        loadCities();
-        setPageChangeListener();
     }
 
     @Override
@@ -83,10 +82,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mPresenter.loadCitiesFromDatabase();
     }
 
-    private void setPageChangeListener() {
-        mViewPager.addOnPageChangeListener(this);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -105,23 +100,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        City city = mCityPagerAdapter.getCities().get(position);
-        mToolbar.setTitle(String.format("%s, %s", city.getName(), city.getCountry()));
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-    }
-
-    @Override
     public void displayCities(List<City> cities) {
         mPullRefreshLayout.setVisibility(View.VISIBLE);
-        mViewPager.setVisibility(View.VISIBLE);
         mStatusInfo.setVisibility(View.GONE);
         if (mCityPagerAdapter == null) {
             mCityPagerAdapter = new CityPagerAdapter(getSupportFragmentManager(), cities);
@@ -134,28 +114,20 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             mPullRefreshLayout.setRefreshing(false);
             mPullRefreshing = false;
         }
-
-        int currentPage = mViewPager.getCurrentItem();
-        mToolbar.setTitle(String.format("%s, %s", cities.get(currentPage).getName(),
-                cities.get(currentPage).getCountry()));
     }
 
     @Override
     public void showNoData() {
-        mViewPager.setVisibility(View.GONE);
         mPullRefreshLayout.setVisibility(View.GONE);
         mStatusInfo.setVisibility(View.VISIBLE);
         mStatusInfo.setText(R.string.message_no_data);
-        mToolbar.setTitle(getResources().getString(R.string.app_name));
     }
 
     @Override
     public void showErrorInfo() {
-        mViewPager.setVisibility(View.GONE);
         mPullRefreshLayout.setVisibility(View.GONE);
         mStatusInfo.setVisibility(View.VISIBLE);
         mStatusInfo.setText(R.string.message_error);
-        mToolbar.setTitle(getResources().getString(R.string.app_name));
     }
 
     private void initializePullRefresh() {
