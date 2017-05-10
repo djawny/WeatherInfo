@@ -24,7 +24,7 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
         mOpenWeatherMapService = service;
     }
 
-    public void loadCities() {
+    public void loadCitiesFromDatabase() {
         addDisposable(mCityRepository
                 .getCitiesRx()
                 .subscribeOn(mSubscribeScheduler)

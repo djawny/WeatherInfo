@@ -13,9 +13,11 @@ import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.example.daniel.weatherinfo.R;
+import com.example.daniel.weatherinfo.api.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.model.City;
 import com.example.daniel.weatherinfo.repository.CityRepository;
 import com.example.daniel.weatherinfo.ui.adapter.CityPagerAdapter;
+import com.example.daniel.weatherinfo.util.NetworkUtils;
 
 import java.util.List;
 
@@ -53,17 +55,26 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
-        mPresenter = new MainActivityPresenter(CityRepository.getInstance(), Schedulers.io(), AndroidSchedulers.mainThread());
+        mPresenter = new MainActivityPresenter(CityRepository.getInstance(),
+                OpenWeatherMapService.Factory.makeWeatherService(), Schedulers.io(), AndroidSchedulers.mainThread());
         mPresenter.setView(this);
-        mPresenter.loadCities();
+        loadCities();
         setPageChangeListener();
         setPullRefresh();
+    }
+
+    private void loadCities() {
+        if (NetworkUtils.isNetAvailable(this)) {
+            mPresenter.loadCities();
+        } else {
+            mPresenter.loadCitiesFromDatabase();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.loadCities();
+        loadCities();
     }
 
     @Override

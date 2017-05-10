@@ -76,7 +76,7 @@ public class PageFragment extends Fragment implements PageFragmentView{
         int cityId = getArguments().getInt(ARG_CITY_ID);
         mPresenter = new PageFragmentPresenter(CityRepository.getInstance(), Schedulers.io(), AndroidSchedulers.mainThread());
         mPresenter.setView(this);
-        mPresenter.loadData(cityId);
+        mPresenter.loadCityFromDatabase(cityId);
         return rootView;
     }
 

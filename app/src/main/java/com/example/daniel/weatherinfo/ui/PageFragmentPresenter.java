@@ -19,7 +19,7 @@ public class PageFragmentPresenter extends BasePresenter<PageFragmentView> {
         mCityRepository = repository;
     }
 
-    public void loadData(int cityId) {
+    public void loadCityFromDatabase(int cityId) {
         addDisposable(mCityRepository
                 .getCityRx(cityId)
                 .subscribeOn(mSubscribeScheduler)

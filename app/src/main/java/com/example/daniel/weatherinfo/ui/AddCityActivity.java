@@ -16,6 +16,7 @@ import com.example.daniel.weatherinfo.api.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.model.City;
 import com.example.daniel.weatherinfo.repository.CityRepository;
 import com.example.daniel.weatherinfo.ui.adapter.CityAdapter;
+import com.example.daniel.weatherinfo.util.NetworkUtils;
 
 import java.util.List;
 
@@ -55,8 +56,10 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
                 OpenWeatherMapService.Factory.makeWeatherService(), Schedulers.io(), AndroidSchedulers.mainThread());
         mPresenter.setView(this);
         setRecycleView();
-        mPresenter.loadCities();
+        mPresenter.loadCitiesFromDatabase();
     }
+
+
 
     @Override
     protected void onDestroy() {
@@ -93,13 +96,13 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
     @Override
     public void update() {
         mCityAdapter.clearData();
-        mPresenter.loadCities();
+        mPresenter.loadCitiesFromDatabase();
     }
 
     @Override
     public void onAddComplete() {
         mCityAdapter.clearData();
-        mPresenter.loadCities();
+        mPresenter.loadCitiesFromDatabase();
     }
 
     @Override
