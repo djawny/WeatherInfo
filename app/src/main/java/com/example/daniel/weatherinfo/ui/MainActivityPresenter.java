@@ -18,36 +18,11 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
     private CityRepositoryInterface mCityRepository;
     private OpenWeatherMapService mOpenWeatherMapService;
 
-
     public MainActivityPresenter(CityRepository repository, OpenWeatherMapService service,
                                  Scheduler subscriber, Scheduler observer) {
         super(subscriber, observer);
         mCityRepository = repository;
         mOpenWeatherMapService = service;
-    }
-
-    public void loadCities(String cityIds) {
-        addDisposable(mOpenWeatherMapService.getWeatherByIds(cityIds)
-                .subscribeOn(mSubscribeScheduler)
-                .observeOn(mObserveScheduler)
-                .subscribeWith(new DisposableObserver<ResponseByIds>() {
-                    @Override
-                    public void onNext(ResponseByIds responseByIds) {
-                        List<City> cities = Mapper.mapCities(responseByIds);
-                        if (!cities.isEmpty()) {
-                            saveCitiesToDatabase(cities);
-                            getView().displayCities(cities);
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onComplete() {
-                    }
-                }));
     }
 
     public void loadCitiesFromDatabase() {
@@ -73,6 +48,66 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                     @Override
                     public void onComplete() {
 
+                    }
+                }));
+    }
+
+    public void loadCitiesFromNetwork() {
+        addDisposable(mCityRepository
+                .getCitiesRx()
+                .subscribeOn(mSubscribeScheduler)
+                .observeOn(mObserveScheduler)
+                .subscribeWith(new DisposableObserver<List<City>>() {
+                    @Override
+                    public void onNext(List<City> cities) {
+                        if (!cities.isEmpty()) {
+                            String cityIds = getIdsFromCities(cities);
+                            getCitiesByIds(cityIds);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                }));
+    }
+
+    private String getIdsFromCities(List<City> cities) {
+        StringBuilder cityIds = new StringBuilder();
+        int size = cities.size();
+        for (int i = 0; i < size; i++) {
+            cityIds.append(String.valueOf(cities.get(i).getId()));
+            if (i != (size - 1)) {
+                cityIds.append(",");
+            }
+        }
+        return cityIds.toString();
+    }
+
+    public void getCitiesByIds(String cityIds) {
+        addDisposable(mOpenWeatherMapService.getWeatherByIds(cityIds)
+                .subscribeOn(mSubscribeScheduler)
+                .observeOn(mObserveScheduler)
+                .subscribeWith(new DisposableObserver<ResponseByIds>() {
+                    @Override
+                    public void onNext(ResponseByIds responseByIds) {
+                        List<City> cities = Mapper.mapCities(responseByIds);
+                        if (!cities.isEmpty()) {
+                            saveCitiesToDatabase(cities);
+                            getView().displayCities(cities);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
                     }
                 }));
     }

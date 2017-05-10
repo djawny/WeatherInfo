@@ -52,7 +52,7 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
                 }));
     }
 
-    public void addCity(String cityName) {
+    public void addCityFromNetwork(String cityName) {
         addDisposable(mOpenWeatherMapService.getWeatherByCity(cityName)
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)

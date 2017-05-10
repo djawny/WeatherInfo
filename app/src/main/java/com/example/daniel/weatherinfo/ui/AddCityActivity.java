@@ -122,7 +122,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
     public void onAddButtonClicked() {
         String cityName = mNewCity.getText().toString().trim();
         if (!TextUtils.isEmpty(cityName)) {
-            mPresenter.addCity(cityName);
+            mPresenter.addCityFromNetwork(cityName);
         }
     }
 

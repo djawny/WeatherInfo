@@ -17,6 +17,7 @@ import com.example.daniel.weatherinfo.api.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.model.City;
 import com.example.daniel.weatherinfo.repository.CityRepository;
 import com.example.daniel.weatherinfo.ui.adapter.CityPagerAdapter;
+import com.example.daniel.weatherinfo.util.NetworkUtils;
 
 import java.util.List;
 
@@ -79,13 +80,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     private void loadCities() {
-        mPresenter.loadCitiesFromDatabase();
-        //Todo
-//        if (NetworkUtils.isNetAvailable(this)) {
-//            mPresenter.loadCities();
-//        } else {
-//            mPresenter.loadCitiesFromDatabase();
-//        }
+//        mPresenter.loadCitiesFromDatabase();
+        if (NetworkUtils.isNetAvailable(this)) {
+            mPresenter.loadCitiesFromNetwork();
+        } else {
+            mPresenter.loadCitiesFromDatabase();
+        }
     }
 
     private void setPageChangeListener() {
