@@ -3,8 +3,10 @@ package com.example.daniel.weatherinfo.ui;
 import com.example.daniel.weatherinfo.api.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.base.BasePresenter;
 import com.example.daniel.weatherinfo.model.City;
+import com.example.daniel.weatherinfo.model.ResponseByIds;
 import com.example.daniel.weatherinfo.repository.CityRepository;
 import com.example.daniel.weatherinfo.repository.CityRepositoryInterface;
+import com.example.daniel.weatherinfo.util.Mapper;
 
 import java.util.List;
 
@@ -24,8 +26,28 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
         mOpenWeatherMapService = service;
     }
 
-    public void loadCities() {
-        //Todo
+    public void loadCities(String cityIds) {
+        addDisposable(mOpenWeatherMapService.getWeatherByIds(cityIds)
+                .subscribeOn(mSubscribeScheduler)
+                .observeOn(mObserveScheduler)
+                .subscribeWith(new DisposableObserver<ResponseByIds>() {
+                    @Override
+                    public void onNext(ResponseByIds responseByIds) {
+                        List<City> cities = Mapper.mapCities(responseByIds);
+                        saveCitiesToDatabase(cities);
+                        getView().displayCities(cities);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                }));
     }
 
     public void loadCitiesFromDatabase() {
@@ -51,6 +73,25 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                     @Override
                     public void onComplete() {
 
+                    }
+                }));
+    }
+
+    private void saveCitiesToDatabase(List<City> cities) {
+        addDisposable(mCityRepository.saveCitiesRx(cities)
+                .subscribeOn(mSubscribeScheduler)
+                .observeOn(mObserveScheduler)
+                .subscribeWith(new DisposableObserver<Void>() {
+                    @Override
+                    public void onNext(Void value) {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
                     }
                 }));
     }

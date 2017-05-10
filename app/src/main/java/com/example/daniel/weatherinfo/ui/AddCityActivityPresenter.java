@@ -60,7 +60,7 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
                     @Override
                     public void onNext(ResponseByCity responseByCity) {
                         City city = Mapper.mapCity(responseByCity);
-                        saveCity(city);
+                        saveCityToDatabase(city);
                         getView().onAddComplete();
                     }
 
@@ -74,7 +74,7 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
                 }));
     }
 
-    private void saveCity(City city) {
+    private void saveCityToDatabase(City city) {
         addDisposable(mCityRepository.saveCityRx(city)
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
