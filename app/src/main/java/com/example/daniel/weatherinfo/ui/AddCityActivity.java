@@ -10,12 +10,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.api.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.model.City;
 import com.example.daniel.weatherinfo.repository.CityRepository;
 import com.example.daniel.weatherinfo.ui.adapter.CityAdapter;
+import com.example.daniel.weatherinfo.util.NetworkUtils;
 
 import java.util.List;
 
@@ -119,8 +121,12 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
     public void onAddButtonClicked() {
         String cityName = mEditText.getText().toString().trim();
         if (!TextUtils.isEmpty(cityName)) {
-            mPresenter.addCityFromNetwork(cityName);
-            mEditText.setText("");
+            if (NetworkUtils.isNetAvailable(this)) {
+                mPresenter.addCityFromNetwork(cityName);
+                mEditText.setText("");
+            } else {
+                Toast.makeText(this, "Network error! Check the network connection settings.", Toast.LENGTH_LONG).show();
+            }
         }
     }
 

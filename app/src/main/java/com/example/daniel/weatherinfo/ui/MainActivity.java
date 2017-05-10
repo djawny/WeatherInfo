@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.example.daniel.weatherinfo.R;
@@ -139,6 +140,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 mPullRefreshing = true;
                 if (NetworkUtils.isNetAvailable(MainActivity.this)) {
                     mPresenter.loadCitiesFromNetwork();
+                } else {
+                    mPullRefreshing = false;
+                    mPullRefreshLayout.setRefreshing(false);
+                    Toast.makeText(MainActivity.this, "Network error! Check the network connection settings.", Toast.LENGTH_LONG).show();
                 }
             }
         });
