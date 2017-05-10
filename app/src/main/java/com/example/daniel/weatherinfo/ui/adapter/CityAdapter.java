@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 public class CityAdapter extends BaseAdapter<City> {
 
     public interface OnCityCrossClickedListener {
-        void onDelete(City city);
+        void onDelete(int cityId);
     }
 
     private OnCityCrossClickedListener mListener;
@@ -37,7 +37,7 @@ public class CityAdapter extends BaseAdapter<City> {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
-                    mListener.onDelete(city);
+                    mListener.onDelete(city.getId());
                 }
             }
         });

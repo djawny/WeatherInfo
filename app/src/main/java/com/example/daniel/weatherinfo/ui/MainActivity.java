@@ -61,6 +61,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.loadCities();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         mPresenter.clearDisposable();

@@ -12,4 +12,8 @@ public interface AddCityActivityView extends BaseView {
     void showNoData();
 
     void showErrorInfo();
+
+    void update();
+
+    void onAddComplete();
 }

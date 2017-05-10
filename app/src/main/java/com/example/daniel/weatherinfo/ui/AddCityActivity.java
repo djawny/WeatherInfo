@@ -5,13 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
+import com.example.daniel.weatherinfo.api.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.model.City;
 import com.example.daniel.weatherinfo.repository.CityRepository;
 import com.example.daniel.weatherinfo.ui.adapter.CityAdapter;
@@ -20,10 +21,11 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class AddCityActivity extends AppCompatActivity implements AddCityActivityView,CityAdapter.OnCityCrossClickedListener {
+public class AddCityActivity extends AppCompatActivity implements AddCityActivityView, CityAdapter.OnCityCrossClickedListener {
 
     @BindView(R.id.main_background)
     ImageView mImageView;
@@ -40,9 +42,6 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
     @BindView(R.id.new_city)
     EditText mNewCity;
 
-    @BindView(R.id.add_button)
-    ImageButton mAddButton;
-
     private AddCityActivityPresenter mPresenter;
     private CityAdapter mCityAdapter;
 
@@ -52,7 +51,8 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
         setContentView(R.layout.activity_add_city);
         setSupportActionBar(mToolbar);
         ButterKnife.bind(this);
-        mPresenter = new AddCityActivityPresenter(CityRepository.getInstance(), Schedulers.io(), AndroidSchedulers.mainThread());
+        mPresenter = new AddCityActivityPresenter(CityRepository.getInstance(),
+                OpenWeatherMapService.Factory.makeWeatherService(), Schedulers.io(), AndroidSchedulers.mainThread());
         mPresenter.setView(this);
         setRecycleView();
         mPresenter.loadCities();
@@ -91,8 +91,20 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
     }
 
     @Override
-    public void onDelete(City city) {
-        mPresenter.deleteCity(city);
+    public void update() {
+        mCityAdapter.clearData();
+        mPresenter.loadCities();
+    }
+
+    @Override
+    public void onAddComplete() {
+        mCityAdapter.clearData();
+        mPresenter.loadCities();
+    }
+
+    @Override
+    public void onDelete(int cityId) {
+        mPresenter.deleteCity(cityId);
     }
 
     private void setRecycleView() {
@@ -100,5 +112,13 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecycleView.setLayoutManager(linearLayoutManager);
+    }
+
+    @OnClick(R.id.add_button)
+    public void onAddButtonCliked() {
+        String cityName = mNewCity.getText().toString().trim();
+        if (!TextUtils.isEmpty(cityName)) {
+            mPresenter.addCity(cityName);
+        }
     }
 }
