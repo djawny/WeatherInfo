@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private void loadCities() {
         mPresenter.loadCitiesFromDatabase();
+        //Todo
 //        if (NetworkUtils.isNetAvailable(this)) {
 //            mPresenter.loadCities();
 //        } else {
