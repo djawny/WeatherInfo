@@ -26,6 +26,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
         if (list != null) {
+            mItems.clear();
             mItems.addAll(list);
         }
     }
@@ -67,5 +68,4 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter {
         mItems.clear();
         notifyDataSetChanged();
     }
-
 }

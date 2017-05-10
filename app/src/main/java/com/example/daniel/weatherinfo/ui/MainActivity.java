@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public void displayCities(List<City> cities) {
         mPullRefreshLayout.setVisibility(View.VISIBLE);
+        mViewPager.setVisibility(View.VISIBLE);
         mStatusInfo.setVisibility(View.GONE);
         if (mCityPagerAdapter == null) {
             mCityPagerAdapter = new CityPagerAdapter(getSupportFragmentManager(), cities);
@@ -141,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     public void showNoData() {
+        mViewPager.setVisibility(View.GONE);
         mPullRefreshLayout.setVisibility(View.GONE);
         mStatusInfo.setVisibility(View.VISIBLE);
         mStatusInfo.setText(R.string.message_no_data);
@@ -149,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     public void showErrorInfo() {
+        mViewPager.setVisibility(View.GONE);
         mPullRefreshLayout.setVisibility(View.GONE);
         mStatusInfo.setVisibility(View.VISIBLE);
         mStatusInfo.setText(R.string.message_error);

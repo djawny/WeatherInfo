@@ -112,9 +112,6 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
 
     @Override
     public void onDeleteComplete() {
-        if (mCityAdapter != null) {
-            mCityAdapter.clearData();
-        }
         loadCities();
     }
 
@@ -129,9 +126,6 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
 
     @Override
     public void onAddComplete() {
-        if (mCityAdapter != null) {
-            mCityAdapter.clearData();
-        }
         loadCities();
     }
 }
