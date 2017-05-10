@@ -16,7 +16,6 @@ import com.example.daniel.weatherinfo.api.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.model.City;
 import com.example.daniel.weatherinfo.repository.CityRepository;
 import com.example.daniel.weatherinfo.ui.adapter.CityAdapter;
-import com.example.daniel.weatherinfo.util.NetworkUtils;
 
 import java.util.List;
 
@@ -59,8 +58,6 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
         mPresenter.loadCitiesFromDatabase();
     }
 
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -95,13 +92,17 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
 
     @Override
     public void update() {
-        mCityAdapter.clearData();
+        if (mCityAdapter != null) {
+            mCityAdapter.clearData();
+        }
         mPresenter.loadCitiesFromDatabase();
     }
 
     @Override
     public void onAddComplete() {
-        mCityAdapter.clearData();
+        if (mCityAdapter != null) {
+            mCityAdapter.clearData();
+        }
         mPresenter.loadCitiesFromDatabase();
     }
 
@@ -118,7 +119,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
     }
 
     @OnClick(R.id.add_button)
-    public void onAddButtonCliked() {
+    public void onAddButtonClicked() {
         String cityName = mNewCity.getText().toString().trim();
         if (!TextUtils.isEmpty(cityName)) {
             mPresenter.addCity(cityName);

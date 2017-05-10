@@ -95,7 +95,6 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
                 }));
     }
 
-
     public void deleteCity(int cityId) {
         addDisposable(mCityRepository.removeCityRx(cityId)
                 .subscribeOn(mSubscribeScheduler)
