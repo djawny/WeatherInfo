@@ -51,17 +51,32 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
         setContentView(R.layout.activity_add_city);
         setSupportActionBar(mToolbar);
         ButterKnife.bind(this);
+        initializePresenter();
+        setRecycleView();
+        loadCities();
+    }
+
+    private void initializePresenter() {
         mPresenter = new AddCityActivityPresenter(CityRepository.getInstance(),
                 OpenWeatherMapService.Factory.makeWeatherService(), Schedulers.io(), AndroidSchedulers.mainThread());
         mPresenter.setView(this);
-        setRecycleView();
-        mPresenter.loadCitiesFromDatabase();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.clearDisposable();
+    }
+
+    private void loadCities() {
+        mPresenter.loadCitiesFromDatabase();
+    }
+
+    private void setRecycleView() {
+        mRecycleView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecycleView.setLayoutManager(linearLayoutManager);
     }
 
     @Override
@@ -91,31 +106,16 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
     }
 
     @Override
-    public void update() {
-        if (mCityAdapter != null) {
-            mCityAdapter.clearData();
-        }
-        mPresenter.loadCitiesFromDatabase();
-    }
-
-    @Override
-    public void onAddComplete() {
-        if (mCityAdapter != null) {
-            mCityAdapter.clearData();
-        }
-        mPresenter.loadCitiesFromDatabase();
-    }
-
-    @Override
     public void onDelete(int cityId) {
-        mPresenter.deleteCity(cityId);
+        mPresenter.deleteCityFromDatabase(cityId);
     }
 
-    private void setRecycleView() {
-        mRecycleView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecycleView.setLayoutManager(linearLayoutManager);
+    @Override
+    public void onDeleteComplete() {
+        if (mCityAdapter != null) {
+            mCityAdapter.clearData();
+        }
+        loadCities();
     }
 
     @OnClick(R.id.add_button)
@@ -124,5 +124,13 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
         if (!TextUtils.isEmpty(cityName)) {
             mPresenter.addCity(cityName);
         }
+    }
+
+    @Override
+    public void onAddComplete() {
+        if (mCityAdapter != null) {
+            mCityAdapter.clearData();
+        }
+        loadCities();
     }
 }

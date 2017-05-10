@@ -18,7 +18,8 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
     private CityRepositoryInterface mCityRepository;
     private OpenWeatherMapService mOpenWeatherMapService;
 
-    public AddCityActivityPresenter(CityRepository repository, OpenWeatherMapService service, Scheduler subscriber, Scheduler observer) {
+    public AddCityActivityPresenter(CityRepository repository, OpenWeatherMapService service,
+                                    Scheduler subscriber, Scheduler observer) {
         super(subscriber, observer);
         mCityRepository = repository;
         mOpenWeatherMapService = service;
@@ -65,12 +66,10 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
 
                     @Override
                     public void onError(Throwable e) {
-                        //Todo
                     }
 
                     @Override
                     public void onComplete() {
-
                     }
                 }));
     }
@@ -90,12 +89,11 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
 
                     @Override
                     public void onComplete() {
-
                     }
                 }));
     }
 
-    public void deleteCity(int cityId) {
+    public void deleteCityFromDatabase(int cityId) {
         addDisposable(mCityRepository.removeCityRx(cityId)
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
@@ -110,7 +108,7 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
 
                     @Override
                     public void onComplete() {
-                        getView().update();
+                        getView().onDeleteComplete();
                     }
                 }));
     }

@@ -13,7 +13,7 @@ public interface AddCityActivityView extends BaseView {
 
     void showErrorInfo();
 
-    void update();
-
     void onAddComplete();
+
+    void onDeleteComplete();
 }

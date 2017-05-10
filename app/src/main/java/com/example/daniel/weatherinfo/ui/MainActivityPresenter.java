@@ -17,7 +17,8 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
     private OpenWeatherMapService mOpenWeatherMapService;
 
 
-    public MainActivityPresenter(CityRepository repository, OpenWeatherMapService service, Scheduler subscriber, Scheduler observer) {
+    public MainActivityPresenter(CityRepository repository, OpenWeatherMapService service,
+                                 Scheduler subscriber, Scheduler observer) {
         super(subscriber, observer);
         mCityRepository = repository;
         mOpenWeatherMapService = service;
