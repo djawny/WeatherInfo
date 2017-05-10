@@ -54,22 +54,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
-        mPresenter = new MainActivityPresenter(CityRepository.getInstance(),
-                OpenWeatherMapService.Factory.makeWeatherService(), Schedulers.io(), AndroidSchedulers.mainThread());
-        mPresenter.setView(this);
+        initializePresenter();
         loadCities();
         setPageChangeListener();
         setPullRefresh();
-    }
-
-    private void loadCities() {
-        mPresenter.loadCitiesFromDatabase();
-        //Todo
-//        if (NetworkUtils.isNetAvailable(this)) {
-//            mPresenter.loadCities();
-//        } else {
-//            mPresenter.loadCitiesFromDatabase();
-//        }
     }
 
     @Override
@@ -82,6 +70,22 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public void onDestroy() {
         super.onDestroy();
         mPresenter.clearDisposable();
+    }
+
+    private void initializePresenter() {
+        mPresenter = new MainActivityPresenter(CityRepository.getInstance(),
+                OpenWeatherMapService.Factory.makeWeatherService(), Schedulers.io(), AndroidSchedulers.mainThread());
+        mPresenter.setView(this);
+    }
+
+    private void loadCities() {
+        mPresenter.loadCitiesFromDatabase();
+        //Todo
+//        if (NetworkUtils.isNetAvailable(this)) {
+//            mPresenter.loadCities();
+//        } else {
+//            mPresenter.loadCitiesFromDatabase();
+//        }
     }
 
     private void setPageChangeListener() {
@@ -136,7 +140,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         }
 
         int currentPage = mViewPager.getCurrentItem();
-        mToolbar.setTitle(String.format("%s, %s", cities.get(currentPage).getName(), cities.get(currentPage).getCountry()));
+        mToolbar.setTitle(String.format("%s, %s", cities.get(currentPage).getName(),
+                cities.get(currentPage).getCountry()));
     }
 
     @Override

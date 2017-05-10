@@ -5,8 +5,6 @@ import com.example.daniel.weatherinfo.model.City;
 import com.example.daniel.weatherinfo.repository.CityRepository;
 import com.example.daniel.weatherinfo.repository.CityRepositoryInterface;
 
-import java.util.List;
-
 import io.reactivex.Scheduler;
 import io.reactivex.observers.DisposableObserver;
 
@@ -27,7 +25,7 @@ public class PageFragmentPresenter extends BasePresenter<PageFragmentView> {
                 .subscribeWith(new DisposableObserver<City>() {
                     @Override
                     public void onNext(City city) {
-                        getView().showCity(city);
+                        getView().displayCity(city);
                     }
 
                     @Override

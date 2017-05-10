@@ -69,21 +69,20 @@ public class PageFragment extends Fragment implements PageFragmentView{
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_page, container, false);
         ButterKnife.bind(this, rootView);
         int cityId = getArguments().getInt(ARG_CITY_ID);
-        mPresenter = new PageFragmentPresenter(CityRepository.getInstance(), Schedulers.io(), AndroidSchedulers.mainThread());
-        mPresenter.setView(this);
-        mPresenter.loadCityFromDatabase(cityId);
+        initializePresenter();
+        loadCity(cityId);
         return rootView;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mContext = context;
     }
 
     @Override
@@ -92,8 +91,17 @@ public class PageFragment extends Fragment implements PageFragmentView{
         mPresenter.clearDisposable();
     }
 
+    private void initializePresenter() {
+        mPresenter = new PageFragmentPresenter(CityRepository.getInstance(), Schedulers.io(), AndroidSchedulers.mainThread());
+        mPresenter.setView(this);
+    }
+
+    private void loadCity(int cityId) {
+        mPresenter.loadCityFromDatabase(cityId);
+    }
+
     @Override
-    public void showCity(City city) {
+    public void displayCity(City city) {
         Picasso.with(mContext)
                 .load("http://openweathermap.org/img/w/" + city.getWeather().getIcon() + ".png")
                 .into(mIcon);

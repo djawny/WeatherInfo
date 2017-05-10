@@ -5,5 +5,5 @@ import com.example.daniel.weatherinfo.model.City;
 
 public interface PageFragmentView extends BaseView {
 
-    void showCity(City city);
+    void displayCity(City city);
 }
