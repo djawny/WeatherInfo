@@ -35,7 +35,7 @@ public class CityPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getItemPosition(Object object) {
-        return super.getItemPosition(object);//Todo
+        return POSITION_NONE;
     }
 
     @Override
