@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface AddCityActivityView extends BaseView {
 
-    void showCities(List<City> cities);
+    void displayCities(List<City> cities);
 
     void showNoData();
 

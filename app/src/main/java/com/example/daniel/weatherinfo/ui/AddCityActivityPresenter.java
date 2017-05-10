@@ -34,7 +34,7 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
                     @Override
                     public void onNext(List<City> cities) {
                         if (!cities.isEmpty()) {
-                            getView().showCities(cities);
+                            getView().displayCities(cities);
                         } else {
                             getView().showNoData();
                         }

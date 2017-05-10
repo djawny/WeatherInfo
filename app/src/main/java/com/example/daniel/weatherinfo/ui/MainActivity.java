@@ -55,9 +55,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         initializePresenter();
+        initializePullRefresh();
         loadCities();
         setPageChangeListener();
-        setPullRefresh();
     }
 
     @Override
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     @Override
-    public void showCities(List<City> cities) {
+    public void displayCities(List<City> cities) {
         mPullRefreshLayout.setVisibility(View.VISIBLE);
         mStatusInfo.setVisibility(View.GONE);
         if (mCityPagerAdapter == null) {
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mToolbar.setTitle(getResources().getString(R.string.app_name));
     }
 
-    private void setPullRefresh() {
+    private void initializePullRefresh() {
         mPullRefreshing = false;
         mPullRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
         mPullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {

@@ -80,7 +80,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
     }
 
     @Override
-    public void showCities(List<City> cities) {
+    public void displayCities(List<City> cities) {
         mRecycleView.setVisibility(View.VISIBLE);
         mStatusInfo.setVisibility(View.GONE);
         if (mCityAdapter == null) {
