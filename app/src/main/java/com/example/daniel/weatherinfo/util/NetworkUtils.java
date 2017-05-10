@@ -20,11 +20,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-/**
- * @author Filippo Engidashet <filippo.eng@gmail.com>
- * @version 1.0.0
- * @since 9/24/2016
- */
 public class NetworkUtils {
 
     public static boolean isNetAvailable(Context context) {

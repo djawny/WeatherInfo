@@ -80,12 +80,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     private void loadCities() {
-//        mPresenter.loadCitiesFromDatabase();
-        if (NetworkUtils.isNetAvailable(this)) {
-            mPresenter.loadCitiesFromNetwork();
-        } else {
-            mPresenter.loadCitiesFromDatabase();
-        }
+        mPresenter.loadCitiesFromDatabase();
     }
 
     private void setPageChangeListener() {
@@ -167,7 +162,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             @Override
             public void onRefresh() {
                 mPullRefreshing = true;
-                loadCities();
+                if (NetworkUtils.isNetAvailable(MainActivity.this)) {
+                    mPresenter.loadCitiesFromNetwork();
+                }
             }
         });
     }

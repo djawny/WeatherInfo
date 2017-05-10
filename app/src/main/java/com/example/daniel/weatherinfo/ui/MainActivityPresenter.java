@@ -88,7 +88,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
         return cityIds.toString();
     }
 
-    public void getCitiesByIds(String cityIds) {
+    private void getCitiesByIds(String cityIds) {
         addDisposable(mOpenWeatherMapService.getWeatherByIds(cityIds)
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
