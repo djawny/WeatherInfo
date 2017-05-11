@@ -54,7 +54,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                 }));
     }
 
-    public void loadCitiesFromNetwork() {
+    public void loadCitiesFromNetwork2() {
         addDisposable(mCityRepository
                 .getCitiesRx()
                 .subscribeOn(mSubscribeScheduler)
@@ -89,6 +89,80 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
                     }
                 }));
+    }
+
+
+    public void loadCitiesFromNetwork() {
+        addDisposable(mCityRepository
+                .getCitiesRx()
+                .subscribeOn(mSubscribeScheduler)
+                .observeOn(mObserveScheduler)
+                .subscribeWith(new DisposableObserver<List<City>>() {
+                    @Override
+                    public void onNext(List<City> cities) {
+                        String idsFromCities = getIdsFromCities(cities);
+                        load(idsFromCities);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                })
+        );
+    }
+
+    private void load(String idsFromCities) {
+        addDisposable(mOpenWeatherMapService.getWeatherByIds(idsFromCities)
+                .subscribeOn(mSubscribeScheduler)
+                .observeOn(mObserveScheduler)
+                .subscribeWith(new DisposableObserver<ResponseByIds>() {
+                    @Override
+                    public void onNext(ResponseByIds responseByIds) {
+                        List<City> cities = Mapper.mapCities(responseByIds);
+                        getView().displayCities(cities);
+                        saveCitiesToDatabase(cities);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                }));
+    }
+
+    private void saveCitiesToDatabase(List<City> cities) {
+        addDisposable(mCityRepository
+                .saveCitiesRx(cities)
+                .subscribeOn(mSubscribeScheduler)
+                .observeOn(mObserveScheduler)
+                .subscribeWith(new DisposableObserver<Void>() {
+                    @Override
+                    public void onNext(Void value) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                })
+        );
     }
 
     private String getIdsFromCities(List<City> cities) {
