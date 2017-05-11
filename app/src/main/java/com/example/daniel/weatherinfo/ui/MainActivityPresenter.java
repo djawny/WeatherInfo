@@ -81,7 +81,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
                     @Override
                     public void onError(Throwable e) {
-                    //Todo
+                        //Todo
                     }
 
                     @Override
