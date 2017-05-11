@@ -10,7 +10,9 @@ import com.example.daniel.weatherinfo.util.Mapper;
 
 import java.util.List;
 
+import io.reactivex.ObservableSource;
 import io.reactivex.Scheduler;
+import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 
 public class MainActivityPresenter extends BasePresenter<MainActivityView> {
@@ -53,45 +55,17 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
     }
 
     public void loadCitiesFromNetwork() {
-        addDisposable(mCityRepository
+        mCityRepository
                 .getCitiesRx()
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
-                .subscribeWith(new DisposableObserver<List<City>>() {
+                .flatMap(new Function<List<City>, ObservableSource<ResponseByIds>>() {
                     @Override
-                    public void onNext(List<City> cities) {
-                        if (!cities.isEmpty()) {
-                            String cityIds = getIdsFromCities(cities);
-                            getCitiesByIds(cityIds);
-                        }
+                    public ObservableSource<ResponseByIds> apply(List<City> cities) throws Exception {
+                        String cityIds = getIdsFromCities(cities);
+                        return mOpenWeatherMapService.getWeatherByIds(cityIds);
                     }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onComplete() {
-                    }
-                }));
-    }
-
-    private String getIdsFromCities(List<City> cities) {
-        StringBuilder cityIds = new StringBuilder();
-        int size = cities.size();
-        for (int i = 0; i < size; i++) {
-            cityIds.append(String.valueOf(cities.get(i).getId()));
-            if (i != (size - 1)) {
-                cityIds.append(",");
-            }
-        }
-        return cityIds.toString();
-    }
-
-    private void getCitiesByIds(String cityIds) {
-        addDisposable(mOpenWeatherMapService.getWeatherByIds(cityIds)
-                .subscribeOn(mSubscribeScheduler)
-                .observeOn(mObserveScheduler)
+                })
                 .subscribeWith(new DisposableObserver<ResponseByIds>() {
                     @Override
                     public void onNext(ResponseByIds responseByIds) {
@@ -109,7 +83,19 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                     @Override
                     public void onComplete() {
                     }
-                }));
+                });
+    }
+
+    private String getIdsFromCities(List<City> cities) {
+        StringBuilder cityIds = new StringBuilder();
+        int size = cities.size();
+        for (int i = 0; i < size; i++) {
+            cityIds.append(String.valueOf(cities.get(i).getId()));
+            if (i != (size - 1)) {
+                cityIds.append(",");
+            }
+        }
+        return cityIds.toString();
     }
 
     private void saveCitiesToDatabase(List<City> cities) {
