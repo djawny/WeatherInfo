@@ -28,8 +28,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
     }
 
     public void loadCitiesFromDatabase() {
-        addDisposable(mCityRepository
-                .getCitiesRx()
+        addDisposable(mCityRepository.getCitiesRx()
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
                 .subscribeWith(new DisposableObserver<List<City>>() {
@@ -49,14 +48,12 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
                     @Override
                     public void onComplete() {
-
                     }
                 }));
     }
 
     public void loadCitiesFromNetwork() {
-        addDisposable(mCityRepository
-                .getCitiesRx()
+        addDisposable(mCityRepository.getCitiesRx()
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
                 .flatMap(new Function<List<City>, ObservableSource<ResponseByIds>>() {
@@ -66,18 +63,21 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                         return mOpenWeatherMapService.getWeatherByIds(cityIds);
                     }
                 })
-                .subscribeWith(new DisposableObserver<ResponseByIds>() {
+                .flatMap(new Function<ResponseByIds, ObservableSource<Void>>() {
                     @Override
-                    public void onNext(ResponseByIds responseByIds) {
+                    public ObservableSource<Void> apply(ResponseByIds responseByIds) throws Exception {
                         List<City> cities = Mapper.mapCities(responseByIds);
-                        if (!cities.isEmpty()) {
-                            saveCitiesToDatabase(cities);
-                            getView().displayCities(cities);
-                        }
+                        getView().displayCities(cities);
+                        return mCityRepository.saveCitiesRx(cities);
+                    }
+                }).subscribeWith(new DisposableObserver<Void>() {
+                    @Override
+                    public void onNext(Void value) {
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        //Todo
                     }
 
                     @Override
@@ -96,24 +96,5 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
             }
         }
         return cityIds.toString();
-    }
-
-    private void saveCitiesToDatabase(List<City> cities) {
-        addDisposable(mCityRepository.saveCitiesRx(cities)
-                .subscribeOn(mSubscribeScheduler)
-                .observeOn(mObserveScheduler)
-                .subscribeWith(new DisposableObserver<Void>() {
-                    @Override
-                    public void onNext(Void value) {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onComplete() {
-                    }
-                }));
     }
 }

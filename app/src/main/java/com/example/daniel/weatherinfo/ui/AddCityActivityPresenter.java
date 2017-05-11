@@ -10,7 +10,9 @@ import com.example.daniel.weatherinfo.util.Mapper;
 
 import java.util.List;
 
+import io.reactivex.ObservableSource;
 import io.reactivex.Scheduler;
+import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 
 public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView> {
@@ -26,8 +28,7 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
     }
 
     public void loadCitiesFromDatabase() {
-        addDisposable(mCityRepository
-                .getCitiesRx()
+        addDisposable(mCityRepository.getCitiesRx()
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
                 .subscribeWith(new DisposableObserver<List<City>>() {
@@ -56,35 +57,21 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
         addDisposable(mOpenWeatherMapService.getWeatherByCity(cityName)
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
-                .subscribeWith(new DisposableObserver<ResponseByCity>() {
+                .flatMap(new Function<ResponseByCity, ObservableSource<Void>>() {
                     @Override
-                    public void onNext(ResponseByCity responseByCity) {
+                    public ObservableSource<Void> apply(ResponseByCity responseByCity) throws Exception {
                         City city = Mapper.mapCity(responseByCity);
-                        saveCityToDatabase(city);
                         getView().onAddComplete();
+                        return mCityRepository.saveCityRx(city);
                     }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onComplete() {
-                    }
-                }));
-    }
-
-    private void saveCityToDatabase(City city) {
-        addDisposable(mCityRepository.saveCityRx(city)
-                .subscribeOn(mSubscribeScheduler)
-                .observeOn(mObserveScheduler)
-                .subscribeWith(new DisposableObserver<Void>() {
+                }).subscribeWith(new DisposableObserver<Void>() {
                     @Override
                     public void onNext(Void value) {
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        //Todo
                     }
 
                     @Override
