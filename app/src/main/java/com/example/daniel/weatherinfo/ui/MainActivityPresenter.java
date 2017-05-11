@@ -55,7 +55,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
     }
 
     public void loadCitiesFromNetwork() {
-        mCityRepository
+        addDisposable(mCityRepository
                 .getCitiesRx()
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
@@ -83,7 +83,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                     @Override
                     public void onComplete() {
                     }
-                });
+                }));
     }
 
     private String getIdsFromCities(List<City> cities) {
