@@ -28,7 +28,8 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
     }
 
     public void loadCitiesFromDatabase() {
-        addDisposable(mCityRepository.getCitiesRx()
+        addDisposable(mCityRepository
+                .getCitiesRx()
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
                 .subscribeWith(new DisposableObserver<List<City>>() {
@@ -48,12 +49,14 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
                     @Override
                     public void onComplete() {
+
                     }
                 }));
     }
 
     public void loadCitiesFromNetwork() {
-        addDisposable(mCityRepository.getCitiesRx()
+        addDisposable(mCityRepository
+                .getCitiesRx()
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
                 .flatMap(new Function<List<City>, ObservableSource<ResponseByIds>>() {
@@ -73,15 +76,17 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                 }).subscribeWith(new DisposableObserver<Void>() {
                     @Override
                     public void onNext(Void value) {
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        //Todo
+                    //Todo
                     }
 
                     @Override
                     public void onComplete() {
+
                     }
                 }));
     }
