@@ -61,7 +61,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                 .flatMap(new Function<List<City>, ObservableSource<ResponseByIds>>() {
                     @Override
                     public ObservableSource<ResponseByIds> apply(List<City> cities) throws Exception {
-                        String cityIds = getIdsFromCities(cities);
+                        String cityIds = getStringOfCityIdsForApiRequest(cities);
                         return mOpenWeatherMapService.getWeatherByIds(cityIds);
                     }
                 })
@@ -94,7 +94,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                 }));
     }
 
-    private String getIdsFromCities(List<City> cities) {
+    private String getStringOfCityIdsForApiRequest(List<City> cities) {
         StringBuilder cityIds = new StringBuilder();
         int size = cities.size();
         for (int i = 0; i < size; i++) {
