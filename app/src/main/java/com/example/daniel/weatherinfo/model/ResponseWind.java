@@ -3,7 +3,7 @@ package com.example.daniel.weatherinfo.model;
 public class ResponseWind {
 
     private double speed;
-    private int deg;
+    private double deg;
 
     public double getSpeed() {
         return speed;
@@ -13,11 +13,11 @@ public class ResponseWind {
         this.speed = speed;
     }
 
-    public int getDeg() {
+    public double getDeg() {
         return deg;
     }
 
-    public void setDeg(int deg) {
+    public void setDeg(double deg) {
         this.deg = deg;
     }
 }

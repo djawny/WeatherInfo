@@ -33,7 +33,7 @@ public class Weather implements Serializable {
     private double mWindSpeed;
 
     @DatabaseField(columnName = "windDegree", canBeNull = false)
-    private int mWindDegree;
+    private double mWindDegree;
 
     @DatabaseField(columnName = "pressure", canBeNull = false)
     private int mPressure;
@@ -56,7 +56,7 @@ public class Weather implements Serializable {
     public Weather() {
     }
 
-    public Weather(int id, double temp, double tempMin, double tempMax, int humidity, int cloudiness, double windSpeed, int windDegree, int pressure, String description, String icon, long date, long sunrise, long sunset) {
+    public Weather(int id, double temp, double tempMin, double tempMax, int humidity, int cloudiness, double windSpeed, double windDegree, int pressure, String description, String icon, long date, long sunrise, long sunset) {
         mId = id;
         mTemp = temp;
         mTempMin = tempMin;
@@ -129,11 +129,11 @@ public class Weather implements Serializable {
         mWindSpeed = windSpeed;
     }
 
-    public int getWindDegree() {
+    public double getWindDegree() {
         return mWindDegree;
     }
 
-    public void setWindDegree(int windDegree) {
+    public void setWindDegree(double windDegree) {
         mWindDegree = windDegree;
     }
 

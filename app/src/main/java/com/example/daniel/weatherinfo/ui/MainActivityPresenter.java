@@ -49,44 +49,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
                     @Override
                     public void onComplete() {
-
-                    }
-                }));
-    }
-
-    public void loadCitiesFromNetwork2() {//TODO
-        addDisposable(mCityRepository
-                .getCitiesRx()
-                .subscribeOn(mSubscribeScheduler)
-                .observeOn(mObserveScheduler)
-                .flatMap(new Function<List<City>, ObservableSource<ResponseByIds>>() {
-                    @Override
-                    public ObservableSource<ResponseByIds> apply(List<City> cities) throws Exception {
-                        String cityIds = getIdsFromCities(cities);
-                        return mOpenWeatherMapService.getWeatherByIds(cityIds);
-                    }
-                })
-                .flatMap(new Function<ResponseByIds, ObservableSource<Void>>() {
-                    @Override
-                    public ObservableSource<Void> apply(ResponseByIds responseByIds) throws Exception {
-                        List<City> cities = Mapper.mapCities(responseByIds);
-                        getView().displayCities(cities);
-                        return mCityRepository.saveCitiesRx(cities);
-                    }
-                }).subscribeWith(new DisposableObserver<Void>() {
-                    @Override
-                    public void onNext(Void value) {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
+                        //ignore
                     }
                 }));
     }
@@ -95,73 +58,40 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
         addDisposable(mCityRepository
                 .getCitiesRx()
                 .subscribeOn(mSubscribeScheduler)
-                .observeOn(mObserveScheduler)
-                .subscribeWith(new DisposableObserver<List<City>>() {
+                .flatMap(new Function<List<City>, ObservableSource<ResponseByIds>>() {
                     @Override
-                    public void onNext(List<City> cities) {
-                        String idsFromCities = getIdsFromCities(cities);
-                        load(idsFromCities);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
+                    public ObservableSource<ResponseByIds> apply(List<City> cities) throws Exception {
+                        String cityIds = getIdsFromCities(cities);
+                        return mOpenWeatherMapService.getWeatherByIds(cityIds);
                     }
                 })
-        );
-    }
-
-    private void load(String idsFromCities) {
-        addDisposable(mOpenWeatherMapService.getWeatherByIds(idsFromCities)
-                .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
-                .subscribeWith(new DisposableObserver<ResponseByIds>() {
+                .flatMap(new Function<ResponseByIds, ObservableSource<Void>>() {
                     @Override
-                    public void onNext(ResponseByIds responseByIds) {
+                    public ObservableSource<Void> apply(ResponseByIds responseByIds) throws Exception {
                         List<City> cities = Mapper.mapCities(responseByIds);
                         getView().displayCities(cities);
-                        saveCitiesToDatabase(cities);
+                        return mCityRepository.saveCitiesRx(cities);
                     }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                }));
-    }
-
-    private void saveCitiesToDatabase(List<City> cities) {
-        addDisposable(mCityRepository
-                .saveCitiesRx(cities)
+                })
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
                 .subscribeWith(new DisposableObserver<Void>() {
                     @Override
                     public void onNext(Void value) {
-
+                        //ignore
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        //TODO
                     }
 
                     @Override
                     public void onComplete() {
-
+                        //TODO
                     }
-                })
-        );
+                }));
     }
 
     private String getIdsFromCities(List<City> cities) {
