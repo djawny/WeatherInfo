@@ -30,10 +30,12 @@ public class PageFragmentPresenter extends BasePresenter<PageFragmentView> {
 
                     @Override
                     public void onError(Throwable e) {
+                        //TODO
                     }
 
                     @Override
                     public void onComplete() {
+                        //ignore
                     }
                 }));
     }
