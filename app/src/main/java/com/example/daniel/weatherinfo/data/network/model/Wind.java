@@ -1,6 +1,6 @@
 package com.example.daniel.weatherinfo.data.network.model;
 
-public class ResponseWind {
+public class Wind {
 
     private double speed;
     private double deg;

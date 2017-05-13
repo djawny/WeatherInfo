@@ -1,6 +1,8 @@
 package com.example.daniel.weatherinfo.data;
 
 import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityId;
+import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityIds;
 
 import java.util.List;
 
@@ -8,15 +10,19 @@ import io.reactivex.Observable;
 
 public interface CityDataManagerInterface {
 
-    Observable<List<City>> getCitiesRx();
+    Observable<List<City>> getCitiesFromDB();
 
-    Observable<City> getCityRx(int cityId);
+    Observable<City> getCityFromDB(int cityId);
 
-    Observable<Boolean> saveCitiesRx(List<City> cities);
+    Observable<Boolean> saveCitiesToDB(List<City> cities);
 
-    Observable<Boolean> saveCityRx(City city);
+    Observable<Boolean> saveCityToDB(City city);
 
-    Observable<Boolean> removeCityRx(int cityId);
+    Observable<Boolean> removeCityFromDB(int cityId);
 
-    Observable<Boolean> removeAllCitiesRx();
+    Observable<Boolean> removeCitiesFromDB();
+
+    Observable<WeatherDataByCityId> getApiResponseByCityId(String cityName);
+
+    Observable<WeatherDataByCityIds> getApiResponseByCityIds(String cityIds);
 }

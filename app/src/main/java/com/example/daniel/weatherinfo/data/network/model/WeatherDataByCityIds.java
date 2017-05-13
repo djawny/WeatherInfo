@@ -2,10 +2,10 @@ package com.example.daniel.weatherinfo.data.network.model;
 
 import java.util.List;
 
-public class ResponseByIds {
+public class WeatherDataByCityIds {
 
     private int cnt;
-    private List<ResponseByCity> list;
+    private List<WeatherDataByCityId> list;
 
     public int getCnt() {
         return cnt;
@@ -15,11 +15,11 @@ public class ResponseByIds {
         this.cnt = cnt;
     }
 
-    public List<ResponseByCity> getList() {
+    public List<WeatherDataByCityId> getList() {
         return list;
     }
 
-    public void setList(List<ResponseByCity> list) {
+    public void setList(List<WeatherDataByCityId> list) {
         this.list = list;
     }
 }

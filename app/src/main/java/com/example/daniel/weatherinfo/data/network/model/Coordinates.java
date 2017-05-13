@@ -1,6 +1,6 @@
 package com.example.daniel.weatherinfo.data.network.model;
 
-public class ResponseCoordinates {
+public class Coordinates {
 
     private double lon;
     private double lat;

@@ -1,6 +1,6 @@
 package com.example.daniel.weatherinfo.data.network.model;
 
-public class ResponseSys {
+public class Sys {
 
     private int type;
     private int id;

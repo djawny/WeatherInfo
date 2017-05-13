@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     private void initializePresenter() {
         mPresenter = new MainActivityPresenter(CityDataManager.getInstance(),
-                OpenWeatherMapService.Factory.makeWeatherService(), Schedulers.io(), AndroidSchedulers.mainThread());
+                OpenWeatherMapService.Factory.makeApiService(), Schedulers.io(), AndroidSchedulers.mainThread());
         mPresenter.setView(this);
     }
 

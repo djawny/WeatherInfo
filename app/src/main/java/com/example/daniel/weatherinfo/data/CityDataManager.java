@@ -3,6 +3,9 @@ package com.example.daniel.weatherinfo.data;
 import com.example.daniel.weatherinfo.application.AndroidApplication;
 import com.example.daniel.weatherinfo.data.database.Database;
 import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
+import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityId;
+import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityIds;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -14,9 +17,11 @@ public class CityDataManager implements CityDataManagerInterface {
     private static CityDataManager mInstance = new CityDataManager();
 
     private final Database mDatabase;
+    private final OpenWeatherMapService mOpenWeatherMapService;
 
     public CityDataManager() {
         mDatabase = AndroidApplication.getDatabase();
+        mOpenWeatherMapService = OpenWeatherMapService.Factory.makeApiService();
     }
 
     public static CityDataManager getInstance() {
@@ -24,7 +29,7 @@ public class CityDataManager implements CityDataManagerInterface {
     }
 
     @Override
-    public Observable<List<City>> getCitiesRx() {
+    public Observable<List<City>> getCitiesFromDB() {
         return Observable.fromCallable(new Callable<List<City>>() {
             @Override
             public List<City> call() throws Exception {
@@ -34,7 +39,7 @@ public class CityDataManager implements CityDataManagerInterface {
     }
 
     @Override
-    public Observable<City> getCityRx(final int cityId) {
+    public Observable<City> getCityFromDB(final int cityId) {
         return Observable.fromCallable(new Callable<City>() {
             @Override
             public City call() throws Exception {
@@ -44,7 +49,7 @@ public class CityDataManager implements CityDataManagerInterface {
     }
 
     @Override
-    public Observable<Boolean> saveCitiesRx(final List<City> cities) {
+    public Observable<Boolean> saveCitiesToDB(final List<City> cities) {
         return Observable.fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
@@ -55,7 +60,7 @@ public class CityDataManager implements CityDataManagerInterface {
     }
 
     @Override
-    public Observable<Boolean> saveCityRx(final City city) {
+    public Observable<Boolean> saveCityToDB(final City city) {
         return Observable.fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
@@ -66,7 +71,7 @@ public class CityDataManager implements CityDataManagerInterface {
     }
 
     @Override
-    public Observable<Boolean> removeCityRx(final int cityId) {
+    public Observable<Boolean> removeCityFromDB(final int cityId) {
         return Observable.fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
@@ -77,7 +82,7 @@ public class CityDataManager implements CityDataManagerInterface {
     }
 
     @Override
-    public Observable<Boolean> removeAllCitiesRx() {
+    public Observable<Boolean> removeCitiesFromDB() {
         return Observable.fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
@@ -85,5 +90,15 @@ public class CityDataManager implements CityDataManagerInterface {
                 return true;
             }
         });
+    }
+
+    @Override
+    public Observable<WeatherDataByCityId> getApiResponseByCityId(String cityName) {
+        return mOpenWeatherMapService.getWeatherDataByCityName(cityName);
+    }
+
+    @Override
+    public Observable<WeatherDataByCityIds> getApiResponseByCityIds(String cityIds) {
+        return mOpenWeatherMapService.getWeatherDataByCityIds(cityIds);
     }
 }

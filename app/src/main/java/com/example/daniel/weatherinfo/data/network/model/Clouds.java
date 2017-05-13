@@ -1,6 +1,6 @@
 package com.example.daniel.weatherinfo.data.network.model;
 
-public class ResponseClouds {
+public class Clouds {
 
     private int all;
 

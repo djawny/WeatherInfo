@@ -19,7 +19,7 @@ public class PageFragmentPresenter extends BasePresenter<PageFragmentView> {
 
     public void loadCityFromDatabase(int cityId) {
         addDisposable(mCityDataManager
-                .getCityRx(cityId)
+                .getCityFromDB(cityId)
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
                 .subscribeWith(new DisposableObserver<City>() {

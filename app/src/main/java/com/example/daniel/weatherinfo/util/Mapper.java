@@ -1,8 +1,8 @@
 package com.example.daniel.weatherinfo.util;
 
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.data.network.model.ResponseByCity;
-import com.example.daniel.weatherinfo.data.network.model.ResponseByIds;
+import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityId;
+import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityIds;
 import com.example.daniel.weatherinfo.data.database.model.Weather;
 
 import java.util.ArrayList;
@@ -13,38 +13,38 @@ public class Mapper {
     public Mapper() {
     }
 
-    public static City mapCity(ResponseByCity response) {
+    public static City mapCity(WeatherDataByCityId weatherDataByCityId) {
         City city = new City();
-        if (response != null) {
-            city.setId(response.getId());
-            city.setName(response.getName());
-            city.setCountry(response.getSys().getCountry());
+        if (weatherDataByCityId != null) {
+            city.setId(weatherDataByCityId.getId());
+            city.setName(weatherDataByCityId.getName());
+            city.setCountry(weatherDataByCityId.getSys().getCountry());
             Weather weather = new Weather();
-            weather.setId(response.getId());
-            weather.setTemp(response.getMain().getTemp());
-            weather.setTempMin(response.getMain().getTempMin());
-            weather.setTempMax(response.getMain().getTempMax());
-            weather.setHumidity(response.getMain().getHumidity());
-            weather.setCloudiness(response.getClouds().getAll());
-            weather.setWindSpeed(response.getWind().getSpeed());
-            weather.setWindDegree(response.getWind().getDeg());
-            weather.setPressure(response.getMain().getPressure());
-            weather.setDescription(response.getWeather().get(0).getDescription());
-            weather.setIcon(response.getWeather().get(0).getIcon());
-            weather.setDate(response.getDt());
-            weather.setSunrise(response.getSys().getSunrise());
-            weather.setSunset(response.getSys().getSunset());
+            weather.setId(weatherDataByCityId.getId());
+            weather.setTemp(weatherDataByCityId.getMain().getTemp());
+            weather.setTempMin(weatherDataByCityId.getMain().getTempMin());
+            weather.setTempMax(weatherDataByCityId.getMain().getTempMax());
+            weather.setHumidity(weatherDataByCityId.getMain().getHumidity());
+            weather.setCloudiness(weatherDataByCityId.getClouds().getAll());
+            weather.setWindSpeed(weatherDataByCityId.getWind().getSpeed());
+            weather.setWindDegree(weatherDataByCityId.getWind().getDeg());
+            weather.setPressure(weatherDataByCityId.getMain().getPressure());
+            weather.setDescription(weatherDataByCityId.getWeather().get(0).getDescription());
+            weather.setIcon(weatherDataByCityId.getWeather().get(0).getIcon());
+            weather.setDate(weatherDataByCityId.getDt());
+            weather.setSunrise(weatherDataByCityId.getSys().getSunrise());
+            weather.setSunset(weatherDataByCityId.getSys().getSunset());
             city.setWeather(weather);
         }
         return city;
     }
 
-    public static List<City> mapCities(ResponseByIds response) {
+    public static List<City> mapCities(WeatherDataByCityIds weatherDataByCityIds) {
         ArrayList<City> cities = new ArrayList<>();
-        if (response != null) {
-            List<ResponseByCity> responseByCityList = response.getList();
-            for (ResponseByCity responseByCity : responseByCityList) {
-                City city = mapCity(responseByCity);
+        if (weatherDataByCityIds != null) {
+            List<WeatherDataByCityId> weatherDataByCityIdList = weatherDataByCityIds.getList();
+            for (WeatherDataByCityId weatherDataByCityId : weatherDataByCityIdList) {
+                City city = mapCity(weatherDataByCityId);
                 cities.add(city);
             }
         }

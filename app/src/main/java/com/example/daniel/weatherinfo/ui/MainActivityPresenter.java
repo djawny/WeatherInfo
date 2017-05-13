@@ -5,7 +5,7 @@ import com.example.daniel.weatherinfo.data.CityDataManager;
 import com.example.daniel.weatherinfo.data.CityDataManagerInterface;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
-import com.example.daniel.weatherinfo.data.network.model.ResponseByIds;
+import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityIds;
 import com.example.daniel.weatherinfo.util.Mapper;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
     public void loadCitiesFromDatabase() {
         addDisposable(mCityDataManager
-                .getCitiesRx()
+                .getCitiesFromDB()
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
                 .subscribeWith(new DisposableObserver<List<City>>() {
@@ -56,22 +56,22 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
     public void loadCitiesFromNetwork() {
         addDisposable(mCityDataManager
-                .getCitiesRx()
+                .getCitiesFromDB()
                 .subscribeOn(mSubscribeScheduler)
-                .concatMap(new Function<List<City>, ObservableSource<ResponseByIds>>() {
+                .concatMap(new Function<List<City>, ObservableSource<WeatherDataByCityIds>>() {
                     @Override
-                    public ObservableSource<ResponseByIds> apply(List<City> cities) throws Exception {
+                    public ObservableSource<WeatherDataByCityIds> apply(List<City> cities) throws Exception {
                         String cityIds = getStringOfCityIdsForApiRequest(cities);
-                        return mOpenWeatherMapService.getWeatherByIds(cityIds);
+                        return mOpenWeatherMapService.getWeatherDataByCityIds(cityIds);
                     }
                 })
                 .observeOn(mObserveScheduler)
-                .concatMap(new Function<ResponseByIds, ObservableSource<Boolean>>() {
+                .concatMap(new Function<WeatherDataByCityIds, ObservableSource<Boolean>>() {
                     @Override
-                    public ObservableSource<Boolean> apply(ResponseByIds responseByIds) throws Exception {
-                        List<City> cities = Mapper.mapCities(responseByIds);
+                    public ObservableSource<Boolean> apply(WeatherDataByCityIds weatherDataByCityIds) throws Exception {
+                        List<City> cities = Mapper.mapCities(weatherDataByCityIds);
                         getView().displayCities(cities);
-                        return mCityDataManager.saveCitiesRx(cities).subscribeOn(mSubscribeScheduler);
+                        return mCityDataManager.saveCitiesToDB(cities).subscribeOn(mSubscribeScheduler);
                     }
                 })
                 .observeOn(mObserveScheduler)

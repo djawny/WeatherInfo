@@ -2,34 +2,34 @@ package com.example.daniel.weatherinfo.data.network.model;
 
 import java.util.List;
 
-public class ResponseByCity {
+public class WeatherDataByCityId {
 
-    private ResponseCoordinates coord;
-    private List<ResponseWeather> weather;
+    private Coordinates coord;
+    private List<Weather> weather;
     private transient String base;
-    private ResponseMain main;
+    private Main main;
     private int visibility;
-    private ResponseWind wind;
-    private ResponseClouds clouds;
+    private Wind wind;
+    private Clouds clouds;
     private long dt;
-    private ResponseSys sys;
+    private Sys sys;
     private int id;
     private String name;
     private int cod;
 
-    public ResponseCoordinates getCoord() {
+    public Coordinates getCoord() {
         return coord;
     }
 
-    public void setCoord(ResponseCoordinates coord) {
+    public void setCoord(Coordinates coord) {
         this.coord = coord;
     }
 
-    public List<ResponseWeather> getWeather() {
+    public List<Weather> getWeather() {
         return weather;
     }
 
-    public void setWeather(List<ResponseWeather> weather) {
+    public void setWeather(List<Weather> weather) {
         this.weather = weather;
     }
 
@@ -41,11 +41,11 @@ public class ResponseByCity {
         this.base = base;
     }
 
-    public ResponseMain getMain() {
+    public Main getMain() {
         return main;
     }
 
-    public void setMain(ResponseMain main) {
+    public void setMain(Main main) {
         this.main = main;
     }
 
@@ -57,19 +57,19 @@ public class ResponseByCity {
         this.visibility = visibility;
     }
 
-    public ResponseWind getWind() {
+    public Wind getWind() {
         return wind;
     }
 
-    public void setWind(ResponseWind wind) {
+    public void setWind(Wind wind) {
         this.wind = wind;
     }
 
-    public ResponseClouds getClouds() {
+    public Clouds getClouds() {
         return clouds;
     }
 
-    public void setClouds(ResponseClouds clouds) {
+    public void setClouds(Clouds clouds) {
         this.clouds = clouds;
     }
 
@@ -81,11 +81,11 @@ public class ResponseByCity {
         this.dt = dt;
     }
 
-    public ResponseSys getSys() {
+    public Sys getSys() {
         return sys;
     }
 
-    public void setSys(ResponseSys sys) {
+    public void setSys(Sys sys) {
         this.sys = sys;
     }
 

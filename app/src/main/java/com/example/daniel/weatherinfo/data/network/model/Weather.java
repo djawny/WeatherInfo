@@ -1,6 +1,6 @@
 package com.example.daniel.weatherinfo.data.network.model;
 
-public class ResponseWeather {
+public class Weather {
 
     private int id;
     private String main;
