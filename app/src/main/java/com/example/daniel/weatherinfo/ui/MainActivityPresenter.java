@@ -1,8 +1,8 @@
 package com.example.daniel.weatherinfo.ui;
 
 import com.example.daniel.weatherinfo.base.BasePresenter;
-import com.example.daniel.weatherinfo.data.CityDataManager;
-import com.example.daniel.weatherinfo.data.CityDataManagerInterface;
+import com.example.daniel.weatherinfo.data.DataManager;
+import com.example.daniel.weatherinfo.data.DataManagerInterface;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityIds;
@@ -17,13 +17,13 @@ import io.reactivex.observers.DisposableObserver;
 
 public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
-    private CityDataManagerInterface mCityDataManager;
+    private DataManagerInterface mCityDataManager;
     private OpenWeatherMapService mOpenWeatherMapService;
 
-    public MainActivityPresenter(CityDataManager cityDataManager, OpenWeatherMapService service,
+    public MainActivityPresenter(DataManager dataManager, OpenWeatherMapService service,
                                  Scheduler subscriber, Scheduler observer) {
         super(subscriber, observer);
-        mCityDataManager = cityDataManager;
+        mCityDataManager = dataManager;
         mOpenWeatherMapService = service;
     }
 

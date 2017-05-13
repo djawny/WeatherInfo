@@ -4,8 +4,8 @@ import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.base.BasePresenter;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityId;
-import com.example.daniel.weatherinfo.data.CityDataManager;
-import com.example.daniel.weatherinfo.data.CityDataManagerInterface;
+import com.example.daniel.weatherinfo.data.DataManager;
+import com.example.daniel.weatherinfo.data.DataManagerInterface;
 import com.example.daniel.weatherinfo.util.Mapper;
 
 import java.util.List;
@@ -17,13 +17,13 @@ import io.reactivex.observers.DisposableObserver;
 
 public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView> {
 
-    private CityDataManagerInterface mCityDataManager;
+    private DataManagerInterface mCityDataManager;
     private OpenWeatherMapService mOpenWeatherMapService;
 
-    public AddCityActivityPresenter(CityDataManager cityDataManager, OpenWeatherMapService service,
+    public AddCityActivityPresenter(DataManager dataManager, OpenWeatherMapService service,
                                     Scheduler subscriber, Scheduler observer) {
         super(subscriber, observer);
-        mCityDataManager = cityDataManager;
+        mCityDataManager = dataManager;
         mOpenWeatherMapService = service;
     }
 

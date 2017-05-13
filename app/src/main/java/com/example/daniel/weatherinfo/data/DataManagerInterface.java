@@ -8,7 +8,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 
-public interface CityDataManagerInterface {
+public interface DataManagerInterface {
 
     Observable<List<City>> getCitiesFromDB();
 

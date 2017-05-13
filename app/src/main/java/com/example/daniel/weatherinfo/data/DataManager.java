@@ -12,19 +12,19 @@ import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
 
-public class CityDataManager implements CityDataManagerInterface {
+public class DataManager implements DataManagerInterface {
 
-    private static CityDataManager mInstance = new CityDataManager();
+    private static DataManager mInstance = new DataManager();
 
     private final Database mDatabase;
     private final OpenWeatherMapService mOpenWeatherMapService;
 
-    public CityDataManager() {
+    public DataManager() {
         mDatabase = AndroidApplication.getDatabase();
         mOpenWeatherMapService = OpenWeatherMapService.Factory.makeApiService();
     }
 
-    public static CityDataManager getInstance() {
+    public static DataManager getInstance() {
         return mInstance;
     }
 
