@@ -14,9 +14,9 @@ import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.example.daniel.weatherinfo.R;
-import com.example.daniel.weatherinfo.api.OpenWeatherMapService;
-import com.example.daniel.weatherinfo.model.City;
-import com.example.daniel.weatherinfo.repository.CityRepository;
+import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
+import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.data.CityRepository;
 import com.example.daniel.weatherinfo.ui.adapter.CityPagerAdapter;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
 

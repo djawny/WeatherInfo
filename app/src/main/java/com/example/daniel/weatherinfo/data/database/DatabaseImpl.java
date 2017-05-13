@@ -1,19 +1,16 @@
-package com.example.daniel.weatherinfo.database;
+package com.example.daniel.weatherinfo.data.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.daniel.weatherinfo.model.City;
-import com.example.daniel.weatherinfo.model.Weather;
+import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.data.database.model.Weather;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
-import com.j256.ormlite.stmt.PreparedQuery;
-import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {

@@ -1,7 +1,7 @@
-package com.example.daniel.weatherinfo.api;
+package com.example.daniel.weatherinfo.data.network;
 
-import com.example.daniel.weatherinfo.model.ResponseByCity;
-import com.example.daniel.weatherinfo.model.ResponseByIds;
+import com.example.daniel.weatherinfo.data.network.model.ResponseByCity;
+import com.example.daniel.weatherinfo.data.network.model.ResponseByIds;
 
 import io.reactivex.Observable;
 import retrofit2.Retrofit;

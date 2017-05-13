@@ -1,9 +1,9 @@
 package com.example.daniel.weatherinfo.ui;
 
 import com.example.daniel.weatherinfo.base.BasePresenter;
-import com.example.daniel.weatherinfo.model.City;
-import com.example.daniel.weatherinfo.repository.CityRepository;
-import com.example.daniel.weatherinfo.repository.CityRepositoryInterface;
+import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.data.CityRepository;
+import com.example.daniel.weatherinfo.data.CityRepositoryInterface;
 
 import io.reactivex.Scheduler;
 import io.reactivex.observers.DisposableObserver;

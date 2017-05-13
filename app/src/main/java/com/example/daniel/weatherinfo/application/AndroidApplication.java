@@ -2,8 +2,8 @@ package com.example.daniel.weatherinfo.application;
 
 import android.app.Application;
 
-import com.example.daniel.weatherinfo.database.Database;
-import com.example.daniel.weatherinfo.database.DatabaseImpl;
+import com.example.daniel.weatherinfo.data.database.Database;
+import com.example.daniel.weatherinfo.data.database.DatabaseImpl;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 public class AndroidApplication extends Application {

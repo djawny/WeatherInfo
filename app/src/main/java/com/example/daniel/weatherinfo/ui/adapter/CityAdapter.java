@@ -4,12 +4,11 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
-import com.example.daniel.weatherinfo.model.City;
+import com.example.daniel.weatherinfo.data.database.model.City;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

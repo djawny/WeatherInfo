@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.model;
+package com.example.daniel.weatherinfo.data.database.model;
 
 
 import com.j256.ormlite.field.DatabaseField;

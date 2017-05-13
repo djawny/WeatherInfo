@@ -1,6 +1,6 @@
-package com.example.daniel.weatherinfo.repository;
+package com.example.daniel.weatherinfo.data;
 
-import com.example.daniel.weatherinfo.model.City;
+import com.example.daniel.weatherinfo.data.database.model.City;
 
 import java.util.List;
 

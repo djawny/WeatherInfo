@@ -1,8 +1,8 @@
-package com.example.daniel.weatherinfo.repository;
+package com.example.daniel.weatherinfo.data;
 
 import com.example.daniel.weatherinfo.application.AndroidApplication;
-import com.example.daniel.weatherinfo.database.Database;
-import com.example.daniel.weatherinfo.model.City;
+import com.example.daniel.weatherinfo.data.database.Database;
+import com.example.daniel.weatherinfo.data.database.model.City;
 
 import java.util.List;
 import java.util.concurrent.Callable;

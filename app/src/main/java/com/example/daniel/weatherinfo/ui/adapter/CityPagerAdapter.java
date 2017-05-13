@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.example.daniel.weatherinfo.model.City;
+import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.ui.PageFragment;
 
 import java.util.ArrayList;

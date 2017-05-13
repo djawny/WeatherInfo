@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
-import com.example.daniel.weatherinfo.model.City;
-import com.example.daniel.weatherinfo.repository.CityRepository;
+import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.data.CityRepository;
 import com.example.daniel.weatherinfo.util.DateConverter;
 import com.squareup.picasso.Picasso;
 

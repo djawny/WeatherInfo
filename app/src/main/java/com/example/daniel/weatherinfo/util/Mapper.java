@@ -1,9 +1,9 @@
 package com.example.daniel.weatherinfo.util;
 
-import com.example.daniel.weatherinfo.model.City;
-import com.example.daniel.weatherinfo.model.ResponseByCity;
-import com.example.daniel.weatherinfo.model.ResponseByIds;
-import com.example.daniel.weatherinfo.model.Weather;
+import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.data.network.model.ResponseByCity;
+import com.example.daniel.weatherinfo.data.network.model.ResponseByIds;
+import com.example.daniel.weatherinfo.data.database.model.Weather;
 
 import java.util.ArrayList;
 import java.util.List;
