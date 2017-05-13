@@ -29,7 +29,7 @@ public class DataManager implements DataManagerInterface {
     }
 
     @Override
-    public Observable<List<City>> getCitiesFromDB() {
+    public Observable<List<City>> getCities() {
         return Observable.fromCallable(new Callable<List<City>>() {
             @Override
             public List<City> call() throws Exception {
@@ -39,7 +39,7 @@ public class DataManager implements DataManagerInterface {
     }
 
     @Override
-    public Observable<City> getCityFromDB(final int cityId) {
+    public Observable<City> getCity(final int cityId) {
         return Observable.fromCallable(new Callable<City>() {
             @Override
             public City call() throws Exception {
@@ -49,7 +49,7 @@ public class DataManager implements DataManagerInterface {
     }
 
     @Override
-    public Observable<Boolean> saveCitiesToDB(final List<City> cities) {
+    public Observable<Boolean> saveCities(final List<City> cities) {
         return Observable.fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
@@ -60,7 +60,7 @@ public class DataManager implements DataManagerInterface {
     }
 
     @Override
-    public Observable<Boolean> saveCityToDB(final City city) {
+    public Observable<Boolean> saveCity(final City city) {
         return Observable.fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
@@ -71,7 +71,7 @@ public class DataManager implements DataManagerInterface {
     }
 
     @Override
-    public Observable<Boolean> removeCityFromDB(final int cityId) {
+    public Observable<Boolean> removeCity(final int cityId) {
         return Observable.fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
@@ -82,7 +82,7 @@ public class DataManager implements DataManagerInterface {
     }
 
     @Override
-    public Observable<Boolean> removeCitiesFromDB() {
+    public Observable<Boolean> removeCities() {
         return Observable.fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
@@ -93,12 +93,12 @@ public class DataManager implements DataManagerInterface {
     }
 
     @Override
-    public Observable<WeatherDataByCityId> getApiResponseByCityId(String cityName) {
+    public Observable<WeatherDataByCityId> getWeatherDataByCityName(String cityName) {
         return mOpenWeatherMapService.getWeatherDataByCityName(cityName);
     }
 
     @Override
-    public Observable<WeatherDataByCityIds> getApiResponseByCityIds(String cityIds) {
+    public Observable<WeatherDataByCityIds> getWeatherDataByCityIds(String cityIds) {
         return mOpenWeatherMapService.getWeatherDataByCityIds(cityIds);
     }
 }

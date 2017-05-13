@@ -59,8 +59,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
     }
 
     private void initializePresenter() {
-        mPresenter = new AddCityActivityPresenter(DataManager.getInstance(),
-                OpenWeatherMapService.Factory.makeApiService(), Schedulers.io(), AndroidSchedulers.mainThread());
+        mPresenter = new AddCityActivityPresenter(DataManager.getInstance(), Schedulers.io(), AndroidSchedulers.mainThread());
         mPresenter.setView(this);
     }
 

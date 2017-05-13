@@ -10,16 +10,16 @@ import io.reactivex.observers.DisposableObserver;
 
 public class PageFragmentPresenter extends BasePresenter<PageFragmentView> {
 
-    private DataManagerInterface mCityDataManager;
+    private DataManagerInterface mDataManager;
 
     public PageFragmentPresenter(DataManager dataManager, Scheduler subscriber, Scheduler observer) {
         super(subscriber, observer);
-        mCityDataManager = dataManager;
+        mDataManager = dataManager;
     }
 
     public void loadCityFromDatabase(int cityId) {
-        addDisposable(mCityDataManager
-                .getCityFromDB(cityId)
+        addDisposable(mDataManager
+                .getCity(cityId)
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
                 .subscribeWith(new DisposableObserver<City>() {

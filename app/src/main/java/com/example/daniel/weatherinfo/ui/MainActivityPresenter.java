@@ -4,7 +4,6 @@ import com.example.daniel.weatherinfo.base.BasePresenter;
 import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.DataManagerInterface;
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityIds;
 import com.example.daniel.weatherinfo.util.Mapper;
 
@@ -17,19 +16,16 @@ import io.reactivex.observers.DisposableObserver;
 
 public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
-    private DataManagerInterface mCityDataManager;
-    private OpenWeatherMapService mOpenWeatherMapService;
+    private DataManagerInterface mDataManager;
 
-    public MainActivityPresenter(DataManager dataManager, OpenWeatherMapService service,
-                                 Scheduler subscriber, Scheduler observer) {
+    public MainActivityPresenter(DataManager dataManager, Scheduler subscriber, Scheduler observer) {
         super(subscriber, observer);
-        mCityDataManager = dataManager;
-        mOpenWeatherMapService = service;
+        mDataManager = dataManager;
     }
 
     public void loadCitiesFromDatabase() {
-        addDisposable(mCityDataManager
-                .getCitiesFromDB()
+        addDisposable(mDataManager
+                .getCities()
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
                 .subscribeWith(new DisposableObserver<List<City>>() {
@@ -55,14 +51,14 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
     }
 
     public void loadCitiesFromNetwork() {
-        addDisposable(mCityDataManager
-                .getCitiesFromDB()
+        addDisposable(mDataManager
+                .getCities()
                 .subscribeOn(mSubscribeScheduler)
                 .concatMap(new Function<List<City>, ObservableSource<WeatherDataByCityIds>>() {
                     @Override
                     public ObservableSource<WeatherDataByCityIds> apply(List<City> cities) throws Exception {
                         String cityIds = getStringOfCityIdsForApiRequest(cities);
-                        return mOpenWeatherMapService.getWeatherDataByCityIds(cityIds);
+                        return mDataManager.getWeatherDataByCityIds(cityIds);
                     }
                 })
                 .observeOn(mObserveScheduler)
@@ -71,7 +67,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                     public ObservableSource<Boolean> apply(WeatherDataByCityIds weatherDataByCityIds) throws Exception {
                         List<City> cities = Mapper.mapCities(weatherDataByCityIds);
                         getView().displayCities(cities);
-                        return mCityDataManager.saveCitiesToDB(cities).subscribeOn(mSubscribeScheduler);
+                        return mDataManager.saveCities(cities).subscribeOn(mSubscribeScheduler);
                     }
                 })
                 .observeOn(mObserveScheduler)

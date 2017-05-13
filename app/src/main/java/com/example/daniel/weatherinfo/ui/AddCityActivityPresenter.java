@@ -1,6 +1,5 @@
 package com.example.daniel.weatherinfo.ui;
 
-import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.base.BasePresenter;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityId;
@@ -17,19 +16,16 @@ import io.reactivex.observers.DisposableObserver;
 
 public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView> {
 
-    private DataManagerInterface mCityDataManager;
-    private OpenWeatherMapService mOpenWeatherMapService;
+    private DataManagerInterface mDataManager;
 
-    public AddCityActivityPresenter(DataManager dataManager, OpenWeatherMapService service,
-                                    Scheduler subscriber, Scheduler observer) {
+    public AddCityActivityPresenter(DataManager dataManager, Scheduler subscriber, Scheduler observer) {
         super(subscriber, observer);
-        mCityDataManager = dataManager;
-        mOpenWeatherMapService = service;
+        mDataManager = dataManager;
     }
 
     public void loadCitiesFromDatabase() {
-        addDisposable(mCityDataManager
-                .getCitiesFromDB()
+        addDisposable(mDataManager
+                .getCities()
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
                 .subscribeWith(new DisposableObserver<List<City>>() {
@@ -55,13 +51,13 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
     }
 
     public void addCityFromNetwork(String cityName) {//TODO
-        addDisposable(mOpenWeatherMapService.getWeatherDataByCityName(cityName)
+        addDisposable(mDataManager.getWeatherDataByCityName(cityName)
                 .subscribeOn(mSubscribeScheduler)
                 .flatMap(new Function<WeatherDataByCityId, ObservableSource<Boolean>>() {
                     @Override
                     public ObservableSource<Boolean> apply(WeatherDataByCityId weatherDataByCityId) throws Exception {
                         City city = Mapper.mapCity(weatherDataByCityId);
-                        return mCityDataManager.saveCityToDB(city);
+                        return mDataManager.saveCity(city);
                     }
                 })
                 .observeOn(mObserveScheduler)
@@ -84,7 +80,7 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
     }
 
     public void deleteCityFromDatabase(int cityId) {
-        addDisposable(mCityDataManager.removeCityFromDB(cityId)
+        addDisposable(mDataManager.removeCity(cityId)
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
                 .subscribeWith(new DisposableObserver<Boolean>() {

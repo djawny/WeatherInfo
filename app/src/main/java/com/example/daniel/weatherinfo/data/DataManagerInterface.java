@@ -10,19 +10,19 @@ import io.reactivex.Observable;
 
 public interface DataManagerInterface {
 
-    Observable<List<City>> getCitiesFromDB();
+    Observable<List<City>> getCities();
 
-    Observable<City> getCityFromDB(int cityId);
+    Observable<City> getCity(int cityId);
 
-    Observable<Boolean> saveCitiesToDB(List<City> cities);
+    Observable<Boolean> saveCities(List<City> cities);
 
-    Observable<Boolean> saveCityToDB(City city);
+    Observable<Boolean> saveCity(City city);
 
-    Observable<Boolean> removeCityFromDB(int cityId);
+    Observable<Boolean> removeCity(int cityId);
 
-    Observable<Boolean> removeCitiesFromDB();
+    Observable<Boolean> removeCities();
 
-    Observable<WeatherDataByCityId> getApiResponseByCityId(String cityName);
+    Observable<WeatherDataByCityId> getWeatherDataByCityName(String cityName);
 
-    Observable<WeatherDataByCityIds> getApiResponseByCityIds(String cityIds);
+    Observable<WeatherDataByCityIds> getWeatherDataByCityIds(String cityIds);
 }
