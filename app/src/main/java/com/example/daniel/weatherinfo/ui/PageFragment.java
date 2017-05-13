@@ -12,7 +12,8 @@ import android.widget.TextView;
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.DataManager;
-import com.example.daniel.weatherinfo.util.DateConverter;
+import com.example.daniel.weatherinfo.util.AppConstants;
+import com.example.daniel.weatherinfo.util.DateUtils;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -21,6 +22,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class PageFragment extends Fragment implements PageFragmentView {
+
+    private static final String ARG_CITY_ID = "city_id";
 
     @BindView(R.id.city_country)
     TextView mCityCountry;
@@ -54,8 +57,6 @@ public class PageFragment extends Fragment implements PageFragmentView {
 
     @BindView(R.id.sunset)
     TextView mSunset;
-
-    private static final String ARG_CITY_ID = "city_id";
 
     private Context mContext;
     private PageFragmentPresenter mPresenter;
@@ -109,7 +110,7 @@ public class PageFragment extends Fragment implements PageFragmentView {
                 .load("http://openweathermap.org/img/w/" + city.getWeather().getIcon() + ".png")
                 .into(mIcon);
         mCityCountry.setText(String.format("%s, %s", city.getName(), city.getCountry()));
-        String date = DateConverter.getDateFromUTCTimestamp(city.getWeather().getDate(), "yyyy-MM-dd\nHH:mm:ss");
+        String date = DateUtils.getDateFromUTCTimestamp(city.getWeather().getDate(), AppConstants.DATE_NEW_LINE_TIME);
         mDate.setText(date);
         mDescription.setText(city.getWeather().getDescription());
         mTemperature.setText(String.format("%s °C", String.valueOf(city.getWeather().getTemp())));
@@ -117,9 +118,9 @@ public class PageFragment extends Fragment implements PageFragmentView {
         mWind.setText(String.format("Wind: %s m/s", city.getWeather().getWindSpeed()));
         mCloudiness.setText(String.format("Cloudiness: %s %%", city.getWeather().getCloudiness()));
         mPressure.setText(String.format("Pressure: %s hpa", city.getWeather().getPressure()));
-        String sunrise = DateConverter.getDateFromUTCTimestamp(city.getWeather().getSunrise(), "HH:mm:ss");
+        String sunrise = DateUtils.getDateFromUTCTimestamp(city.getWeather().getSunrise(), AppConstants.TIME);
         mSunrise.setText(String.format("Sunrise: %s", sunrise));
-        String sunset = DateConverter.getDateFromUTCTimestamp(city.getWeather().getSunset(), "HH:mm:ss");
+        String sunset = DateUtils.getDateFromUTCTimestamp(city.getWeather().getSunset(), AppConstants.TIME);
         mSunset.setText(String.format("Sunset: %s", sunset));
     }
 }

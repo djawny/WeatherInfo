@@ -13,10 +13,10 @@ import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 import java.util.List;
 
-public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
+import static com.example.daniel.weatherinfo.util.AppConstants.DATABASE_NAME;
+import static com.example.daniel.weatherinfo.util.AppConstants.DATABASE_VERSION;
 
-    private final static String DATABASE_NAME = "weather_info";
-    private final static int DATABASE_VERSION = 1;
+public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
 
     private RuntimeExceptionDao<City, Integer> mCityDao;
     private RuntimeExceptionDao<Weather, Integer> mWeatherDao;

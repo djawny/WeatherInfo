@@ -123,7 +123,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
             if (NetworkUtils.isNetAvailable(this)) {
                 mPresenter.addCityFromNetwork(cityName);
                 mEditText.setText("");
-                KeyboardUtils.hideSoftInput(this);
+                KeyboardUtils.hideSoftKeyboard(this);
             } else {
                 Toast.makeText(this, "Network error! Check the network connection settings.", Toast.LENGTH_LONG).show();
             }

@@ -2,12 +2,10 @@ package com.example.daniel.weatherinfo.util;
 
 import android.text.format.DateFormat;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.TimeZone;
 
-public class DateConverter {
+public class DateUtils {
 
     public static String getDateFromUTCTimestamp(long mTimestamp, String format) {
         String date = null;

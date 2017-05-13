@@ -1,7 +1,7 @@
 package com.example.daniel.weatherinfo.data.network;
 
-import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityName;
 import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityIds;
+import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityName;
 
 import io.reactivex.Observable;
 import retrofit2.Retrofit;
@@ -10,9 +10,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-public interface OpenWeatherMapService {
+import static com.example.daniel.weatherinfo.util.AppConstants.BASE_URL;
 
-    String BASE_URL = "http://api.openweathermap.org/data/2.5/";
+public interface OpenWeatherMapService {
 
     @GET("weather?appid=779bcb1c99f4dcd8ffe6b596d5dc919d&units=metric")
     Observable<WeatherDataByCityName> getWeatherDataByCityName(@Query("q") String cityName);

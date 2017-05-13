@@ -26,6 +26,7 @@
         </activity>
         <activity
             android:name=".ui.AddCityActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:label="@string/title_activity_add_city"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
