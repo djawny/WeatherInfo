@@ -16,6 +16,7 @@ import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.ui.adapter.CityAdapter;
+import com.example.daniel.weatherinfo.util.KeyboardUtils;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
 
 import java.util.List;
@@ -122,6 +123,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
             if (NetworkUtils.isNetAvailable(this)) {
                 mPresenter.addCityFromNetwork(cityName);
                 mEditText.setText("");
+                KeyboardUtils.hideSoftInput(this);
             } else {
                 Toast.makeText(this, "Network error! Check the network connection settings.", Toast.LENGTH_LONG).show();
             }
