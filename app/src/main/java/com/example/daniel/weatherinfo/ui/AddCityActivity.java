@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.data.CityRepository;
+import com.example.daniel.weatherinfo.data.CityDataManager;
 import com.example.daniel.weatherinfo.ui.adapter.CityAdapter;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
 
@@ -59,7 +59,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityActivit
     }
 
     private void initializePresenter() {
-        mPresenter = new AddCityActivityPresenter(CityRepository.getInstance(),
+        mPresenter = new AddCityActivityPresenter(CityDataManager.getInstance(),
                 OpenWeatherMapService.Factory.makeWeatherService(), Schedulers.io(), AndroidSchedulers.mainThread());
         mPresenter.setView(this);
     }

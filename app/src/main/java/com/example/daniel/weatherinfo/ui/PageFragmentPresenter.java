@@ -2,23 +2,23 @@ package com.example.daniel.weatherinfo.ui;
 
 import com.example.daniel.weatherinfo.base.BasePresenter;
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.data.CityRepository;
-import com.example.daniel.weatherinfo.data.CityRepositoryInterface;
+import com.example.daniel.weatherinfo.data.CityDataManager;
+import com.example.daniel.weatherinfo.data.CityDataManagerInterface;
 
 import io.reactivex.Scheduler;
 import io.reactivex.observers.DisposableObserver;
 
 public class PageFragmentPresenter extends BasePresenter<PageFragmentView> {
 
-    private CityRepositoryInterface mCityRepository;
+    private CityDataManagerInterface mCityDataManager;
 
-    public PageFragmentPresenter(CityRepository repository, Scheduler subscriber, Scheduler observer) {
+    public PageFragmentPresenter(CityDataManager cityDataManager, Scheduler subscriber, Scheduler observer) {
         super(subscriber, observer);
-        mCityRepository = repository;
+        mCityDataManager = cityDataManager;
     }
 
     public void loadCityFromDatabase(int cityId) {
-        addDisposable(mCityRepository
+        addDisposable(mCityDataManager
                 .getCityRx(cityId)
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)

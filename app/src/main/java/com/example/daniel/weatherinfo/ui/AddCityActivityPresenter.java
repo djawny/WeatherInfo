@@ -4,8 +4,8 @@ import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.base.BasePresenter;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.network.model.ResponseByCity;
-import com.example.daniel.weatherinfo.data.CityRepository;
-import com.example.daniel.weatherinfo.data.CityRepositoryInterface;
+import com.example.daniel.weatherinfo.data.CityDataManager;
+import com.example.daniel.weatherinfo.data.CityDataManagerInterface;
 import com.example.daniel.weatherinfo.util.Mapper;
 
 import java.util.List;
@@ -17,18 +17,18 @@ import io.reactivex.observers.DisposableObserver;
 
 public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView> {
 
-    private CityRepositoryInterface mCityRepository;
+    private CityDataManagerInterface mCityDataManager;
     private OpenWeatherMapService mOpenWeatherMapService;
 
-    public AddCityActivityPresenter(CityRepository repository, OpenWeatherMapService service,
+    public AddCityActivityPresenter(CityDataManager cityDataManager, OpenWeatherMapService service,
                                     Scheduler subscriber, Scheduler observer) {
         super(subscriber, observer);
-        mCityRepository = repository;
+        mCityDataManager = cityDataManager;
         mOpenWeatherMapService = service;
     }
 
     public void loadCitiesFromDatabase() {
-        addDisposable(mCityRepository
+        addDisposable(mCityDataManager
                 .getCitiesRx()
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
@@ -61,7 +61,7 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
                     @Override
                     public ObservableSource<Boolean> apply(ResponseByCity responseByCity) throws Exception {
                         City city = Mapper.mapCity(responseByCity);
-                        return mCityRepository.saveCityRx(city);
+                        return mCityDataManager.saveCityRx(city);
                     }
                 })
                 .observeOn(mObserveScheduler)
@@ -84,12 +84,12 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
     }
 
     public void deleteCityFromDatabase(int cityId) {
-        addDisposable(mCityRepository.removeCityRx(cityId)
+        addDisposable(mCityDataManager.removeCityRx(cityId)
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
-                .subscribeWith(new DisposableObserver<Void>() {
+                .subscribeWith(new DisposableObserver<Boolean>() {
                     @Override
-                    public void onNext(Void value) {
+                    public void onNext(Boolean value) {
                         //ignore
                     }
 

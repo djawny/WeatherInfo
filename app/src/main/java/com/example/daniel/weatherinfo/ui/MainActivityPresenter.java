@@ -1,11 +1,11 @@
 package com.example.daniel.weatherinfo.ui;
 
-import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.base.BasePresenter;
+import com.example.daniel.weatherinfo.data.CityDataManager;
+import com.example.daniel.weatherinfo.data.CityDataManagerInterface;
 import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.data.network.model.ResponseByIds;
-import com.example.daniel.weatherinfo.data.CityRepository;
-import com.example.daniel.weatherinfo.data.CityRepositoryInterface;
 import com.example.daniel.weatherinfo.util.Mapper;
 
 import java.util.List;
@@ -17,18 +17,18 @@ import io.reactivex.observers.DisposableObserver;
 
 public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
-    private CityRepositoryInterface mCityRepository;
+    private CityDataManagerInterface mCityDataManager;
     private OpenWeatherMapService mOpenWeatherMapService;
 
-    public MainActivityPresenter(CityRepository repository, OpenWeatherMapService service,
+    public MainActivityPresenter(CityDataManager cityDataManager, OpenWeatherMapService service,
                                  Scheduler subscriber, Scheduler observer) {
         super(subscriber, observer);
-        mCityRepository = repository;
+        mCityDataManager = cityDataManager;
         mOpenWeatherMapService = service;
     }
 
     public void loadCitiesFromDatabase() {
-        addDisposable(mCityRepository
+        addDisposable(mCityDataManager
                 .getCitiesRx()
                 .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
@@ -55,10 +55,10 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
     }
 
     public void loadCitiesFromNetwork() {
-        addDisposable(mCityRepository
+        addDisposable(mCityDataManager
                 .getCitiesRx()
                 .subscribeOn(mSubscribeScheduler)
-                .flatMap(new Function<List<City>, ObservableSource<ResponseByIds>>() {
+                .concatMap(new Function<List<City>, ObservableSource<ResponseByIds>>() {
                     @Override
                     public ObservableSource<ResponseByIds> apply(List<City> cities) throws Exception {
                         String cityIds = getStringOfCityIdsForApiRequest(cities);
@@ -66,19 +66,18 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                     }
                 })
                 .observeOn(mObserveScheduler)
-                .flatMap(new Function<ResponseByIds, ObservableSource<Void>>() {
+                .concatMap(new Function<ResponseByIds, ObservableSource<Boolean>>() {
                     @Override
-                    public ObservableSource<Void> apply(ResponseByIds responseByIds) throws Exception {
+                    public ObservableSource<Boolean> apply(ResponseByIds responseByIds) throws Exception {
                         List<City> cities = Mapper.mapCities(responseByIds);
                         getView().displayCities(cities);
-                        return mCityRepository.saveCitiesRx(cities);
+                        return mCityDataManager.saveCitiesRx(cities).subscribeOn(mSubscribeScheduler);
                     }
                 })
-                .subscribeOn(mSubscribeScheduler)
                 .observeOn(mObserveScheduler)
-                .subscribeWith(new DisposableObserver<Void>() {
+                .subscribeWith(new DisposableObserver<Boolean>() {
                     @Override
-                    public void onNext(Void value) {
+                    public void onNext(Boolean value) {
                         //ignore
                     }
 

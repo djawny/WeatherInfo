@@ -8,19 +8,18 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 
-public class CityRepository implements CityRepositoryInterface {
+public class CityDataManager implements CityDataManagerInterface {
 
-    private static CityRepository mInstance = new CityRepository();
+    private static CityDataManager mInstance = new CityDataManager();
 
     private final Database mDatabase;
 
-    public CityRepository() {
+    public CityDataManager() {
         mDatabase = AndroidApplication.getDatabase();
     }
 
-    public static CityRepository getInstance() {
+    public static CityDataManager getInstance() {
         return mInstance;
     }
 

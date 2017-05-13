@@ -16,7 +16,7 @@ import com.baoyz.widget.PullRefreshLayout;
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.data.CityRepository;
+import com.example.daniel.weatherinfo.data.CityDataManager;
 import com.example.daniel.weatherinfo.ui.adapter.CityPagerAdapter;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
 
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     private void initializePresenter() {
-        mPresenter = new MainActivityPresenter(CityRepository.getInstance(),
+        mPresenter = new MainActivityPresenter(CityDataManager.getInstance(),
                 OpenWeatherMapService.Factory.makeWeatherService(), Schedulers.io(), AndroidSchedulers.mainThread());
         mPresenter.setView(this);
     }

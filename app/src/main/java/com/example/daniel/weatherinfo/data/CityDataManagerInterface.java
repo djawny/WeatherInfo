@@ -6,7 +6,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 
-public interface CityRepositoryInterface {
+public interface CityDataManagerInterface {
 
     Observable<List<City>> getCitiesRx();
 
