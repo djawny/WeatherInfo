@@ -45,45 +45,45 @@ public class CityRepository implements CityRepositoryInterface {
     }
 
     @Override
-    public Observable<Void> saveCitiesRx(final List<City> cities) {
-        return Observable.defer(new Callable<ObservableSource<? extends Void>>() {
+    public Observable<Boolean> saveCitiesRx(final List<City> cities) {
+        return Observable.fromCallable(new Callable<Boolean>() {
             @Override
-            public ObservableSource<? extends Void> call() throws Exception {
+            public Boolean call() throws Exception {
                 mDatabase.saveCities(cities);
-                return Observable.empty();
+                return true;
             }
         });
     }
 
     @Override
-    public Observable<Void> saveCityRx(final City city) {
-        return Observable.defer(new Callable<ObservableSource<? extends Void>>() {
+    public Observable<Boolean> saveCityRx(final City city) {
+        return Observable.fromCallable(new Callable<Boolean>() {
             @Override
-            public ObservableSource<? extends Void> call() throws Exception {
+            public Boolean call() throws Exception {
                 mDatabase.saveCity(city);
-                return Observable.empty();
+                return true;
             }
         });
     }
 
     @Override
-    public Observable<Void> removeCityRx(final int cityId) {
-        return Observable.defer(new Callable<ObservableSource<? extends Void>>() {
+    public Observable<Boolean> removeCityRx(final int cityId) {
+        return Observable.fromCallable(new Callable<Boolean>() {
             @Override
-            public ObservableSource<? extends Void> call() throws Exception {
+            public Boolean call() throws Exception {
                 mDatabase.removeCity(cityId);
-                return Observable.empty();
+                return true;
             }
         });
     }
 
     @Override
-    public Observable<Void> removeAllCitiesRx() {
-        return Observable.defer(new Callable<ObservableSource<? extends Void>>() {
+    public Observable<Boolean> removeAllCitiesRx() {
+        return Observable.fromCallable(new Callable<Boolean>() {
             @Override
-            public ObservableSource<? extends Void> call() throws Exception {
+            public Boolean call() throws Exception {
                 mDatabase.removeAllCities();
-                return Observable.empty();
+                return true;
             }
         });
     }

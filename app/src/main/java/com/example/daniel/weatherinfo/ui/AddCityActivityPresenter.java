@@ -57,17 +57,17 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
     public void addCityFromNetwork(String cityName) {//TODO
         addDisposable(mOpenWeatherMapService.getWeatherByCity(cityName)
                 .subscribeOn(mSubscribeScheduler)
-                .flatMap(new Function<ResponseByCity, ObservableSource<Void>>() {
+                .flatMap(new Function<ResponseByCity, ObservableSource<Boolean>>() {
                     @Override
-                    public ObservableSource<Void> apply(ResponseByCity responseByCity) throws Exception {
+                    public ObservableSource<Boolean> apply(ResponseByCity responseByCity) throws Exception {
                         City city = Mapper.mapCity(responseByCity);
                         return mCityRepository.saveCityRx(city);
                     }
                 })
                 .observeOn(mObserveScheduler)
-                .subscribeWith(new DisposableObserver<Void>() {
+                .subscribeWith(new DisposableObserver<Boolean>() {
                     @Override
-                    public void onNext(Void value) {
+                    public void onNext(Boolean value) {
                         //ignore
                     }
 

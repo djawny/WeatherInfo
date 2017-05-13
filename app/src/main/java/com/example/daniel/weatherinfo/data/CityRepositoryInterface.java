@@ -12,11 +12,11 @@ public interface CityRepositoryInterface {
 
     Observable<City> getCityRx(int cityId);
 
-    Observable<Void> saveCitiesRx(List<City> cities);
+    Observable<Boolean> saveCitiesRx(List<City> cities);
 
-    Observable<Void> saveCityRx(City city);
+    Observable<Boolean> saveCityRx(City city);
 
-    Observable<Void> removeCityRx(int cityId);
+    Observable<Boolean> removeCityRx(int cityId);
 
-    Observable<Void> removeAllCitiesRx();
+    Observable<Boolean> removeAllCitiesRx();
 }
