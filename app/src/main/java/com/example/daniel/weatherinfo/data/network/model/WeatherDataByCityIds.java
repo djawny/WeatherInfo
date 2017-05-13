@@ -13,7 +13,7 @@ public class WeatherDataByCityIds {
 
     @SerializedName("list")
     @Expose
-    private List<WeatherDataByCityId> list;
+    private List<WeatherDataByCityName> list;
 
     public int getCounter() {
         return counter;
@@ -23,11 +23,11 @@ public class WeatherDataByCityIds {
         this.counter = counter;
     }
 
-    public List<WeatherDataByCityId> getList() {
+    public List<WeatherDataByCityName> getList() {
         return list;
     }
 
-    public void setList(List<WeatherDataByCityId> list) {
+    public void setList(List<WeatherDataByCityName> list) {
         this.list = list;
     }
 }

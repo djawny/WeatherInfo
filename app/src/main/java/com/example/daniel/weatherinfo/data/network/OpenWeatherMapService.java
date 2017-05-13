@@ -1,6 +1,6 @@
 package com.example.daniel.weatherinfo.data.network;
 
-import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityId;
+import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityName;
 import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityIds;
 
 import io.reactivex.Observable;
@@ -15,7 +15,7 @@ public interface OpenWeatherMapService {
     String BASE_URL = "http://api.openweathermap.org/data/2.5/";
 
     @GET("weather?appid=779bcb1c99f4dcd8ffe6b596d5dc919d&units=metric")
-    Observable<WeatherDataByCityId> getWeatherDataByCityName(@Query("q") String cityName);
+    Observable<WeatherDataByCityName> getWeatherDataByCityName(@Query("q") String cityName);
 
     @GET("group?appid=779bcb1c99f4dcd8ffe6b596d5dc919d&units=metric")
     Observable<WeatherDataByCityIds> getWeatherDataByCityIds(@Query("id") String cityIds);

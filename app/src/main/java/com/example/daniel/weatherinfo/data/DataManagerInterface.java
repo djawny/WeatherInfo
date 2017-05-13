@@ -1,7 +1,7 @@
 package com.example.daniel.weatherinfo.data;
 
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityId;
+import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityName;
 import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityIds;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public interface DataManagerInterface {
 
     Observable<Boolean> removeCities();
 
-    Observable<WeatherDataByCityId> getWeatherDataByCityName(String cityName);
+    Observable<WeatherDataByCityName> getWeatherDataByCityName(String cityName);
 
     Observable<WeatherDataByCityIds> getWeatherDataByCityIds(String cityIds);
 }
