@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.base;
+package com.example.daniel.weatherinfo.ui.base;
 
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.CompositeDisposable;

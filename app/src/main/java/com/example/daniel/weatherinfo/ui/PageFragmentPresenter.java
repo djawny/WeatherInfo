@@ -1,6 +1,6 @@
 package com.example.daniel.weatherinfo.ui;
 
-import com.example.daniel.weatherinfo.base.BasePresenter;
+import com.example.daniel.weatherinfo.ui.base.BasePresenter;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.DataManagerInterface;
