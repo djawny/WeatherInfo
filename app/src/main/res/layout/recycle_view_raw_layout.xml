@@ -35,7 +35,7 @@
             tools:textColor="@android:color/black" />
 
         <TextView
-            android:id="@+id/temperature"
+            android:id="@+id/temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/icon"
@@ -43,7 +43,7 @@
             android:layout_toRightOf="@+id/icon"
             android:textColor="@android:color/white"
             android:textSize="30sp"
-            tools:text="temperature"
+            tools:text="temp"
             tools:textColor="@android:color/black" />
 
         <TextView

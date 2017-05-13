@@ -5,7 +5,7 @@ import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.DataManagerInterface;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityIds;
-import com.example.daniel.weatherinfo.util.Mapper;
+import com.example.daniel.weatherinfo.data.mapper.Mapper;
 
 import java.util.List;
 

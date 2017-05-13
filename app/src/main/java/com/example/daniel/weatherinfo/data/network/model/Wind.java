@@ -1,9 +1,17 @@
 package com.example.daniel.weatherinfo.data.network.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Wind {
 
+    @SerializedName("speed")
+    @Expose
     private double speed;
-    private double deg;
+
+    @SerializedName("deg")
+    @Expose
+    private double degree;
 
     public double getSpeed() {
         return speed;
@@ -13,11 +21,11 @@ public class Wind {
         this.speed = speed;
     }
 
-    public double getDeg() {
-        return deg;
+    public double getDegree() {
+        return degree;
     }
 
-    public void setDeg(double deg) {
-        this.deg = deg;
+    public void setDegree(double degree) {
+        this.degree = degree;
     }
 }

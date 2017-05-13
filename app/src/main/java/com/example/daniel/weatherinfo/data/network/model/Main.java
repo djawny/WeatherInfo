@@ -1,15 +1,28 @@
 package com.example.daniel.weatherinfo.data.network.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Main {
 
+    @SerializedName("temp")
+    @Expose
     private double temp;
+
+    @SerializedName("humidity")
+    @Expose
     private int humidity;
+
+    @SerializedName("pressure")
+    @Expose
     private int pressure;
+
     @SerializedName("temp_min")
+    @Expose
     private double tempMin;
+
     @SerializedName("temp_max")
+    @Expose
     private double tempMax;
 
     public double getTemp() {

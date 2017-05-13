@@ -56,7 +56,7 @@ public class CityAdapter extends BaseAdapter<City> {
         @BindView(R.id.name_country)
         TextView mNameCountry;
 
-        @BindView(R.id.temperature)
+        @BindView(R.id.temp)
         TextView mTemperature;
 
         @BindView(R.id.description)

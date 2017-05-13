@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.util;
+package com.example.daniel.weatherinfo.data.mapper;
 
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityId;
@@ -25,13 +25,13 @@ public class Mapper {
             weather.setTempMin(weatherDataByCityId.getMain().getTempMin());
             weather.setTempMax(weatherDataByCityId.getMain().getTempMax());
             weather.setHumidity(weatherDataByCityId.getMain().getHumidity());
-            weather.setCloudiness(weatherDataByCityId.getClouds().getAll());
+            weather.setCloudiness(weatherDataByCityId.getClouds().getCloudiness());
             weather.setWindSpeed(weatherDataByCityId.getWind().getSpeed());
-            weather.setWindDegree(weatherDataByCityId.getWind().getDeg());
+            weather.setWindDegree(weatherDataByCityId.getWind().getDegree());
             weather.setPressure(weatherDataByCityId.getMain().getPressure());
             weather.setDescription(weatherDataByCityId.getWeather().get(0).getDescription());
             weather.setIcon(weatherDataByCityId.getWeather().get(0).getIcon());
-            weather.setDate(weatherDataByCityId.getDt());
+            weather.setDate(weatherDataByCityId.getDate());
             weather.setSunrise(weatherDataByCityId.getSys().getSunrise());
             weather.setSunset(weatherDataByCityId.getSys().getSunset());
             city.setWeather(weather);

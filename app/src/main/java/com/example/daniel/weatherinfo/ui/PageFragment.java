@@ -34,7 +34,7 @@ public class PageFragment extends Fragment implements PageFragmentView {
     @BindView(R.id.date)
     TextView mDate;
 
-    @BindView(R.id.temperature)
+    @BindView(R.id.temp)
     TextView mTemperature;
 
     @BindView(R.id.temperature_range)

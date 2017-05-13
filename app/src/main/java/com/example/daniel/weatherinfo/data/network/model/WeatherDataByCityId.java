@@ -1,28 +1,66 @@
 package com.example.daniel.weatherinfo.data.network.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class WeatherDataByCityId {
 
-    private Coordinates coord;
+    @SerializedName("coord")
+    @Expose
+    private Coordinates coordinates;
+
+    @SerializedName("weather")
+    @Expose
     private List<Weather> weather;
-    private transient String base;
+
+    @SerializedName("base")
+    @Expose
+    private String base;
+
+    @SerializedName("main")
+    @Expose
     private Main main;
+
+    @SerializedName("visibility")
+    @Expose
     private int visibility;
+
+    @SerializedName("wind")
+    @Expose
     private Wind wind;
+
+    @SerializedName("clouds")
+    @Expose
     private Clouds clouds;
-    private long dt;
+
+    @SerializedName("dt")
+    @Expose
+    private long date;
+
+    @SerializedName("sys")
+    @Expose
     private Sys sys;
+
+    @SerializedName("id")
+    @Expose
     private int id;
+
+    @SerializedName("name")
+    @Expose
     private String name;
+
+    @SerializedName("cod")
+    @Expose
     private int cod;
 
-    public Coordinates getCoord() {
-        return coord;
+    public Coordinates getCoordinates() {
+        return coordinates;
     }
 
-    public void setCoord(Coordinates coord) {
-        this.coord = coord;
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
     }
 
     public List<Weather> getWeather() {
@@ -73,12 +111,12 @@ public class WeatherDataByCityId {
         this.clouds = clouds;
     }
 
-    public long getDt() {
-        return dt;
+    public long getDate() {
+        return date;
     }
 
-    public void setDt(long dt) {
-        this.dt = dt;
+    public void setDate(long date) {
+        this.date = date;
     }
 
     public Sys getSys() {

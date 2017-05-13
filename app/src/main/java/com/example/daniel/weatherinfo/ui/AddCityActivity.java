@@ -13,9 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.daniel.weatherinfo.R;
-import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
-import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.DataManager;
+import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.ui.adapter.CityAdapter;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
 

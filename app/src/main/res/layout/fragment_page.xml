@@ -53,12 +53,12 @@
         tools:textColor="@android:color/black" />
 
     <TextView
-        android:id="@+id/temperature"
+        android:id="@+id/temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
         android:textSize="48sp"
-        tools:text="temperature"
+        tools:text="temp"
         tools:textColor="@android:color/black"
         android:layout_below="@+id/icon"
         android:layout_alignParentLeft="true"
@@ -73,7 +73,7 @@
         tools:text="temperature_range"
         tools:textColor="@android:color/black"
         android:layout_marginTop="12dp"
-        android:layout_below="@+id/temperature"
+        android:layout_below="@+id/temp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -95,7 +95,7 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
         android:textSize="20sp"
-        tools:text="cloudiness"
+        tools:text="all"
         tools:textColor="@android:color/black"
         android:layout_above="@+id/pressure"
         android:layout_alignParentLeft="true"
