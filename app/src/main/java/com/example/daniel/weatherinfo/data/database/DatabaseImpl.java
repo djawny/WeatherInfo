@@ -13,14 +13,19 @@ import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import static com.example.daniel.weatherinfo.util.AppConstants.DATABASE_NAME;
 import static com.example.daniel.weatherinfo.util.AppConstants.DATABASE_VERSION;
 
+@Singleton
 public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
 
     private RuntimeExceptionDao<City, Integer> mCityDao;
     private RuntimeExceptionDao<Weather, Integer> mWeatherDao;
 
+    @Inject
     public DatabaseImpl(final Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 

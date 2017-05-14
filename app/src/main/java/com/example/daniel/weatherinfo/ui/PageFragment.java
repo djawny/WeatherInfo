@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.util.AppConstants;
 import com.example.daniel.weatherinfo.util.DateUtils;
 import com.squareup.picasso.Picasso;
@@ -96,7 +95,7 @@ public class PageFragment extends Fragment implements PageFragmentView {
     }
 
     private void initializePresenter() {
-        mPresenter = new PageFragmentPresenter(DataManager.getInstance(), Schedulers.io(), AndroidSchedulers.mainThread());
+        mPresenter = new PageFragmentPresenter(Schedulers.io(), AndroidSchedulers.mainThread());
         mPresenter.setView(this);
     }
 

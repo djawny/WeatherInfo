@@ -2,22 +2,37 @@ package com.example.daniel.weatherinfo;
 
 import android.app.Application;
 
-import com.example.daniel.weatherinfo.data.database.Database;
-import com.example.daniel.weatherinfo.data.database.DatabaseImpl;
-import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.example.daniel.weatherinfo.data.DataManager;
+import com.example.daniel.weatherinfo.di.component.ApplicationComponent;
+import com.example.daniel.weatherinfo.di.component.DaggerApplicationComponent;
+import com.example.daniel.weatherinfo.di.mudule.ApplicationModule;
+
+import javax.inject.Inject;
+
+import static com.example.daniel.weatherinfo.util.AppConstants.BASE_URL;
 
 public class MyApplication extends Application {
 
-    private static Database mDatabase;
+    @Inject
+    DataManager mDataManager;
+
+    private ApplicationComponent mApplicationComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-        mDatabase = OpenHelperManager.getHelper(this, DatabaseImpl.class);
+        initializeApplicationComponent();
+        mApplicationComponent.inject(this);
     }
 
-    public static Database getDatabase() {
-        return mDatabase;
+    public ApplicationComponent getApplicationComponent() {
+        return mApplicationComponent;
+    }
+
+    private void initializeApplicationComponent() {
+        mApplicationComponent = DaggerApplicationComponent
+                .builder()
+                .applicationModule(new ApplicationModule(this, BASE_URL))
+                .build();
     }
 }

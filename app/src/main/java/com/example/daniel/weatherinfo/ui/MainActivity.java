@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.example.daniel.weatherinfo.R;
-import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.ui.adapter.CityPagerAdapter;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
@@ -73,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     private void initializePresenter() {
-        mPresenter = new MainActivityPresenter(DataManager.getInstance(), Schedulers.io(), AndroidSchedulers.mainThread());
+        mPresenter = new MainActivityPresenter(Schedulers.io(), AndroidSchedulers.mainThread());
         mPresenter.setView(this);
     }
 

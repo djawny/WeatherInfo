@@ -1,13 +1,14 @@
 package com.example.daniel.weatherinfo.ui;
 
-import com.example.daniel.weatherinfo.ui.base.BasePresenter;
 import com.example.daniel.weatherinfo.data.DataManager;
-import com.example.daniel.weatherinfo.data.DataManagerInterface;
+import com.example.daniel.weatherinfo.ui.base.BasePresenter;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityIds;
 import com.example.daniel.weatherinfo.data.mapper.Mapper;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import io.reactivex.ObservableSource;
 import io.reactivex.Scheduler;
@@ -16,11 +17,11 @@ import io.reactivex.observers.DisposableObserver;
 
 public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
-    private DataManagerInterface mDataManager;
+    @Inject
+    DataManager mDataManager;
 
-    public MainActivityPresenter(DataManager dataManager, Scheduler subscriber, Scheduler observer) {
+    public MainActivityPresenter(Scheduler subscriber, Scheduler observer) {
         super(subscriber, observer);
-        mDataManager = dataManager;
     }
 
     public void loadCitiesFromDatabase() {
