@@ -1,6 +1,6 @@
 package com.example.daniel.weatherinfo.data;
 
-import com.example.daniel.weatherinfo.WeatherInfoApplication;
+import com.example.daniel.weatherinfo.MyApplication;
 import com.example.daniel.weatherinfo.data.database.Database;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
@@ -20,7 +20,7 @@ public class DataManager implements DataManagerInterface {
     private final OpenWeatherMapService mOpenWeatherMapService;
 
     public DataManager() {
-        mDatabase = WeatherInfoApplication.getDatabase();
+        mDatabase = MyApplication.getDatabase();
         mOpenWeatherMapService = OpenWeatherMapService.Factory.makeApiService();
     }
 
