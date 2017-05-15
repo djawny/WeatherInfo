@@ -54,6 +54,7 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
         setContentView(R.layout.activity_add_city);
         setSupportActionBar(mToolbar);
         ButterKnife.bind(this);
+        getActivityComponent().inject(this);
         initializePresenter();
         setRecycleView();
         loadCities();

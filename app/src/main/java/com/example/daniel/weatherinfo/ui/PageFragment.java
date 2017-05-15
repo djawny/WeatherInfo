@@ -2,6 +2,7 @@ package com.example.daniel.weatherinfo.ui;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.ui.base.BaseActivity;
 import com.example.daniel.weatherinfo.util.AppConstants;
 import com.example.daniel.weatherinfo.util.DateUtils;
 import com.squareup.picasso.Picasso;
@@ -84,10 +86,16 @@ public class PageFragment extends Fragment implements PageFragmentView {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_page, container, false);
         ButterKnife.bind(this, rootView);
-        int cityId = getArguments().getInt(ARG_CITY_ID);
-        initializePresenter();
-        loadCity(cityId);
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
+        initializePresenter();
+        int cityId = getArguments().getInt(ARG_CITY_ID);
+        loadCity(cityId);
     }
 
     @Override

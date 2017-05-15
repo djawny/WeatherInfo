@@ -1,6 +1,7 @@
 package com.example.daniel.weatherinfo.di.component;
 
 import com.example.daniel.weatherinfo.MyApplication;
+import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.di.mudule.ApplicationModule;
 import com.example.daniel.weatherinfo.di.mudule.DataManagerModule;
 
@@ -13,4 +14,6 @@ import dagger.Component;
 public interface ApplicationComponent {
 
     void inject(MyApplication myApplication);
+
+    DataManager getDataManager();
 }
