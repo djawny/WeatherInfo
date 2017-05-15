@@ -1,11 +1,13 @@
 package com.example.daniel.weatherinfo;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.di.component.ApplicationComponent;
 import com.example.daniel.weatherinfo.di.component.DaggerApplicationComponent;
 import com.example.daniel.weatherinfo.di.mudule.ApplicationModule;
+import com.example.daniel.weatherinfo.di.mudule.DataManagerModule;
 
 import javax.inject.Inject;
 
@@ -29,10 +31,15 @@ public class MyApplication extends Application {
         return mApplicationComponent;
     }
 
+    public static ApplicationComponent getComponent(Context context) {
+        return ((MyApplication) context.getApplicationContext()).mApplicationComponent;
+    }
+
     private void initializeApplicationComponent() {
         mApplicationComponent = DaggerApplicationComponent
                 .builder()
-                .applicationModule(new ApplicationModule(this, BASE_URL))
+                .applicationModule(new ApplicationModule(this))
+                .dataManagerModule(new DataManagerModule(BASE_URL))
                 .build();
     }
 }
