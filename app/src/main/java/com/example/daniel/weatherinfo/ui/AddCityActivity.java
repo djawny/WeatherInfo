@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.ui.adapter.CityAdapter;
+import com.example.daniel.weatherinfo.ui.base.BaseActivity;
 import com.example.daniel.weatherinfo.util.KeyboardUtils;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
 
@@ -26,7 +27,7 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class AddCityActivity extends AppCompatActivity implements AddCityActivityView, CityAdapter.OnCityCrossClickedListener {
+public class AddCityActivity extends BaseActivity implements AddCityActivityView, CityAdapter.OnCityCrossClickedListener {
 
     @BindView(R.id.main_background)
     ImageView mImageView;

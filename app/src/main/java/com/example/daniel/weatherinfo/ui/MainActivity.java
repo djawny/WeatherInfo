@@ -16,6 +16,7 @@ import com.baoyz.widget.PullRefreshLayout;
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.ui.adapter.CityPagerAdapter;
+import com.example.daniel.weatherinfo.ui.base.BaseActivity;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
 
 import java.util.List;
@@ -25,7 +26,7 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity implements MainActivityView {
+public class MainActivity extends BaseActivity implements MainActivityView {
 
     private static final int ADD_CITY_REQUEST_CODE = 1;
 
