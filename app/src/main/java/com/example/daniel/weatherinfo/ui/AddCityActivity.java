@@ -1,7 +1,6 @@
 package com.example.daniel.weatherinfo.ui;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,14 +17,13 @@ import com.example.daniel.weatherinfo.ui.adapter.CityAdapter;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
 import com.example.daniel.weatherinfo.util.KeyboardUtils;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
+import com.example.daniel.weatherinfo.util.SchedulerProviderImpl;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class AddCityActivity extends BaseActivity implements AddCityActivityView, CityAdapter.OnCityCrossClickedListener {
 
@@ -59,7 +57,7 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
     }
 
     private void initializePresenter() {
-        mPresenter = new AddCityActivityPresenter(Schedulers.io(), AndroidSchedulers.mainThread());
+        mPresenter = new AddCityActivityPresenter(new SchedulerProviderImpl());
         mPresenter.setView(this);
     }
 

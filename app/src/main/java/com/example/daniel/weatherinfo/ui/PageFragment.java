@@ -13,12 +13,11 @@ import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.util.AppConstants;
 import com.example.daniel.weatherinfo.util.DateUtils;
+import com.example.daniel.weatherinfo.util.SchedulerProviderImpl;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class PageFragment extends Fragment implements PageFragmentView {
 
@@ -95,7 +94,7 @@ public class PageFragment extends Fragment implements PageFragmentView {
     }
 
     private void initializePresenter() {
-        mPresenter = new PageFragmentPresenter(Schedulers.io(), AndroidSchedulers.mainThread());
+        mPresenter = new PageFragmentPresenter(new SchedulerProviderImpl());
         mPresenter.setView(this);
     }
 

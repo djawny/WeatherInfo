@@ -3,7 +3,6 @@ package com.example.daniel.weatherinfo.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,13 +17,12 @@ import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.ui.adapter.CityPagerAdapter;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
+import com.example.daniel.weatherinfo.util.SchedulerProviderImpl;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity implements MainActivityView {
 
@@ -73,7 +71,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     }
 
     private void initializePresenter() {
-        mPresenter = new MainActivityPresenter(Schedulers.io(), AndroidSchedulers.mainThread());
+        mPresenter = new MainActivityPresenter(new SchedulerProviderImpl());
         mPresenter.setView(this);
     }
 

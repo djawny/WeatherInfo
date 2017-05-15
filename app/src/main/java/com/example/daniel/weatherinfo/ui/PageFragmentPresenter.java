@@ -1,12 +1,12 @@
 package com.example.daniel.weatherinfo.ui;
 
 import com.example.daniel.weatherinfo.data.DataManager;
-import com.example.daniel.weatherinfo.ui.base.BasePresenter;
 import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.ui.base.BasePresenter;
+import com.example.daniel.weatherinfo.util.SchedulerProvider;
 
 import javax.inject.Inject;
 
-import io.reactivex.Scheduler;
 import io.reactivex.observers.DisposableObserver;
 
 public class PageFragmentPresenter extends BasePresenter<PageFragmentView> {
@@ -14,8 +14,8 @@ public class PageFragmentPresenter extends BasePresenter<PageFragmentView> {
     @Inject
     DataManager mDataManager;
 
-    public PageFragmentPresenter(Scheduler subscriber, Scheduler observer) {
-        super(subscriber, observer);
+    public PageFragmentPresenter(SchedulerProvider schedulerProvider) {
+        super(schedulerProvider.io(), schedulerProvider.ui());
     }
 
     public void loadCityFromDatabase(int cityId) {

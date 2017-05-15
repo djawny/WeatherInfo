@@ -9,29 +9,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.daniel.weatherinfo.MyApplication;
 import com.example.daniel.weatherinfo.R;
+import com.example.daniel.weatherinfo.di.component.ActivityComponent;
+import com.example.daniel.weatherinfo.di.mudule.ActivityModule;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-//    private ActivityComponent mActivityComponent;
+    private ActivityComponent mActivityComponent;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
-//        initializeActivityComponent();
+        initializeActivityComponent();
     }
 
-    public void initializeActivityComponent(){
-//        mActivityComponent = DaggerActivityComponent.builder()
-//                .activityModule(new ActivityModule(this))
-//                .applicationComponent(MyApplication.getComponent(this))
-//                .build();
-
+    public void initializeActivityComponent() {
+        mActivityComponent = DaggerActivityComponent.builder()
+                .activityModule(new ActivityModule(this))
+                .applicationComponent(MyApplication.getComponent(this))
+                .build();
     }
 
-//    public ActivityComponent getActivityComponent() {
-//        return mActivityComponent;
-//    }
+    public ActivityComponent getActivityComponent() {
+        return mActivityComponent;
+    }
 
     private void showSnackBar(String message) {
         Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT);

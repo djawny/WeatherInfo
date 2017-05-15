@@ -2,6 +2,7 @@ package com.example.daniel.weatherinfo.di.mudule;
 
 import android.app.Activity;
 
+import com.example.daniel.weatherinfo.di.PerActivity;
 import com.example.daniel.weatherinfo.ui.AddCityActivityPresenter;
 import com.example.daniel.weatherinfo.ui.MainActivityPresenter;
 import com.example.daniel.weatherinfo.ui.PageFragmentPresenter;
@@ -25,18 +26,21 @@ public class ActivityModule {
         return new SchedulerProviderImpl();
     }
 
+    @PerActivity
     @Provides
-    MainActivityPresenter provideMainActivityPresenter() {
-        return null;
+    MainActivityPresenter provideMainActivityPresenter(SchedulerProvider schedulerProvider) {
+        return new MainActivityPresenter(schedulerProvider);
     }
 
+    @PerActivity
     @Provides
-    AddCityActivityPresenter provideAddCityActivityPresenter() {
-        return null;
+    AddCityActivityPresenter provideAddCityActivityPresenter(SchedulerProvider schedulerProvider) {
+        return new AddCityActivityPresenter(schedulerProvider);
     }
 
+    @PerActivity
     @Provides
-    PageFragmentPresenter providePageFragmentPresenter() {
-        return null;
+    PageFragmentPresenter providePageFragmentPresenter(SchedulerProvider schedulerProvider) {
+        return new PageFragmentPresenter(schedulerProvider);
     }
 }
