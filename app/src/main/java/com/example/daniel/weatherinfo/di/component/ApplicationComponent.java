@@ -15,5 +15,7 @@ public interface ApplicationComponent {
 
     void inject(MyApplication myApplication);
 
-    DataManager getDataManager();
+    MyApplication exposeMyApplication();
+
+    DataManager exposeDataManager();
 }

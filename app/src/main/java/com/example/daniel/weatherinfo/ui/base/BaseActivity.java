@@ -26,8 +26,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void initializeActivityComponent() {
         mActivityComponent = DaggerActivityComponent.builder()
-                .activityModule(new ActivityModule(this))
                 .applicationComponent(MyApplication.getComponent(this))
+                .activityModule(new ActivityModule(this))
                 .build();
     }
 
