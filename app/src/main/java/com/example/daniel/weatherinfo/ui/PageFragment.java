@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.ui.base.BaseActivity;
 import com.example.daniel.weatherinfo.util.AppConstants;
 import com.example.daniel.weatherinfo.util.DateUtils;
 import com.squareup.picasso.Picasso;
@@ -92,7 +91,7 @@ public class PageFragment extends Fragment implements PageFragmentView {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
+        ((MainActivity) mContext).getActivityComponent().inject(this);
         initializePresenter();
         int cityId = getArguments().getInt(ARG_CITY_ID);
         loadCity(cityId);
