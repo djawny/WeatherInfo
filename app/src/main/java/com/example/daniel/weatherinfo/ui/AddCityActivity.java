@@ -1,6 +1,7 @@
 package com.example.daniel.weatherinfo.ui;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -126,7 +127,8 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
                 mEditText.setText("");
                 KeyboardUtils.hideSoftKeyboard(this);
             } else {
-                Toast.makeText(this, "Network error! Check the network connection settings.", Toast.LENGTH_LONG).show();
+                KeyboardUtils.hideSoftKeyboard(this);
+                showSnackBar("Network error! Check the network connection settings.", Snackbar.LENGTH_LONG);
             }
         }
     }
