@@ -1,8 +1,10 @@
 package com.example.daniel.weatherinfo.di.mudule;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.example.daniel.weatherinfo.data.DataManager;
+import com.example.daniel.weatherinfo.di.ActivityContext;
 import com.example.daniel.weatherinfo.di.PerActivity;
 import com.example.daniel.weatherinfo.ui.AddCityActivityPresenter;
 import com.example.daniel.weatherinfo.ui.MainActivityPresenter;
@@ -20,6 +22,17 @@ public class ActivityModule {
 
     public ActivityModule(Activity activity) {
         mActivity = activity;
+    }
+
+    @Provides
+    @ActivityContext
+    Context provideContext() {
+        return mActivity;
+    }
+
+    @Provides
+    Activity provideActivity() {
+        return mActivity;
     }
 
     @Provides

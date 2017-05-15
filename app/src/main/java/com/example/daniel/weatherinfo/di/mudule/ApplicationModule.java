@@ -3,6 +3,7 @@ package com.example.daniel.weatherinfo.di.mudule;
 import android.content.Context;
 
 import com.example.daniel.weatherinfo.MyApplication;
+import com.example.daniel.weatherinfo.di.ApplicationContext;
 
 import javax.inject.Singleton;
 
@@ -19,13 +20,12 @@ public class ApplicationModule {
     }
 
     @Provides
-    @Singleton
     public MyApplication provideApplication() {
         return mApplication;
     }
 
     @Provides
-    @Singleton
+    @ApplicationContext
     public Context provideContext() {
         return mApplication;
     }

@@ -30,8 +30,7 @@ public class MyApplication extends Application {
     }
 
     private void initializeApplicationComponent() {
-        mApplicationComponent = DaggerApplicationComponent
-                .builder()
+        mApplicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
                 .dataManagerModule(new DataManagerModule(BASE_URL))
                 .build();
