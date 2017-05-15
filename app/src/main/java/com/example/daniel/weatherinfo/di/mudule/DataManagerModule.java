@@ -7,6 +7,7 @@ import com.example.daniel.weatherinfo.data.DataManagerImpl;
 import com.example.daniel.weatherinfo.data.database.Database;
 import com.example.daniel.weatherinfo.data.database.DatabaseImpl;
 import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
+import com.example.daniel.weatherinfo.di.ApplicationContext;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.util.concurrent.TimeUnit;
@@ -31,7 +32,7 @@ public class DataManagerModule {
 
     @Provides
     @Singleton
-    public Database provideDatabase(Context context) {
+    public Database provideDatabase(@ApplicationContext Context context) {
         return OpenHelperManager.getHelper(context, DatabaseImpl.class);
     }
 

@@ -2,6 +2,8 @@ package com.example.daniel.weatherinfo.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 import com.baoyz.widget.PullRefreshLayout;
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.di.component.ActivityComponent;
 import com.example.daniel.weatherinfo.ui.adapter.CityPagerAdapter;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
@@ -55,12 +58,14 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        getActivityComponent().inject(this);
+        ActivityComponent activityComponent = getActivityComponent();
+        activityComponent.inject(this);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         initializePresenter();
         initializePullRefresh();
     }
+
 
     @Override
     protected void onResume() {

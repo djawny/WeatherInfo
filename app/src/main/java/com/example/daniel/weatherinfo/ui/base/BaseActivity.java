@@ -1,7 +1,6 @@
 package com.example.daniel.weatherinfo.ui.base;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -20,8 +19,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     private ActivityComponent mActivityComponent;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         initializeActivityComponent();
     }
 
