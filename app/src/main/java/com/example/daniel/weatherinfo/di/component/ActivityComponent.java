@@ -1,5 +1,20 @@
 package com.example.daniel.weatherinfo.di.component;
 
-public class ActivityComponent {
+import com.example.daniel.weatherinfo.di.PerActivity;
+import com.example.daniel.weatherinfo.di.mudule.ActivityModule;
+import com.example.daniel.weatherinfo.ui.AddCityActivity;
+import com.example.daniel.weatherinfo.ui.MainActivity;
+import com.example.daniel.weatherinfo.ui.PageFragment;
 
+import dagger.Component;
+
+@PerActivity
+@Component(modules = ActivityModule.class, dependencies = ApplicationComponent.class)
+public interface ActivityComponent {
+
+    void inject(MainActivity activity);
+
+    void inject(AddCityActivity activity);
+
+    void inject(PageFragment fragment);
 }
