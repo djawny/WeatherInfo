@@ -17,9 +17,10 @@ import com.example.daniel.weatherinfo.ui.adapter.CityAdapter;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
 import com.example.daniel.weatherinfo.util.KeyboardUtils;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
-import com.example.daniel.weatherinfo.util.SchedulerProviderImpl;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,7 +43,9 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
     @BindView(R.id.city_edit_text)
     EditText mEditText;
 
-    private AddCityActivityPresenter mPresenter;
+    @Inject
+    AddCityActivityPresenter mPresenter;
+
     private CityAdapter mCityAdapter;
 
     @Override
@@ -57,7 +60,6 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
     }
 
     private void initializePresenter() {
-        mPresenter = new AddCityActivityPresenter(new SchedulerProviderImpl());
         mPresenter.setView(this);
     }
 

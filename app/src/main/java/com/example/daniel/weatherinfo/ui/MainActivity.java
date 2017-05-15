@@ -17,9 +17,10 @@ import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.ui.adapter.CityPagerAdapter;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
-import com.example.daniel.weatherinfo.util.SchedulerProviderImpl;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,9 +44,11 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     @BindView(R.id.status_info)
     TextView mStatusInfo;
 
+    @Inject
+    MainActivityPresenter mPresenter;
+
     private CityPagerAdapter mCityPagerAdapter;
     private boolean mPullRefreshing;
-    private MainActivityPresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +74,6 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     }
 
     private void initializePresenter() {
-        mPresenter = new MainActivityPresenter(new SchedulerProviderImpl());
         mPresenter.setView(this);
     }
 

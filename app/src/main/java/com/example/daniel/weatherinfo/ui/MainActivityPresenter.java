@@ -9,26 +9,21 @@ import com.example.daniel.weatherinfo.util.SchedulerProvider;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 
 public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
-    @Inject
-    DataManager mDataManager;
-
-    public MainActivityPresenter(SchedulerProvider schedulerProvider) {
-        super(schedulerProvider.io(), schedulerProvider.ui());
+    public MainActivityPresenter(DataManager dataManager, SchedulerProvider schedulerProvider) {
+        super(dataManager, schedulerProvider.io(), schedulerProvider.ui());
     }
 
     public void loadCitiesFromDatabase() {
-        addDisposable(mDataManager
+        addDisposable(getDataManager()
                 .getCities()
-                .subscribeOn(mSubscribeScheduler)
-                .observeOn(mObserveScheduler)
+                .subscribeOn(getSubscribeScheduler())
+                .observeOn(getObserveScheduler())
                 .subscribeWith(new DisposableObserver<List<City>>() {
                     @Override
                     public void onNext(List<City> cities) {
@@ -52,26 +47,26 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
     }
 
     public void loadCitiesFromNetwork() {
-        addDisposable(mDataManager
+        addDisposable(getDataManager()
                 .getCities()
-                .subscribeOn(mSubscribeScheduler)
+                .subscribeOn(getSubscribeScheduler())
                 .concatMap(new Function<List<City>, ObservableSource<WeatherDataByCityIds>>() {
                     @Override
                     public ObservableSource<WeatherDataByCityIds> apply(List<City> cities) throws Exception {
                         String cityIds = getStringOfCityIdsForApiRequest(cities);
-                        return mDataManager.getWeatherDataByCityIds(cityIds);
+                        return getDataManager().getWeatherDataByCityIds(cityIds);
                     }
                 })
-                .observeOn(mObserveScheduler)
+                .observeOn(getObserveScheduler())
                 .concatMap(new Function<WeatherDataByCityIds, ObservableSource<Boolean>>() {
                     @Override
                     public ObservableSource<Boolean> apply(WeatherDataByCityIds weatherDataByCityIds) throws Exception {
                         List<City> cities = Mapper.mapCities(weatherDataByCityIds);
                         getView().displayCities(cities);
-                        return mDataManager.saveCities(cities).subscribeOn(mSubscribeScheduler);
+                        return getDataManager().saveCities(cities).subscribeOn(getSubscribeScheduler());
                     }
                 })
-                .observeOn(mObserveScheduler)
+                .observeOn(getObserveScheduler())
                 .subscribeWith(new DisposableObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean value) {

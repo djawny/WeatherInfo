@@ -3,20 +3,14 @@ package com.example.daniel.weatherinfo;
 import android.app.Application;
 import android.content.Context;
 
-import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.di.component.ApplicationComponent;
 import com.example.daniel.weatherinfo.di.component.DaggerApplicationComponent;
 import com.example.daniel.weatherinfo.di.mudule.ApplicationModule;
 import com.example.daniel.weatherinfo.di.mudule.DataManagerModule;
 
-import javax.inject.Inject;
-
 import static com.example.daniel.weatherinfo.util.AppConstants.BASE_URL;
 
 public class MyApplication extends Application {
-
-    @Inject
-    DataManager mDataManager;
 
     private ApplicationComponent mApplicationComponent;
 

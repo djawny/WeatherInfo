@@ -13,8 +13,9 @@ import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.util.AppConstants;
 import com.example.daniel.weatherinfo.util.DateUtils;
-import com.example.daniel.weatherinfo.util.SchedulerProviderImpl;
 import com.squareup.picasso.Picasso;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,8 +57,10 @@ public class PageFragment extends Fragment implements PageFragmentView {
     @BindView(R.id.sunset)
     TextView mSunset;
 
+    @Inject
+    PageFragmentPresenter mPresenter;
+
     private Context mContext;
-    private PageFragmentPresenter mPresenter;
 
     public PageFragment() {
     }
@@ -94,7 +97,6 @@ public class PageFragment extends Fragment implements PageFragmentView {
     }
 
     private void initializePresenter() {
-        mPresenter = new PageFragmentPresenter(new SchedulerProviderImpl());
         mPresenter.setView(this);
     }
 

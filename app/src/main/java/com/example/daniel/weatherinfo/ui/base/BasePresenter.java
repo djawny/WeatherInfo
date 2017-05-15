@@ -1,5 +1,7 @@
 package com.example.daniel.weatherinfo.ui.base;
 
+import com.example.daniel.weatherinfo.data.DataManager;
+
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -7,17 +9,35 @@ import io.reactivex.disposables.Disposable;
 public abstract class BasePresenter<V extends BaseView> {
 
     private V mView;
-    protected Scheduler mSubscribeScheduler;
-    protected Scheduler mObserveScheduler;
-    protected CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    private DataManager mDataManager;
+    private Scheduler mSubscribeScheduler;
+    private Scheduler mObserveScheduler;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
-    public BasePresenter(Scheduler subscriber, Scheduler observer) {
+    public BasePresenter(DataManager dataManager, Scheduler subscriber, Scheduler observer) {
+        mDataManager = dataManager;
         mSubscribeScheduler = subscriber;
         mObserveScheduler = observer;
     }
 
     public V getView() {
         return mView;
+    }
+
+    public DataManager getDataManager() {
+        return mDataManager;
+    }
+
+    public Scheduler getSubscribeScheduler() {
+        return mSubscribeScheduler;
+    }
+
+    public Scheduler getObserveScheduler() {
+        return mObserveScheduler;
+    }
+
+    public CompositeDisposable getmCompositeDisposable() {
+        return mCompositeDisposable;
     }
 
     public void setView(V view) {
