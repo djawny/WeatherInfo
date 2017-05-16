@@ -1,9 +1,8 @@
 package com.example.daniel.weatherinfo.ui;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.ui.base.BaseFragment;
 import com.example.daniel.weatherinfo.util.AppConstants;
 import com.example.daniel.weatherinfo.util.DateUtils;
 import com.squareup.picasso.Picasso;
@@ -21,7 +21,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PageFragment extends Fragment implements PageFragmentView {
+public class PageFragment extends BaseFragment implements PageFragmentView {
 
     private static final String ARG_CITY_ID = "city_id";
 
@@ -61,8 +61,6 @@ public class PageFragment extends Fragment implements PageFragmentView {
     @Inject
     PageFragmentPresenter mPresenter;
 
-    private Context mContext;
-
     public PageFragment() {
     }
 
@@ -72,12 +70,6 @@ public class PageFragment extends Fragment implements PageFragmentView {
         args.putInt(ARG_CITY_ID, cityId);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mContext = context;
     }
 
     @Override
@@ -91,9 +83,10 @@ public class PageFragment extends Fragment implements PageFragmentView {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((MainActivity) mContext).getActivityComponent().inject(this);
+        getActivityComponent().inject(this);
         initializePresenter();
         int cityId = getArguments().getInt(ARG_CITY_ID);
+        Log.i("Fragment", "cityId=" + cityId);
         loadCity(cityId);
     }
 
@@ -113,7 +106,7 @@ public class PageFragment extends Fragment implements PageFragmentView {
 
     @Override
     public void displayCity(City city) {
-        Picasso.with(mContext)
+        Picasso.with(getActivity())
                 .load("http://openweathermap.org/img/w/" + city.getWeather().getIcon() + ".png")
                 .into(mIcon);
         mCityCountry.setText(String.format("%s, %s", city.getName(), city.getCountry()));
