@@ -16,6 +16,7 @@ import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.di.component.ActivityComponent;
 import com.example.daniel.weatherinfo.ui.adapter.CityPagerAdapter;
+import com.example.daniel.weatherinfo.ui.adapter.ZoomOutTransformer;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
 
@@ -109,6 +110,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         if (mCityPagerAdapter == null) {
             mCityPagerAdapter = new CityPagerAdapter(getSupportFragmentManager(), cities);
             mViewPager.setAdapter(mCityPagerAdapter);
+            mViewPager.setPageTransformer(true,new ZoomOutTransformer());
         } else {
             mCityPagerAdapter.swapData(cities);
         }
