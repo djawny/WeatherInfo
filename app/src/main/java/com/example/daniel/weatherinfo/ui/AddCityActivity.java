@@ -31,9 +31,6 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
 
     public static final String POSITION = "position";
 
-    @BindView(R.id.main_background)
-    ImageView mImageView;
-
     @BindView(R.id.recycle_view)
     RecyclerView mRecycleView;
 

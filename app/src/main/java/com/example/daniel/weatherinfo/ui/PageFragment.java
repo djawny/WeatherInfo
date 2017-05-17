@@ -57,6 +57,9 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
     @BindView(R.id.sunset)
     TextView mSunset;
 
+    @BindView(R.id.bg_image_view)
+    ImageView mBouground;
+
     @Inject
     PageFragmentPresenter mPresenter;
 
@@ -120,5 +123,7 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
         mSunrise.setText(String.format("Sunrise: %s", sunrise));
         String sunset = DateUtils.getDateFromUTCTimestamp(city.getWeather().getSunset(), AppConstants.TIME);
         mSunset.setText(String.format("Sunset: %s", sunset));
+        //TODO
+        mBouground.setImageResource(R.drawable.day_noclouds);
     }
 }
