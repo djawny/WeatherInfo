@@ -123,7 +123,47 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
         mSunrise.setText(String.format("Sunrise: %s", sunrise));
         String sunset = DateUtils.getDateFromUTCTimestamp(city.getWeather().getSunset(), AppConstants.TIME);
         mSunset.setText(String.format("Sunset: %s", sunset));
-        //TODO
-        mBouground.setImageResource(R.drawable.day_noclouds);
+        setBackground(city.getWeather().getIcon());
+    }
+
+    private void setBackground(String icon) {
+        switch (icon) {
+            case "01d": //clear sky
+                mBouground.setImageResource(R.drawable.day_noclouds);
+                break;
+            case "02d": //few clouds
+            case "03d": //scattered clouds
+            case "04d": //broken clouds
+            case "50d": //mist
+                mBouground.setImageResource(R.drawable.day_clouds);
+                break;
+            case "09d": //shower rain
+            case "10d": //rain
+            case "11d": //thunderstorm
+                mBouground.setImageResource(R.drawable.day_rain);
+                break;
+            case "13d": //snow
+                mBouground.setImageResource(R.drawable.day_snow);
+                break;
+            case "01n":
+                mBouground.setImageResource(R.drawable.night_noclouds);
+                break;
+            case "02n":
+            case "03n":
+            case "04n":
+            case "50n":
+                mBouground.setImageResource(R.drawable.night_clouds);
+                break;
+            case "09n":
+            case "10n":
+            case "11n":
+                mBouground.setImageResource(R.drawable.night_rain);
+                break;
+            case "13n":
+                mBouground.setImageResource(R.drawable.night_snow);
+                break;
+            default:
+                mBouground.setImageResource(R.drawable.day_noclouds);
+        }
     }
 }
