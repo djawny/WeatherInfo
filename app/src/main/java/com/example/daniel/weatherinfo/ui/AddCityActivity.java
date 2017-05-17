@@ -1,5 +1,6 @@
 package com.example.daniel.weatherinfo.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,7 +27,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AddCityActivity extends BaseActivity implements AddCityActivityView, CityAdapter.OnCityCrossClickedListener {
+public class AddCityActivity extends BaseActivity implements AddCityActivityView, CityAdapter.OnRecycleViewClickListener {
+
+    public static final String POSITION = "position";
 
     @BindView(R.id.main_background)
     ImageView mImageView;
@@ -117,8 +120,16 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
     }
 
     @Override
-    public void onDelete(int cityId) {
+    public void deleteClickedItem(int cityId) {
         mPresenter.deleteCityFromDatabase(cityId);
+    }
+
+    @Override
+    public void showClickedItem(int position) {
+        Intent intent = getIntent();
+        intent.putExtra(POSITION, position);
+        setResult(RESULT_OK, intent);
+        onBackPressed();
     }
 
     @Override

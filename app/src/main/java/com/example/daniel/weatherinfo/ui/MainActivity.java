@@ -27,6 +27,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.daniel.weatherinfo.ui.AddCityActivity.POSITION;
+
 public class MainActivity extends BaseActivity implements MainActivityView {
 
     private static final int ADD_CITY_REQUEST_CODE = 1;
@@ -63,13 +65,22 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         initializePresenter();
         initializePullRefresh();
+        loadCities();
     }
 
-
     @Override
-    protected void onResume() {
-        super.onResume();
-        loadCities();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADD_CITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                loadCities();
+                Bundle bundle = data.getExtras();
+                int position = bundle.getInt(POSITION);
+                mViewPager.setCurrentItem(position);
+            } else {
+                loadCities();
+            }
+        }
     }
 
     @Override
@@ -110,7 +121,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         if (mCityPagerAdapter == null) {
             mCityPagerAdapter = new CityPagerAdapter(getSupportFragmentManager(), cities);
             mViewPager.setAdapter(mCityPagerAdapter);
-            mViewPager.setPageTransformer(true,new ZoomOutTransformer());
+            mViewPager.setPageTransformer(true, new ZoomOutTransformer());
             mViewPager.setCurrentItem(1);
         } else {
             mCityPagerAdapter.swapData(cities);

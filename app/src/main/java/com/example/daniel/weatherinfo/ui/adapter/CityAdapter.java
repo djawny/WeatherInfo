@@ -1,9 +1,6 @@
 package com.example.daniel.weatherinfo.ui.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,15 +21,18 @@ public class CityAdapter extends BaseAdapter<City> {
 
     private Boolean mIsButtonVisibleFlag;
 
-    public interface OnCityCrossClickedListener {
-        void onDelete(int cityId);
+    public interface OnRecycleViewClickListener {
+
+        void deleteClickedItem(int cityId);
+
+        void showClickedItem(int position);
     }
 
-    private OnCityCrossClickedListener mListener;
+    private OnRecycleViewClickListener mListener;
 
-    public CityAdapter(Context context, List<City> list, OnCityCrossClickedListener onCityCrossClickedListener) {
+    public CityAdapter(Context context, List<City> list, OnRecycleViewClickListener onRecycleViewClickListener) {
         super(context, list);
-        mListener = onCityCrossClickedListener;
+        mListener = onRecycleViewClickListener;
         mIsButtonVisibleFlag = false;
     }
 
@@ -46,7 +46,7 @@ public class CityAdapter extends BaseAdapter<City> {
     }
 
     @Override
-    public void onBind(final RecyclerView.ViewHolder holder, final City city, int position) {
+    public void onBind(final RecyclerView.ViewHolder holder, final City city, final int position) {
         CityHolder cityHolder = (CityHolder) holder;
         cityHolder.bind(city, getContext());
 
@@ -54,7 +54,7 @@ public class CityAdapter extends BaseAdapter<City> {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
-                    mListener.onDelete(city.getId());
+                    mListener.deleteClickedItem(city.getId());
                 }
             }
         });
@@ -64,6 +64,15 @@ public class CityAdapter extends BaseAdapter<City> {
             public boolean onLongClick(View v) {
                 setIsButtonVisibleFlag(true);
                 return false;
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!getIsButtonVisibleFlag()){
+                    mListener.showClickedItem(position);
+                }
             }
         });
 
