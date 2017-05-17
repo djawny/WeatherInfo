@@ -30,7 +30,7 @@ public class CityAdapter extends BaseAdapter<City> {
     }
 
     @Override
-    public void onBind(RecyclerView.ViewHolder holder, final City city, int position) {
+    public void onBind(final RecyclerView.ViewHolder holder, final City city, int position) {
         ((CityHolder) holder).bind(city, getContext());
         ((CityHolder) holder).mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,6 +38,13 @@ public class CityAdapter extends BaseAdapter<City> {
                 if (mListener != null) {
                     mListener.onDelete(city.getId());
                 }
+            }
+        });
+        ((CityHolder) holder).itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+//                ((CityHolder) holder).mDeleteButton.setVisibility(View.VISIBLE);
+                return false;
             }
         });
     }
