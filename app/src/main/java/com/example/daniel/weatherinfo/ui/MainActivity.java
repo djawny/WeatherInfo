@@ -111,6 +111,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
             mCityPagerAdapter = new CityPagerAdapter(getSupportFragmentManager(), cities);
             mViewPager.setAdapter(mCityPagerAdapter);
             mViewPager.setPageTransformer(true,new ZoomOutTransformer());
+            mViewPager.setCurrentItem(1);
         } else {
             mCityPagerAdapter.swapData(cities);
         }

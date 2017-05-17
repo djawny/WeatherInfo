@@ -1,10 +1,14 @@
 package com.example.daniel.weatherinfo.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
@@ -18,6 +22,8 @@ import butterknife.ButterKnife;
 
 public class CityAdapter extends BaseAdapter<City> {
 
+    private Boolean mIsButtonVisibleFlag;
+
     public interface OnCityCrossClickedListener {
         void onDelete(int cityId);
     }
@@ -27,12 +33,24 @@ public class CityAdapter extends BaseAdapter<City> {
     public CityAdapter(Context context, List<City> list, OnCityCrossClickedListener onCityCrossClickedListener) {
         super(context, list);
         mListener = onCityCrossClickedListener;
+        mIsButtonVisibleFlag = false;
+    }
+
+    public void setIsButtonVisibleFlag(Boolean mIsButtonVisibleFlag) {
+        this.mIsButtonVisibleFlag = mIsButtonVisibleFlag;
+        notifyDataSetChanged();
+    }
+
+    public Boolean getIsButtonVisibleFlag() {
+        return mIsButtonVisibleFlag;
     }
 
     @Override
     public void onBind(final RecyclerView.ViewHolder holder, final City city, int position) {
-        ((CityHolder) holder).bind(city, getContext());
-        ((CityHolder) holder).mDeleteButton.setOnClickListener(new View.OnClickListener() {
+        CityHolder cityHolder = (CityHolder) holder;
+        cityHolder.bind(city, getContext());
+
+        cityHolder.getDeleteButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
@@ -40,13 +58,22 @@ public class CityAdapter extends BaseAdapter<City> {
                 }
             }
         });
-        ((CityHolder) holder).itemView.setOnLongClickListener(new View.OnLongClickListener() {
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-//                ((CityHolder) holder).mDeleteButton.setVisibility(View.VISIBLE);
+                setIsButtonVisibleFlag(true);
                 return false;
             }
         });
+
+        if (mIsButtonVisibleFlag) {
+            cityHolder.getDeleteButton().setVisibility(View.VISIBLE);
+            cityHolder.getContentLayout().setBackgroundResource(R.color.transparent_black);
+        } else {
+            cityHolder.getDeleteButton().setVisibility(View.GONE);
+            cityHolder.getContentLayout().setBackgroundResource(R.color.transparent);
+        }
     }
 
     @Override
@@ -72,6 +99,9 @@ public class CityAdapter extends BaseAdapter<City> {
         @BindView(R.id.delete_button)
         ImageView mDeleteButton;
 
+        @BindView(R.id.content_layout)
+        RelativeLayout mContentLayout;
+
 
         public CityHolder(View itemView) {
             super(itemView);
@@ -85,6 +115,14 @@ public class CityAdapter extends BaseAdapter<City> {
             mNameCountry.setText(String.format("%s, %s", city.getName(), city.getCountry()));
             mTemperature.setText(String.format("%s °C", String.valueOf(city.getWeather().getTemp())));
             mDescription.setText(city.getWeather().getDescription());
+        }
+
+        public ImageView getDeleteButton() {
+            return mDeleteButton;
+        }
+
+        public RelativeLayout getContentLayout() {
+            return mContentLayout;
         }
     }
 }

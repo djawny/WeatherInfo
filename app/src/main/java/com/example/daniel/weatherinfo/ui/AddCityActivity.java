@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
@@ -59,6 +58,15 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
         initializePresenter();
         setRecycleView();
         loadCities();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mCityAdapter.getIsButtonVisibleFlag()) {
+            mCityAdapter.setIsButtonVisibleFlag(false);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void initializePresenter() {
