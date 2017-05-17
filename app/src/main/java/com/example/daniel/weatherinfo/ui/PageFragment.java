@@ -107,9 +107,11 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
 
     @Override
     public void displayCity(City city) {
+        String icon = city.getWeather().getIcon();
         Picasso.with(getActivity())
-                .load("http://openweathermap.org/img/w/" + city.getWeather().getIcon() + ".png")
+                .load("http://openweathermap.org/img/w/" + icon + ".png")
                 .into(mIcon);
+        setBackground(icon);
         mCityCountry.setText(String.format("%s, %s", city.getName(), city.getCountry()));
         String date = DateUtils.getDateFromUTCTimestamp(city.getWeather().getDate(), AppConstants.DATE_NEW_LINE_TIME);
         mDate.setText(date);
@@ -123,7 +125,6 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
         mSunrise.setText(String.format("Sunrise: %s", sunrise));
         String sunset = DateUtils.getDateFromUTCTimestamp(city.getWeather().getSunset(), AppConstants.TIME);
         mSunset.setText(String.format("Sunset: %s", sunset));
-        setBackground(city.getWeather().getIcon());
     }
 
     private void setBackground(String icon) {
