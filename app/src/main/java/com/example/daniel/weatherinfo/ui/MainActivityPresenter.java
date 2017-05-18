@@ -54,7 +54,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                     @Override
                     public ObservableSource<CitiesWeatherData> apply(List<City> cities) throws Exception {
                         String cityIds = getStringOfCityIdsForApiRequest(cities);
-                        return getDataManager().getWeatherDataByCityIds(cityIds);
+                        return getDataManager().getCitiesWeatherData(cityIds);
                     }
                 })
                 .observeOn(getObserveScheduler())

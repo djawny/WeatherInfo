@@ -9,6 +9,7 @@ import com.example.daniel.weatherinfo.util.SchedulerProvider;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
@@ -48,9 +49,9 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
 
     public void addCityFromNetwork(String cityName) {
         addDisposable(getDataManager()
-                .getWeatherDataByCityName(cityName)
+                .getCityWeatherData(cityName)
                 .subscribeOn(getSubscribeScheduler())
-                .flatMap(new Function<CityWeatherData, ObservableSource<Boolean>>() {
+                .concatMap(new Function<CityWeatherData, ObservableSource<Boolean>>() {
                     @Override
                     public ObservableSource<Boolean> apply(CityWeatherData cityWeatherData) throws Exception {
                         City city = Mapper.mapCity(cityWeatherData);

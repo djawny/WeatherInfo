@@ -4,6 +4,7 @@ import com.example.daniel.weatherinfo.data.database.Database;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.data.network.model.CitiesWeatherData;
+import com.example.daniel.weatherinfo.data.network.model.CityForecastData;
 import com.example.daniel.weatherinfo.data.network.model.CityWeatherData;
 
 import java.util.List;
@@ -91,12 +92,17 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
-    public Observable<CityWeatherData> getWeatherDataByCityName(String cityName) {
+    public Observable<CityWeatherData> getCityWeatherData(String cityName) {
         return mOpenWeatherMapService.getCityWeatherData(cityName);
     }
 
     @Override
-    public Observable<CitiesWeatherData> getWeatherDataByCityIds(String cityIds) {
+    public Observable<CitiesWeatherData> getCitiesWeatherData(String cityIds) {
         return mOpenWeatherMapService.getCitiesWeatherData(cityIds);
+    }
+
+    @Override
+    public Observable<CityForecastData> getCityForecastData(int cityId) {
+        return mOpenWeatherMapService.getCityForecastData(cityId);
     }
 }
