@@ -1,8 +1,8 @@
 package com.example.daniel.weatherinfo.data.mapper;
 
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityName;
-import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityIds;
+import com.example.daniel.weatherinfo.data.network.model.WeatherData;
+import com.example.daniel.weatherinfo.data.network.model.WeatherDataList;
 import com.example.daniel.weatherinfo.data.database.model.Weather;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public class Mapper {
     public Mapper() {
     }
 
-    public static City mapCity(WeatherDataByCityName weatherData) {
+    public static City mapCity(WeatherData weatherData) {
         City city = new City();
         if (weatherData != null) {
             city.setId(weatherData.getId());
@@ -38,11 +38,11 @@ public class Mapper {
         return city;
     }
 
-    public static List<City> mapCities(WeatherDataByCityIds weatherDataByCityIds) {
+    public static List<City> mapCities(WeatherDataList weatherDataList) {
         ArrayList<City> cities = new ArrayList<>();
-        if (weatherDataByCityIds != null) {
-            List<WeatherDataByCityName> weatherDataList = weatherDataByCityIds.getList();
-            for (WeatherDataByCityName weatherData : weatherDataList) {
+        if (weatherDataList != null) {
+            List<WeatherData> dataList = weatherDataList.getList();
+            for (WeatherData weatherData : dataList) {
                 City city = mapCity(weatherData);
                 cities.add(city);
             }

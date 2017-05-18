@@ -3,8 +3,8 @@ package com.example.daniel.weatherinfo.data;
 import com.example.daniel.weatherinfo.data.database.Database;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
-import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityIds;
-import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityName;
+import com.example.daniel.weatherinfo.data.network.model.WeatherDataList;
+import com.example.daniel.weatherinfo.data.network.model.WeatherData;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -91,12 +91,12 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
-    public Observable<WeatherDataByCityName> getWeatherDataByCityName(String cityName) {
+    public Observable<WeatherData> getWeatherDataByCityName(String cityName) {
         return mOpenWeatherMapService.getWeatherDataByCityName(cityName);
     }
 
     @Override
-    public Observable<WeatherDataByCityIds> getWeatherDataByCityIds(String cityIds) {
+    public Observable<WeatherDataList> getWeatherDataByCityIds(String cityIds) {
         return mOpenWeatherMapService.getWeatherDataByCityIds(cityIds);
     }
 }

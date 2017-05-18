@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class WeatherDataByCityName {
+public class WeatherData {
 
     @SerializedName("coord")
     @Expose
@@ -14,10 +14,6 @@ public class WeatherDataByCityName {
     @SerializedName("weather")
     @Expose
     private List<Weather> weather;
-
-    @SerializedName("base")
-    @Expose
-    private String base;
 
     @SerializedName("main")
     @Expose
@@ -51,10 +47,6 @@ public class WeatherDataByCityName {
     @Expose
     private String name;
 
-    @SerializedName("cod")
-    @Expose
-    private int cod;
-
     public Coordinates getCoordinates() {
         return coordinates;
     }
@@ -69,14 +61,6 @@ public class WeatherDataByCityName {
 
     public void setWeather(List<Weather> weather) {
         this.weather = weather;
-    }
-
-    public String getBase() {
-        return base;
-    }
-
-    public void setBase(String base) {
-        this.base = base;
     }
 
     public Main getMain() {
@@ -141,13 +125,5 @@ public class WeatherDataByCityName {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getCod() {
-        return cod;
-    }
-
-    public void setCod(int cod) {
-        this.cod = cod;
     }
 }

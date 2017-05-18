@@ -3,7 +3,7 @@ package com.example.daniel.weatherinfo.ui;
 import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.mapper.Mapper;
-import com.example.daniel.weatherinfo.data.network.model.WeatherDataByCityIds;
+import com.example.daniel.weatherinfo.data.network.model.WeatherDataList;
 import com.example.daniel.weatherinfo.ui.base.BasePresenter;
 import com.example.daniel.weatherinfo.util.SchedulerProvider;
 
@@ -50,18 +50,18 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
         addDisposable(getDataManager()
                 .getCities()
                 .subscribeOn(getSubscribeScheduler())
-                .concatMap(new Function<List<City>, ObservableSource<WeatherDataByCityIds>>() {
+                .concatMap(new Function<List<City>, ObservableSource<WeatherDataList>>() {
                     @Override
-                    public ObservableSource<WeatherDataByCityIds> apply(List<City> cities) throws Exception {
+                    public ObservableSource<WeatherDataList> apply(List<City> cities) throws Exception {
                         String cityIds = getStringOfCityIdsForApiRequest(cities);
                         return getDataManager().getWeatherDataByCityIds(cityIds);
                     }
                 })
                 .observeOn(getObserveScheduler())
-                .concatMap(new Function<WeatherDataByCityIds, ObservableSource<Boolean>>() {
+                .concatMap(new Function<WeatherDataList, ObservableSource<Boolean>>() {
                     @Override
-                    public ObservableSource<Boolean> apply(WeatherDataByCityIds weatherDataByCityIds) throws Exception {
-                        List<City> cities = Mapper.mapCities(weatherDataByCityIds);
+                    public ObservableSource<Boolean> apply(WeatherDataList weatherDataList) throws Exception {
+                        List<City> cities = Mapper.mapCities(weatherDataList);
                         getView().displayCities(cities);
                         return getDataManager().saveCities(cities).subscribeOn(getSubscribeScheduler());
                     }
