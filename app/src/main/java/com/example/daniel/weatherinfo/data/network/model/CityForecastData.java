@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class ForecastData {
+public class CityForecastData {
 
     @SerializedName("city")
     @Expose
@@ -13,7 +13,7 @@ public class ForecastData {
 
     @SerializedName("list")
     @Expose
-    private List<Forecast> list;
+    private List<CityForecast> list;
 
     public City getCity() {
         return city;
@@ -23,11 +23,11 @@ public class ForecastData {
         this.city = city;
     }
 
-    public List<Forecast> getList() {
+    public List<CityForecast> getList() {
         return list;
     }
 
-    public void setList(List<Forecast> list) {
+    public void setList(List<CityForecast> list) {
         this.list = list;
     }
 }

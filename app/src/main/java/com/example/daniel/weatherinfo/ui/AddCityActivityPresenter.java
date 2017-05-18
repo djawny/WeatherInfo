@@ -3,7 +3,7 @@ package com.example.daniel.weatherinfo.ui;
 import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.mapper.Mapper;
-import com.example.daniel.weatherinfo.data.network.model.WeatherData;
+import com.example.daniel.weatherinfo.data.network.model.CityWeatherData;
 import com.example.daniel.weatherinfo.ui.base.BasePresenter;
 import com.example.daniel.weatherinfo.util.SchedulerProvider;
 
@@ -50,10 +50,10 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
         addDisposable(getDataManager()
                 .getWeatherDataByCityName(cityName)
                 .subscribeOn(getSubscribeScheduler())
-                .flatMap(new Function<WeatherData, ObservableSource<Boolean>>() {
+                .flatMap(new Function<CityWeatherData, ObservableSource<Boolean>>() {
                     @Override
-                    public ObservableSource<Boolean> apply(WeatherData weatherData) throws Exception {
-                        City city = Mapper.mapCity(weatherData);
+                    public ObservableSource<Boolean> apply(CityWeatherData cityWeatherData) throws Exception {
+                        City city = Mapper.mapCity(cityWeatherData);
                         return getDataManager().saveCity(city);
                     }
                 })

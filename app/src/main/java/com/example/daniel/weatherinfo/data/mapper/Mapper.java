@@ -1,9 +1,12 @@
 package com.example.daniel.weatherinfo.data.mapper;
 
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.data.network.model.WeatherData;
-import com.example.daniel.weatherinfo.data.network.model.WeatherDataList;
+import com.example.daniel.weatherinfo.data.database.model.Forecast;
 import com.example.daniel.weatherinfo.data.database.model.Weather;
+import com.example.daniel.weatherinfo.data.network.model.CitiesWeatherData;
+import com.example.daniel.weatherinfo.data.network.model.CityForecast;
+import com.example.daniel.weatherinfo.data.network.model.CityForecastData;
+import com.example.daniel.weatherinfo.data.network.model.CityWeatherData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,40 +16,51 @@ public class Mapper {
     public Mapper() {
     }
 
-    public static City mapCity(WeatherData weatherData) {
+    public static City mapCity(CityWeatherData cityWeatherData) {
         City city = new City();
-        if (weatherData != null) {
-            city.setId(weatherData.getId());
-            city.setName(weatherData.getName());
-            city.setCountry(weatherData.getSys().getCountry());
+        if (cityWeatherData != null) {
+            city.setId(cityWeatherData.getId());
+            city.setName(cityWeatherData.getName());
+            city.setCountry(cityWeatherData.getSys().getCountry());
             Weather weather = new Weather();
-            weather.setTemp(weatherData.getMain().getTemp());
-            weather.setTempMin(weatherData.getMain().getTempMin());
-            weather.setTempMax(weatherData.getMain().getTempMax());
-            weather.setHumidity(weatherData.getMain().getHumidity());
-            weather.setCloudiness(weatherData.getClouds().getCloudiness());
-            weather.setWindSpeed(weatherData.getWind().getSpeed());
-            weather.setWindDegree(weatherData.getWind().getDegree());
-            weather.setPressure(weatherData.getMain().getPressure());
-            weather.setDescription(weatherData.getWeather().get(0).getDescription());
-            weather.setIcon(weatherData.getWeather().get(0).getIcon());
-            weather.setDate(weatherData.getDate());
-            weather.setSunrise(weatherData.getSys().getSunrise());
-            weather.setSunset(weatherData.getSys().getSunset());
+            weather.setTemp(cityWeatherData.getMain().getTemp());
+            weather.setTempMin(cityWeatherData.getMain().getTempMin());
+            weather.setTempMax(cityWeatherData.getMain().getTempMax());
+            weather.setHumidity(cityWeatherData.getMain().getHumidity());
+            weather.setCloudiness(cityWeatherData.getClouds().getCloudiness());
+            weather.setWindSpeed(cityWeatherData.getWind().getSpeed());
+            weather.setWindDegree(cityWeatherData.getWind().getDegree());
+            weather.setPressure(cityWeatherData.getMain().getPressure());
+            weather.setDescription(cityWeatherData.getWeather().get(0).getDescription());
+            weather.setIcon(cityWeatherData.getWeather().get(0).getIcon());
+            weather.setDate(cityWeatherData.getDate());
+            weather.setSunrise(cityWeatherData.getSys().getSunrise());
+            weather.setSunset(cityWeatherData.getSys().getSunset());
             city.setWeather(weather);
         }
         return city;
     }
 
-    public static List<City> mapCities(WeatherDataList weatherDataList) {
-        ArrayList<City> cities = new ArrayList<>();
-        if (weatherDataList != null) {
-            List<WeatherData> dataList = weatherDataList.getList();
-            for (WeatherData weatherData : dataList) {
-                City city = mapCity(weatherData);
+    public static List<City> mapCities(CitiesWeatherData citiesWeatherData) {
+        List<City> cities = new ArrayList<>();
+        if (citiesWeatherData != null) {
+            List<CityWeatherData> dataList = citiesWeatherData.getList();
+            for (CityWeatherData cityWeatherData : dataList) {
+                City city = mapCity(cityWeatherData);
                 cities.add(city);
             }
         }
         return cities;
+    }
+
+    public static List<Forecast> mapForecast(CityForecastData cityForecastData) {
+        List<Forecast> forecasts = new ArrayList<>();
+        if (cityForecastData != null) {
+            List<CityForecast> cityForecasts = cityForecastData.getList();
+            for (CityForecast cityForecast : cityForecasts) {
+
+            }
+        }
+        return forecasts;
     }
 }

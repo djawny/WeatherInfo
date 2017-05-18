@@ -5,17 +5,17 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class WeatherDataList {
+public class CitiesWeatherData {
 
     @SerializedName("list")
     @Expose
-    private List<WeatherData> list;
+    private List<CityWeatherData> list;
 
-    public List<WeatherData> getList() {
+    public List<CityWeatherData> getList() {
         return list;
     }
 
-    public void setList(List<WeatherData> list) {
+    public void setList(List<CityWeatherData> list) {
         this.list = list;
     }
 }

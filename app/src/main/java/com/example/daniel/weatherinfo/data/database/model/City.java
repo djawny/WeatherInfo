@@ -25,12 +25,12 @@ public class City implements Serializable {
 //    @ForeignCollectionField
 //    private ForeignCollection<Forecast> mForecasts;
 //
-//    public ForeignCollection<Forecast> getmForecasts() {
+//    public ForeignCollection<Forecast> getForecasts() {
 //        return mForecasts;
 //    }
 //
-//    public void setmForecasts(ForeignCollection<Forecast> mForecasts) {
-//        this.mForecasts = mForecasts;
+//    public void setForecasts(ForeignCollection<Forecast> forecasts) {
+//        mForecasts = forecasts;
 //    }
 
     public City() {
