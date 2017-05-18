@@ -1,11 +1,13 @@
 package com.example.daniel.weatherinfo.data.database.model;
 
-import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @DatabaseTable(tableName = City.TABLE_NAME)
 public class City implements Serializable {
@@ -21,19 +23,19 @@ public class City implements Serializable {
     @DatabaseField(columnName = "country", canBeNull = false)
     private String mCountry;
 
-    @DatabaseField(columnName = "weatherId", foreign = true, foreignAutoRefresh = true)
+    @DatabaseField(columnName = "weatherId", foreign = true, foreignAutoRefresh = true, canBeNull = false)
     private Weather mWeather;
 
-//    @ForeignCollectionField
-//    private ForeignCollection<Forecast> mForecasts;
-//
-//    public ForeignCollection<Forecast> getForecasts() {
-//        return mForecasts;
-//    }
-//
-//    public void setForecasts(ForeignCollection<Forecast> forecasts) {
-//        mForecasts = forecasts;
-//    }
+    @ForeignCollectionField(eager = true)
+    private Collection<Forecast> mForecastCollection;
+
+    public List<Forecast> getForecasts() {
+        return new ArrayList<>(mForecastCollection);
+    }
+
+    public void setForecastCollection(Collection<Forecast> forecastCollection) {
+        mForecastCollection = new ArrayList<>(forecastCollection);
+    }
 
     public City() {
     }

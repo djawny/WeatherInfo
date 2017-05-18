@@ -42,12 +42,12 @@ public class Mapper {
         return city;
     }
 
-    public static City mapCity(CityWeatherData cityWeatherData, CityForecastData cityForecastData) {
-        City city = mapCity(cityWeatherData);
-        List<Forecast> forecasts = mapForecast(cityForecastData);
-//        city.setForecasts((ForeignCollection<Forecast>) forecasts);
-        return city;
-    }
+//    public static City mapCity(CityWeatherData cityWeatherData, CityForecastData cityForecastData) {
+//        City city = mapCity(cityWeatherData);
+//        List<Forecast> forecasts = mapForecast(cityForecastData);
+//        city.setForecasts(forecasts);
+//        return city;
+//    }
 
     public static List<City> mapCities(CitiesWeatherData citiesWeatherData) {
         List<City> cities = new ArrayList<>();

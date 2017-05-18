@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.data.database.model.Forecast;
 import com.example.daniel.weatherinfo.data.database.model.Weather;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
@@ -24,6 +25,7 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
 
     private RuntimeExceptionDao<City, Integer> mCityDao;
     private RuntimeExceptionDao<Weather, Integer> mWeatherDao;
+    private final RuntimeExceptionDao<Forecast, Integer> mForecastDao;
 
     @Inject
     public DatabaseImpl(final Context context) {
@@ -31,6 +33,7 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
 
         mCityDao = getRuntimeExceptionDao(City.class);
         mWeatherDao = getRuntimeExceptionDao(Weather.class);
+        mForecastDao = getRuntimeExceptionDao(Forecast.class);
     }
 
     @Override
@@ -38,6 +41,7 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
         try {
             TableUtils.createTableIfNotExists(connectionSource, City.class);
             TableUtils.createTableIfNotExists(connectionSource, Weather.class);
+            TableUtils.createTableIfNotExists(connectionSource, Forecast.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -48,6 +52,7 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
         try {
             TableUtils.dropTable(connectionSource, City.class, true);
             TableUtils.dropTable(connectionSource, Weather.class, true);
+            TableUtils.dropTable(connectionSource, Forecast.class, true);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -70,6 +75,7 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
             getWritableDatabase().beginTransaction();
             for (City city : cities) {
                 Weather weather = city.getWeather();
+                setWeatherIdIfCityExists(city, weather);
                 mWeatherDao.createOrUpdate(weather);
                 mCityDao.createOrUpdate(city);
             }
@@ -84,11 +90,19 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
         try {
             getWritableDatabase().beginTransaction();
             Weather weather = city.getWeather();
+            setWeatherIdIfCityExists(city, weather);
             mWeatherDao.createOrUpdate(weather);
             mCityDao.createOrUpdate(city);
             getWritableDatabase().setTransactionSuccessful();
         } finally {
             getWritableDatabase().endTransaction();
+        }
+    }
+
+    private void setWeatherIdIfCityExists(City city, Weather weather) {
+        City queryCity = mCityDao.queryForId(city.getId());
+        if (queryCity != null) {
+            weather.setId(queryCity.getWeather().getId());
         }
     }
 
