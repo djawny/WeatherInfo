@@ -20,7 +20,6 @@ public class Mapper {
             city.setName(weatherData.getName());
             city.setCountry(weatherData.getSys().getCountry());
             Weather weather = new Weather();
-            weather.setId(weatherData.getId());
             weather.setTemp(weatherData.getMain().getTemp());
             weather.setTempMin(weatherData.getMain().getTempMin());
             weather.setTempMax(weatherData.getMain().getTempMax());
