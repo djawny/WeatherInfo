@@ -2,7 +2,9 @@ package com.example.daniel.weatherinfo.ui;
 
 import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.data.database.model.Forecast;
 import com.example.daniel.weatherinfo.data.mapper.Mapper;
+import com.example.daniel.weatherinfo.data.network.model.CityForecastData;
 import com.example.daniel.weatherinfo.data.network.model.CityWeatherData;
 import com.example.daniel.weatherinfo.ui.base.BasePresenter;
 import com.example.daniel.weatherinfo.util.SchedulerProvider;
