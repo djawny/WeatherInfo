@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
@@ -62,7 +61,7 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
 
     @Override
     public void onBackPressed() {
-        if (mCityAdapter.getIsButtonVisibleFlag()) {
+        if (mCityAdapter != null && mCityAdapter.getIsButtonVisibleFlag()) {
             mCityAdapter.setIsButtonVisibleFlag(false);
         } else {
             super.onBackPressed();
