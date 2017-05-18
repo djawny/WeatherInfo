@@ -7,7 +7,6 @@ import com.example.daniel.weatherinfo.data.network.model.CitiesWeatherData;
 import com.example.daniel.weatherinfo.data.network.model.CityForecast;
 import com.example.daniel.weatherinfo.data.network.model.CityForecastData;
 import com.example.daniel.weatherinfo.data.network.model.CityWeatherData;
-import com.j256.ormlite.dao.ForeignCollection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +41,6 @@ public class Mapper {
         return city;
     }
 
-//    public static City mapCity(CityWeatherData cityWeatherData, CityForecastData cityForecastData) {
-//        City city = mapCity(cityWeatherData);
-//        List<Forecast> forecasts = mapForecast(cityForecastData);
-//        city.setForecasts(forecasts);
-//        return city;
-//    }
-
     public static List<City> mapCities(CitiesWeatherData citiesWeatherData) {
         List<City> cities = new ArrayList<>();
         if (citiesWeatherData != null) {
@@ -61,12 +53,13 @@ public class Mapper {
         return cities;
     }
 
-    public static List<Forecast> mapForecast(CityForecastData cityForecastData) {
+    public static List<Forecast> mapForecast(CityForecastData cityForecastData, City city) {
         List<Forecast> forecasts = new ArrayList<>();
         if (cityForecastData != null) {
             List<CityForecast> cityForecasts = cityForecastData.getList();
             for (CityForecast cityForecast : cityForecasts) {
                 Forecast forecast = new Forecast();
+                forecast.setCity(city);
                 forecast.setDate(cityForecast.getDate());
                 forecast.setDateTxt(cityForecast.getDateTxt());
                 forecast.setTemp(cityForecast.getMain().getTemp());
