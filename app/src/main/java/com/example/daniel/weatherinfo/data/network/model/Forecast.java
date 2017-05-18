@@ -6,9 +6,10 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Forecast {
+
     @SerializedName("dt")
     @Expose
-    private long dt;
+    private long date;
 
     @SerializedName("main")
     @Expose
@@ -34,12 +35,12 @@ public class Forecast {
     @Expose
     private List<Weather> weather;
 
-    public long getDt() {
-        return dt;
+    public long getDate() {
+        return date;
     }
 
-    public void setDt(long dt) {
-        this.dt = dt;
+    public void setDate(long date) {
+        this.date = date;
     }
 
     public Main getMain() {

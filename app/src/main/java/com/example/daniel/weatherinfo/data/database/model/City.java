@@ -22,6 +22,17 @@ public class City implements Serializable {
     @DatabaseField(columnName = "weatherId", foreign = true, foreignAutoRefresh = true)
     private Weather mWeather;
 
+//    @ForeignCollectionField
+//    private ForeignCollection<Forecast> mForecasts;
+//
+//    public ForeignCollection<Forecast> getmForecasts() {
+//        return mForecasts;
+//    }
+//
+//    public void setmForecasts(ForeignCollection<Forecast> mForecasts) {
+//        this.mForecasts = mForecasts;
+//    }
+
     public City() {
     }
 
