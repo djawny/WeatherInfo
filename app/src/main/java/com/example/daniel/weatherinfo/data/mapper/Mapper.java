@@ -13,9 +13,6 @@ import java.util.List;
 
 public class Mapper {
 
-    public Mapper() {
-    }
-
     public static City mapCity(CityWeatherData cityWeatherData) {
         City city = new City();
         if (cityWeatherData != null) {
