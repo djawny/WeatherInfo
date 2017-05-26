@@ -10,10 +10,13 @@ import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.data.database.model.Forecast;
 import com.example.daniel.weatherinfo.ui.base.BaseFragment;
 import com.example.daniel.weatherinfo.util.AppConstants;
 import com.example.daniel.weatherinfo.util.DateUtils;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -125,6 +128,11 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
         mSunrise.setText(String.format("Sunrise: %s", sunrise));
         String sunset = DateUtils.getDateFromUTCTimestamp(city.getWeather().getSunset(), AppConstants.TIME);
         mSunset.setText(String.format("Sunset: %s", sunset));
+        List<Forecast> forecasts = city.getForecasts();
+        drawChart(forecasts);
+    }
+
+    private void drawChart(List<Forecast> forecasts) {
     }
 
     private void setBackground(String icon) {

@@ -8,6 +8,8 @@ import com.example.daniel.weatherinfo.data.database.model.Forecast;
 import com.example.daniel.weatherinfo.data.database.model.Weather;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -17,6 +19,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import static com.example.daniel.weatherinfo.data.database.model.Forecast.CITY_ID;
 import static com.example.daniel.weatherinfo.util.AppConstants.DATABASE_NAME;
 import static com.example.daniel.weatherinfo.util.AppConstants.DATABASE_VERSION;
 
@@ -99,6 +102,23 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
         }
     }
 
+    @Override
+    public void saveCity(City city, List<Forecast> forecasts) {
+        try {
+            getWritableDatabase().beginTransaction();
+            Weather weather = city.getWeather();
+            setWeatherIdIfCityExists(city, weather);
+            mWeatherDao.createOrUpdate(weather);
+            mCityDao.createOrUpdate(city);
+            for (Forecast forecast : forecasts) {
+                mForecastDao.createOrUpdate(forecast);
+            }
+            getWritableDatabase().setTransactionSuccessful();
+        } finally {
+            getWritableDatabase().endTransaction();
+        }
+    }
+
     private void setWeatherIdIfCityExists(City city, Weather weather) {
         City queryCity = mCityDao.queryForId(city.getId());
         if (queryCity != null) {
@@ -111,6 +131,14 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
         City city = mCityDao.queryForId(cityId);
         mCityDao.deleteById(cityId);
         mWeatherDao.deleteById(city.getWeather().getId());
+        DeleteBuilder<Forecast, Integer> deleteBuilder = mForecastDao.deleteBuilder();
+        Where<Forecast, Integer> where = deleteBuilder.where();
+        try {
+            where.eq(CITY_ID, cityId);
+            deleteBuilder.delete();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -118,6 +146,7 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
         try {
             TableUtils.clearTable(getConnectionSource(), City.class);
             TableUtils.clearTable(getConnectionSource(), Weather.class);
+            TableUtils.clearTable(getConnectionSource(), Forecast.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }

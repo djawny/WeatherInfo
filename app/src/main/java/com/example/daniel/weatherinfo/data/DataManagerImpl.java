@@ -2,6 +2,7 @@ package com.example.daniel.weatherinfo.data;
 
 import com.example.daniel.weatherinfo.data.database.Database;
 import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.data.database.model.Forecast;
 import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.data.network.model.CitiesWeatherData;
 import com.example.daniel.weatherinfo.data.network.model.CityForecastData;
@@ -64,6 +65,17 @@ public class DataManagerImpl implements DataManager {
             @Override
             public Boolean call() throws Exception {
                 mDatabase.saveCity(city);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public Observable saveCity(final City city, final List<Forecast> forecasts) {
+        return Observable.fromCallable(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                mDatabase.saveCity(city,forecasts);
                 return true;
             }
         });

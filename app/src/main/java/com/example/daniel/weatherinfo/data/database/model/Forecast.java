@@ -9,23 +9,29 @@ import java.io.Serializable;
 public class Forecast implements Serializable {
 
     public static final String TABLE_NAME = "forecast";
+    public static final String ID = "id";
+    public static final String CITY_ID = "cityId";
+    public static final String DATE = "date";
+    public static final String DATE_TXT = "dateTxt";
+    public static final String TEMP = "temp";
+    public static final String ICON = "icon";
 
-    @DatabaseField(columnName = "id", generatedId = true)
+    @DatabaseField(columnName = ID, generatedId = true)
     private int mId;
 
-    @DatabaseField(columnName = "cityId", foreign = true, foreignAutoRefresh = true)
+    @DatabaseField(columnName = CITY_ID, foreign = true, foreignAutoRefresh = true)
     private City mCity;
 
-    @DatabaseField(columnName = "date", canBeNull = false)
+    @DatabaseField(columnName = DATE, canBeNull = false)
     private long mDate;
 
-    @DatabaseField(columnName = "dateTxt", canBeNull = false)
+    @DatabaseField(columnName = DATE_TXT, canBeNull = false)
     private String mDateTxt;
 
-    @DatabaseField(columnName = "temp", canBeNull = false)
+    @DatabaseField(columnName = TEMP, canBeNull = false)
     private double mTemp;
 
-    @DatabaseField(columnName = "icon", canBeNull = false)
+    @DatabaseField(columnName = ICON, canBeNull = false)
     private String mIcon;
 
     public Forecast() {

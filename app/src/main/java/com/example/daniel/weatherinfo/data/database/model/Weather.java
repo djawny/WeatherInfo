@@ -10,47 +10,61 @@ import java.io.Serializable;
 public class Weather implements Serializable {
 
     public static final String TABLE_NAME = "weather";
+    public static final String ID = "id";
+    public static final String TEMP = "temp";
+    public static final String TEMP_MIN = "tempMin";
+    public static final String TEMP_MAX = "tempMax";
+    public static final String HUMIDITY = "humidity";
+    public static final String CLOUDINESS = "cloudiness";
+    public static final String WIND_SPEED = "windSpeed";
+    public static final String WIND_DEGREE = "windDegree";
+    public static final String PRESSURE = "pressure";
+    public static final String DESCRIPTION = "description";
+    public static final String ICON = "icon";
+    public static final String DATE = "date";
+    public static final String SUNRISE = "sunrise";
+    public static final String SUNSET = "sunset";
 
-    @DatabaseField(columnName = "id", generatedId = true)
+    @DatabaseField(columnName = ID, generatedId = true)
     private int mId;
 
-    @DatabaseField(columnName = "temp", canBeNull = false)
+    @DatabaseField(columnName = TEMP, canBeNull = false)
     private double mTemp;
 
-    @DatabaseField(columnName = "tempMin", canBeNull = false)
+    @DatabaseField(columnName = TEMP_MIN, canBeNull = false)
     private double mTempMin;
 
-    @DatabaseField(columnName = "tempMax", canBeNull = false)
+    @DatabaseField(columnName = TEMP_MAX, canBeNull = false)
     private double mTempMax;
 
-    @DatabaseField(columnName = "humidity", canBeNull = false)
+    @DatabaseField(columnName = HUMIDITY, canBeNull = false)
     private int mHumidity;
 
-    @DatabaseField(columnName = "cloudiness", canBeNull = false)
+    @DatabaseField(columnName = CLOUDINESS, canBeNull = false)
     private int mCloudiness;
 
-    @DatabaseField(columnName = "windSpeed", canBeNull = false)
+    @DatabaseField(columnName = WIND_SPEED, canBeNull = false)
     private double mWindSpeed;
 
-    @DatabaseField(columnName = "windDegree", canBeNull = false)
+    @DatabaseField(columnName = WIND_DEGREE, canBeNull = false)
     private double mWindDegree;
 
-    @DatabaseField(columnName = "pressure", canBeNull = false)
+    @DatabaseField(columnName = PRESSURE, canBeNull = false)
     private double mPressure;
 
-    @DatabaseField(columnName = "description", canBeNull = false)
+    @DatabaseField(columnName = DESCRIPTION, canBeNull = false)
     private String mDescription;
 
-    @DatabaseField(columnName = "icon", canBeNull = false)
+    @DatabaseField(columnName = ICON, canBeNull = false)
     private String mIcon;
 
-    @DatabaseField(columnName = "date", canBeNull = false)
+    @DatabaseField(columnName = DATE, canBeNull = false)
     private long mDate;
 
-    @DatabaseField(columnName = "sunrise", canBeNull = false)
+    @DatabaseField(columnName = SUNRISE, canBeNull = false)
     private long mSunrise;
 
-    @DatabaseField(columnName = "sunset", canBeNull = false)
+    @DatabaseField(columnName = SUNSET, canBeNull = false)
     private long mSunset;
 
     public Weather() {

@@ -13,17 +13,21 @@ import java.util.List;
 public class City implements Serializable {
 
     public static final String TABLE_NAME = "city";
+    public static final String ID = "id";
+    public static final String NAME = "name";
+    public static final String COUNTRY = "country";
+    public static final String WEATHER_ID = "weatherId";
 
-    @DatabaseField(columnName = "id", id = true)
+    @DatabaseField(columnName = ID, id = true)
     private int mId;
 
-    @DatabaseField(columnName = "name", canBeNull = false)
+    @DatabaseField(columnName = NAME, canBeNull = false)
     private String mName;
 
-    @DatabaseField(columnName = "country", canBeNull = false)
+    @DatabaseField(columnName = COUNTRY, canBeNull = false)
     private String mCountry;
 
-    @DatabaseField(columnName = "weatherId", foreign = true, foreignAutoRefresh = true, canBeNull = false)
+    @DatabaseField(columnName = WEATHER_ID, foreign = true, foreignAutoRefresh = true, canBeNull = false)
     private Weather mWeather;
 
     @ForeignCollectionField(eager = true)

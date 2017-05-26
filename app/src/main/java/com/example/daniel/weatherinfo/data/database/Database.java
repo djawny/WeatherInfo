@@ -1,6 +1,7 @@
 package com.example.daniel.weatherinfo.data.database;
 
 import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.data.database.model.Forecast;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface Database {
     void removeCity(int cityId);
 
     void removeAllCities();
+
+    void saveCity(City city, List<Forecast> forecasts);
 }
