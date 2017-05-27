@@ -18,6 +18,4 @@ public interface Database {
     void removeCity(int cityId);
 
     void removeAllCities();
-
-    void saveCity(City city, List<Forecast> forecasts);
 }

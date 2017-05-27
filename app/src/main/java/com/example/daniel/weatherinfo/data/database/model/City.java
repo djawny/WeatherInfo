@@ -17,6 +17,7 @@ public class City implements Serializable {
     public static final String NAME = "name";
     public static final String COUNTRY = "country";
     public static final String WEATHER_ID = "weatherId";
+    public static final String FORECASTS = "forecasts";
 
     @DatabaseField(columnName = ID, id = true)
     private int mId;
@@ -30,7 +31,7 @@ public class City implements Serializable {
     @DatabaseField(columnName = WEATHER_ID, foreign = true, foreignAutoRefresh = true, canBeNull = false)
     private Weather mWeather;
 
-    @ForeignCollectionField(eager = true)
+    @ForeignCollectionField(columnName = FORECASTS, eager = true)
     private Collection<Forecast> mForecastCollection;
 
     public List<Forecast> getForecasts() {

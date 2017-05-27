@@ -71,17 +71,6 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
-    public Observable saveCity(final City city, final List<Forecast> forecasts) {
-        return Observable.fromCallable(new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception {
-                mDatabase.saveCity(city,forecasts);
-                return true;
-            }
-        });
-    }
-
-    @Override
     public Observable<Boolean> removeCity(final int cityId) {
         return Observable.fromCallable(new Callable<Boolean>() {
             @Override

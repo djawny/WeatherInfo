@@ -50,36 +50,6 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
                 }));
     }
 
-    public void addCityFromNetwork1(String cityName) {
-        addDisposable(getDataManager()
-                .getCityWeatherData(cityName)
-                .subscribeOn(getSubscribeScheduler())
-                .concatMap(new Function<CityWeatherData, ObservableSource<Boolean>>() {
-                    @Override
-                    public ObservableSource<Boolean> apply(CityWeatherData cityWeatherData) throws Exception {
-                        City city = Mapper.mapCity(cityWeatherData);
-                        return getDataManager().saveCity(city);
-                    }
-                })
-                .observeOn(getObserveScheduler())
-                .subscribeWith(new DisposableObserver<Boolean>() {
-                    @Override
-                    public void onNext(Boolean value) {
-                        //ignore
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        //TODO
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        getView().onAddComplete();
-                    }
-                }));
-    }
-
     public void addCityFromNetwork(String cityName) {
         addDisposable(getDataManager()
                 .getCityWeatherData(cityName)
@@ -88,12 +58,15 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
                     @Override
                     public ObservableSource<Boolean> apply(CityWeatherData cityWeatherData) throws Exception {
                         City city = Mapper.mapCity(cityWeatherData);
-                        return Observable.combineLatest(getDataManager().getCityForecastData(city.getId()), Observable.just(city), new BiFunction<CityForecastData, City, Boolean>() {
+                        return Observable.zip(getDataManager().getCityForecastData(city.getId()), Observable.just(city), new BiFunction<CityForecastData, City, Boolean>() {
                             @Override
                             public Boolean apply(CityForecastData cityForecastData, City city) throws Exception {
                                 List<Forecast> forecasts = Mapper.mapForecast(cityForecastData, city);
-                                getDataManager().saveCity(city, forecasts).subscribeOn(getSubscribeScheduler()).subscribe();
-                                return true;
+                                city.setForecastCollection(forecasts);
+                                return getDataManager()
+                                        .saveCity(city)
+                                        .subscribeOn(getSubscribeScheduler())
+                                        .blockingFirst();
                             }
                         });
                     }

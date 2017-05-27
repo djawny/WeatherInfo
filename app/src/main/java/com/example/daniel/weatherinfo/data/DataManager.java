@@ -29,6 +29,4 @@ public interface DataManager {
     Observable<CitiesWeatherData> getCitiesWeatherData(String cityIds);
 
     Observable<CityForecastData> getCityForecastData(int cityId);
-
-    Observable saveCity(City city, List<Forecast> forecasts);
 }
