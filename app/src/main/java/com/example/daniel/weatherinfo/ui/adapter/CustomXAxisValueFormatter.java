@@ -5,11 +5,11 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import java.util.List;
 
-public class MyBarChartXAxisValueFormatter implements IAxisValueFormatter {
+public class CustomXAxisValueFormatter implements IAxisValueFormatter {
 
     public List<String> mValues;
 
-    public MyBarChartXAxisValueFormatter(List<String> mValues) {
+    public CustomXAxisValueFormatter(List<String> mValues) {
         this.mValues = mValues;
     }
 
