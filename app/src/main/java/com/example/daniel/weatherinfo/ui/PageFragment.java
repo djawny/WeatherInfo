@@ -229,19 +229,23 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
         mBarChart.getAxisRight().setEnabled(false);
         mBarChart.getLegend().setEnabled(false);
         mBarChart.getDescription().setEnabled(false);
-        mBarChart.setExtraTopOffset(20);
+        mBarChart.setExtraBottomOffset(20);
         mBarChart.setData(barData);
 
         YAxis axisLeft = mBarChart.getAxisLeft();
-        axisLeft.setAxisMinimum(chart.getYAxisMin() - TEMP_OFFSET);
+        if (chart.getYAxisMin() - TEMP_OFFSET < 0) {
+            axisLeft.setAxisMinimum(chart.getYAxisMin() - TEMP_OFFSET);
+        } else {
+            axisLeft.setAxisMinimum(0);
+        }
         axisLeft.setAxisMaximum(chart.getYAxisMax() + TEMP_OFFSET);
         axisLeft.setEnabled(false);
 
         XAxis xAxis = mBarChart.getXAxis();
         xAxis.setDrawGridLines(false);
-        xAxis.setDrawAxisLine(false);
+        xAxis.setDrawAxisLine(true);
         xAxis.setGranularity(1f);
-        xAxis.setPosition(XAxis.XAxisPosition.TOP);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setValueFormatter(new CustomXAxisValueFormatter(chart.getXLabels()));
         xAxis.setTextSize(16);
         xAxis.setTextColor(Color.WHITE);

@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -63,8 +64,31 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         initializePresenter();
-        mSwipeRefreshLayout.setOnRefreshListener(this);
+        setSwipeRefreshListener();
+        setViewPagerListener();
         loadCities();
+    }
+
+    private void setSwipeRefreshListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+    }
+
+    private void setViewPagerListener() {
+        mViewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        mSwipeRefreshLayout.setEnabled(false);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        mSwipeRefreshLayout.setEnabled(true);
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     @Override

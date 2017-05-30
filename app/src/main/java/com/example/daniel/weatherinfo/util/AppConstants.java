@@ -13,5 +13,5 @@ public final class AppConstants {
     public static final String TIME = "HH:mm:ss";
     public static final String TIME_HOURES = "HH";
 
-    public static final int TEMP_OFFSET = 4;
+    public static final int TEMP_OFFSET = 10;
 }

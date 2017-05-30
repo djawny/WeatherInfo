@@ -46,7 +46,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                 }));
     }
 
-    public void loadCitiesFromNetwork() {
+    public void loadCitiesFromNetwork() {   //Todo add refresh forecast
         addDisposable(getDataManager()
                 .getCities()
                 .subscribeOn(getSubscribeScheduler())
