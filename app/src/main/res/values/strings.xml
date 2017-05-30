@@ -5,4 +5,7 @@
     <string name="message_error">Error</string>
     <string name="title_activity_add_city">AddCityActivity</string>
     <string name="hint_city_name_edit_text">enter city name</string>
+    <string name="header_hourly_forecast">Hourly forecast</string>
+    <string name="header_daily_forecast">Daily forecast</string>
+    <string name="header_details">Details</string>
 </resources>
