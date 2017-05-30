@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,7 +12,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.baoyz.widget.PullRefreshLayout;
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.di.component.ActivityComponent;
@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
 
 import static com.example.daniel.weatherinfo.ui.AddCityActivity.POSITION;
 
-public class MainActivity extends BaseActivity implements MainActivityView {
+public class MainActivity extends BaseActivity implements MainActivityView, SwipeRefreshLayout.OnRefreshListener {
 
     private static final int ADD_CITY_REQUEST_CODE = 1;
 
@@ -43,7 +43,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     Toolbar mToolbar;
 
     @BindView(R.id.refresh_layout)
-    PullRefreshLayout mPullRefreshLayout;
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     @BindView(R.id.status_info)
     TextView mStatusInfo;
@@ -52,7 +52,6 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     MainActivityPresenter mPresenter;
 
     private CityPagerAdapter mCityPagerAdapter;
-    private boolean mPullRefreshing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +63,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         initializePresenter();
-        initializePullRefresh();
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         loadCities();
     }
 
@@ -116,7 +115,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
     @Override
     public void displayCities(List<City> cities) {
-        mPullRefreshLayout.setVisibility(View.VISIBLE);
+        mSwipeRefreshLayout.setVisibility(View.VISIBLE);
         mStatusInfo.setVisibility(View.GONE);
         if (mCityPagerAdapter == null) {
             mCityPagerAdapter = new CityPagerAdapter(getSupportFragmentManager(), cities);
@@ -127,41 +126,32 @@ public class MainActivity extends BaseActivity implements MainActivityView {
             mCityPagerAdapter.swapData(cities);
         }
 
-        if (mPullRefreshing) {
-            mPullRefreshLayout.setRefreshing(false);
-            mPullRefreshing = false;
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
     @Override
     public void showNoData() {
-        mPullRefreshLayout.setVisibility(View.GONE);
+        mSwipeRefreshLayout.setVisibility(View.GONE);
         mStatusInfo.setVisibility(View.VISIBLE);
         mStatusInfo.setText(R.string.message_no_data);
     }
 
     @Override
     public void showErrorInfo() {
-        mPullRefreshLayout.setVisibility(View.GONE);
+        mSwipeRefreshLayout.setVisibility(View.GONE);
         mStatusInfo.setVisibility(View.VISIBLE);
         mStatusInfo.setText(R.string.message_error);
     }
 
-    private void initializePullRefresh() {
-        mPullRefreshing = false;
-        mPullRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
-        mPullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPullRefreshing = true;
-                if (NetworkUtils.isNetAvailable(MainActivity.this)) {
-                    mPresenter.loadCitiesFromNetwork();
-                } else {
-                    mPullRefreshing = false;
-                    mPullRefreshLayout.setRefreshing(false);
-                    showSnackBar("Network error! Check the network connection settings.", Snackbar.LENGTH_LONG);
-                }
-            }
-        });
+    @Override
+    public void onRefresh() {
+        if (NetworkUtils.isNetAvailable(MainActivity.this)) {
+            mPresenter.loadCitiesFromNetwork();
+        } else {
+            mSwipeRefreshLayout.setRefreshing(false);
+            showSnackBar("Network error! Check the network connection settings.", Snackbar.LENGTH_LONG);
+        }
     }
 }
