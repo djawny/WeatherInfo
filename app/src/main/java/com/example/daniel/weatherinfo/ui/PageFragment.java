@@ -61,8 +61,8 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
     @BindView(R.id.temp)
     TextView mTemperature;
 
-    @BindView(R.id.temperature_range)
-    TextView mTemperatureRange;
+//    @BindView(R.id.temperature_range)
+//    TextView mTemperatureRange;
 
     @BindView(R.id.wind)
     TextView mWind;
@@ -145,7 +145,7 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
         mDate.setText(date);
         mDescription.setText(city.getWeather().getDescription());
         mTemperature.setText(String.format("%s °C", String.valueOf(city.getWeather().getTemp())));
-        mTemperatureRange.setText(String.format("Temperature from %s °C to %s °C", city.getWeather().getTempMin(), city.getWeather().getTempMax()));
+//        mTemperatureRange.setText(String.format("Temperature from %s °C to %s °C", city.getWeather().getTempMin(), city.getWeather().getTempMax()));
         mWind.setText(String.format("Wind: %s m/s", city.getWeather().getWindSpeed()));
         mCloudiness.setText(String.format("Cloudiness: %s %%", city.getWeather().getCloudiness()));
         mPressure.setText(String.format("Pressure: %s hpa", city.getWeather().getPressure()));
