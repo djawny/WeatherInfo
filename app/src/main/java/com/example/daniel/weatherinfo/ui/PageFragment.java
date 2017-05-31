@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.database.model.Forecast;
-import com.example.daniel.weatherinfo.data.database.model.MyBarBaseChart;
-import com.example.daniel.weatherinfo.data.database.model.MyLineBaseChart;
+import com.example.daniel.weatherinfo.data.database.model.MyBarChart;
+import com.example.daniel.weatherinfo.data.database.model.MyLineChart;
 import com.example.daniel.weatherinfo.ui.adapter.CustomXAxisValueFormatter;
 import com.example.daniel.weatherinfo.ui.base.BaseFragment;
 import com.example.daniel.weatherinfo.util.AppConstants;
@@ -40,7 +40,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.daniel.weatherinfo.util.AppConstants.TEMP_OFFSET;
+import static com.example.daniel.weatherinfo.util.AppConstants.CHART_TEMP_OFFSET;
 
 public class PageFragment extends BaseFragment implements PageFragmentView {
 
@@ -159,7 +159,7 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
     }
 
     private void drawLineChart(List<Forecast> forecasts) {
-        MyLineBaseChart chart = new MyLineBaseChart();
+        MyLineChart chart = new MyLineChart();
         chart.setData(forecasts);
 
         LineDataSet dataSet = new LineDataSet(chart.getEntries(), "Label");
@@ -182,8 +182,8 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
         mLineChart.setData(lineData);
 
         YAxis axisLeft = mLineChart.getAxisLeft();
-        axisLeft.setAxisMinimum(chart.getYAxisMin() - TEMP_OFFSET);
-        axisLeft.setAxisMaximum(chart.getYAxisMax() + TEMP_OFFSET);
+        axisLeft.setAxisMinimum(chart.getMinTemp() - CHART_TEMP_OFFSET);
+        axisLeft.setAxisMaximum(chart.getMaxTemp() + CHART_TEMP_OFFSET);
         axisLeft.setTextSize(16);
         axisLeft.setTextColor(Color.WHITE);
         axisLeft.setDrawGridLines(false);
@@ -199,7 +199,7 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(false);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setValueFormatter(new CustomXAxisValueFormatter(chart.getXLabels()));
+        xAxis.setValueFormatter(new CustomXAxisValueFormatter(chart.getXAxisLabels()));
         xAxis.setTextSize(16);
         xAxis.setTextColor(Color.WHITE);
 
@@ -207,7 +207,7 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
     }
 
     private void drawBarChart(List<Forecast> forecasts) {
-        MyBarBaseChart chart = new MyBarBaseChart();
+        MyBarChart chart = new MyBarChart();
         chart.setData(forecasts);
 
         BarDataSet barDataSet = new BarDataSet(chart.getEntries(), "Forecast");
@@ -233,12 +233,12 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
         mBarChart.setData(barData);
 
         YAxis axisLeft = mBarChart.getAxisLeft();
-        if (chart.getYAxisMin() - TEMP_OFFSET < 0) {
-            axisLeft.setAxisMinimum(chart.getYAxisMin() - TEMP_OFFSET);
+        if (chart.getMinTemp() - CHART_TEMP_OFFSET < 0) {
+            axisLeft.setAxisMinimum(chart.getMinTemp() - CHART_TEMP_OFFSET);
         } else {
             axisLeft.setAxisMinimum(0);
         }
-        axisLeft.setAxisMaximum(chart.getYAxisMax() + TEMP_OFFSET);
+        axisLeft.setAxisMaximum(chart.getMaxTemp() + CHART_TEMP_OFFSET);
         axisLeft.setEnabled(false);
 
         XAxis xAxis = mBarChart.getXAxis();
@@ -246,7 +246,7 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
         xAxis.setDrawAxisLine(true);
         xAxis.setGranularity(1f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setValueFormatter(new CustomXAxisValueFormatter(chart.getXLabels()));
+        xAxis.setValueFormatter(new CustomXAxisValueFormatter(chart.getXAxisLabels()));
         xAxis.setTextSize(16);
         xAxis.setTextColor(Color.WHITE);
 
