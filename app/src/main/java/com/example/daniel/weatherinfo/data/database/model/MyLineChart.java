@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.daniel.weatherinfo.util.AppConstants.LINE_CHART_FORECAST_SIZE;
-import static com.example.daniel.weatherinfo.util.AppConstants.TIME_HOURES;
+import static com.example.daniel.weatherinfo.util.AppConstants.TIME_HOURS;
 
 public class MyLineChart extends BaseChart {
 
@@ -24,7 +24,7 @@ public class MyLineChart extends BaseChart {
             temp = (float) forecasts.get(i).getTemp();
             setTempExtremeValues(temp);
             getEntries().add(new Entry(i, temp));
-            getXAxisLabels().add(DateUtils.getDateFromUTCTimestamp(forecasts.get(i).getDate(), TIME_HOURES));
+            getXAxisLabels().add(DateUtils.getDateFromUTCTimestamp(forecasts.get(i).getDate(), TIME_HOURS));
         }
         return this;
     }

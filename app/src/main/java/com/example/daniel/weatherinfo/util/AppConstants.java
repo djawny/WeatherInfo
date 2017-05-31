@@ -11,7 +11,7 @@ public final class AppConstants {
     public static final String DATE_NEW_LINE_TIME = "yyyy-MM-dd\nHH:mm:ss";
     public static final String DATE_DAY_MONTH = "dd/MM";
     public static final String TIME = "HH:mm:ss";
-    public static final String TIME_HOURES = "HH";
+    public static final String TIME_HOURS = "HH";
 
     public static final int CHART_TEMP_OFFSET = 10;
     public static final int LINE_CHART_FORECAST_SIZE = 10;
