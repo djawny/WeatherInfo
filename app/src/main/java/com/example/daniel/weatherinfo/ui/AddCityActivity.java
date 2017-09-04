@@ -8,7 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
@@ -18,6 +19,7 @@ import com.example.daniel.weatherinfo.ui.base.BaseActivity;
 import com.example.daniel.weatherinfo.util.KeyboardUtils;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -39,8 +41,8 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
     @BindView(R.id.status_info)
     TextView mStatusInfo;
 
-    @BindView(R.id.city_edit_text)
-    EditText mEditText;
+    @BindView(R.id.city_autocomplete_text_view)
+    AutoCompleteTextView mAutoCompleteTextView;
 
     @Inject
     AddCityActivityPresenter mPresenter;
@@ -57,6 +59,14 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
         initializePresenter();
         setRecycleView();
         loadCities();
+        setAutoCompleteTextView();
+    }
+
+    private void setAutoCompleteTextView() {
+        String[] cities = getResources().getStringArray(R.array.city_list);
+        List<String> cityList = Arrays.asList(cities);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, cityList);
+        mAutoCompleteTextView.setAdapter(adapter);
     }
 
     @Override
@@ -135,11 +145,11 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
 
     @OnClick(R.id.add_button)
     public void onAddButtonClicked() {
-        String cityName = mEditText.getText().toString().trim();
+        String cityName = mAutoCompleteTextView.getText().toString().trim();
         if (!TextUtils.isEmpty(cityName)) {
             if (NetworkUtils.isNetAvailable(this)) {
                 mPresenter.addCityFromNetwork(cityName);
-                mEditText.setText("");
+                mAutoCompleteTextView.setText("");
                 KeyboardUtils.hideSoftKeyboard(this);
             } else {
                 KeyboardUtils.hideSoftKeyboard(this);
