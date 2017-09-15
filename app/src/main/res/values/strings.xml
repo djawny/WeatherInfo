@@ -1,11 +1,22 @@
 <resources>
     <string name="app_name">Weather Info</string>
-    <string name="manu_item_add">Add</string>
-    <string name="message_no_data">No data to display</string>
-    <string name="message_error">Error</string>
+    <string name="menu_item_add">Add</string>
+    <string name="menu_item_city_list">Cities</string>
     <string name="title_activity_add_city">AddCityActivity</string>
-    <string name="hint_city_name_edit_text">enter city name</string>
-    <string name="header_hourly_forecast">Hourly forecast</string>
-    <string name="header_daily_forecast">Daily forecast (max temp.)</string>
+    <string name="hint_city_name_edit_text">Enter location</string>
+    <string name="header_hourly_forecast">Hourly</string>
+    <string name="header_daily_forecast">Daily (max temp.)</string>
     <string name="header_details">Details</string>
+    <string name="message_error">Error</string>
+    <string name="message_no_data">No data to display</string>
+    <string name="message_network_connection_error">Network error! Check the network connection settings.</string>
+    <string name="message_loading_data_error">Loading Data Error</string>
+    <string name="locations">Locations</string>
+
+    <string-array name="tab_titles">
+        <item>Current</item>
+        <item>Forecast</item>
+        <item>Map</item>
+    </string-array>
+
 </resources>

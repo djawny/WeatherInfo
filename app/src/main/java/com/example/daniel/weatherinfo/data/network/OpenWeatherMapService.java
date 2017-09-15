@@ -11,11 +11,14 @@ import retrofit2.http.Query;
 public interface OpenWeatherMapService {
 
     @GET("weather?appid=779bcb1c99f4dcd8ffe6b596d5dc919d&units=metric")
-    Observable<CityWeatherData> getCityWeatherData(@Query("q") String cityName);
+    Observable<CityWeatherData> getCityWeatherDataByName(@Query("q") String cityName);
+
+    @GET("weather?appid=779bcb1c99f4dcd8ffe6b596d5dc919d&units=metric")
+    Observable<CityWeatherData> getCityWeatherDataById(@Query("id") int cityId);
 
     @GET("group?appid=779bcb1c99f4dcd8ffe6b596d5dc919d&units=metric")
-    Observable<CitiesWeatherData> getCitiesWeatherData(@Query("id") String cityIds);
+    Observable<CitiesWeatherData> getCitiesWeatherDataByIds(@Query("id") String cityIds);
 
     @GET("forecast?appid=779bcb1c99f4dcd8ffe6b596d5dc919d&units=metric")
-    Observable<CityForecastData> getCityForecastData(@Query("id") int cityId);
+    Observable<CityForecastData> getCityForecastDataById(@Query("id") int cityId);
 }

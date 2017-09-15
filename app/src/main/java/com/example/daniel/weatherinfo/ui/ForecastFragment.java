@@ -3,11 +3,10 @@ package com.example.daniel.weatherinfo.ui;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
@@ -15,9 +14,6 @@ import com.example.daniel.weatherinfo.data.database.model.Forecast;
 import com.example.daniel.weatherinfo.data.database.model.MyBarChart;
 import com.example.daniel.weatherinfo.data.database.model.MyLineChart;
 import com.example.daniel.weatherinfo.ui.adapter.CustomXAxisValueFormatter;
-import com.example.daniel.weatherinfo.ui.base.BaseFragment;
-import com.example.daniel.weatherinfo.util.AppConstants;
-import com.example.daniel.weatherinfo.util.DateUtils;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -31,56 +27,17 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.example.daniel.weatherinfo.util.AppConstants.CHART_TEMP_OFFSET;
 
-public class PageFragment extends BaseFragment implements PageFragmentView {
+public class ForecastFragment extends Fragment {
 
-    private static final String ARG_CITY_ID = "city_id";
-
-    @BindView(R.id.city_country)
-    TextView mCityCountry;
-
-    @BindView(R.id.icon)
-    ImageView mIcon;
-
-    @BindView(R.id.description)
-    TextView mDescription;
-
-    @BindView(R.id.date)
-    TextView mDate;
-
-    @BindView(R.id.temp)
-    TextView mTemperature;
-
-//    @BindView(R.id.temperature_range)
-//    TextView mTemperatureRange;
-
-    @BindView(R.id.wind)
-    TextView mWind;
-
-    @BindView(R.id.cloudiness)
-    TextView mCloudiness;
-
-    @BindView(R.id.pressure)
-    TextView mPressure;
-
-    @BindView(R.id.sunrise)
-    TextView mSunrise;
-
-    @BindView(R.id.sunset)
-    TextView mSunset;
-
-    @BindView(R.id.bg_image_view)
-    ImageView mBackground;
+    private static final String ARG_CITY = "city";
 
     @BindView(R.id.line_chart)
     LineChart mLineChart;
@@ -88,16 +45,13 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
     @BindView(R.id.bar_chart)
     BarChart mBarChart;
 
-    @Inject
-    PageFragmentPresenter mPresenter;
-
-    public PageFragment() {
+    public ForecastFragment() {
     }
 
-    public static PageFragment newInstance(int cityId) {
-        PageFragment fragment = new PageFragment();
+    public static ForecastFragment newInstance(City city) {
+        ForecastFragment fragment = new ForecastFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_CITY_ID, cityId);
+        args.putSerializable(ARG_CITY, city);
         fragment.setArguments(args);
         return fragment;
     }
@@ -105,7 +59,7 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_page, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_forecast, container, false);
         ButterKnife.bind(this, rootView);
         return rootView;
     }
@@ -113,46 +67,7 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getActivityComponent().inject(this);
-        initializePresenter();
-        int cityId = getArguments().getInt(ARG_CITY_ID);
-        loadCity(cityId);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mPresenter.clearDisposable();
-    }
-
-    private void initializePresenter() {
-        mPresenter.setView(this);
-    }
-
-    private void loadCity(int cityId) {
-        mPresenter.loadCityFromDatabase(cityId);
-    }
-
-    @Override
-    public void displayCity(City city) {
-        String icon = city.getWeather().getIcon();
-        Picasso.with(getActivity())
-                .load("http://openweathermap.org/img/w/" + icon + ".png")
-                .into(mIcon);
-        setBackground(icon);
-        mCityCountry.setText(String.format("%s, %s", city.getName(), city.getCountry()));
-        String date = DateUtils.getDateFromUTCTimestamp(city.getWeather().getDate(), AppConstants.DATE_NEW_LINE_TIME);
-        mDate.setText(date);
-        mDescription.setText(city.getWeather().getDescription());
-        mTemperature.setText(String.format("%s °C", String.valueOf(city.getWeather().getTemp())));
-//        mTemperatureRange.setText(String.format("Temperature from %s °C to %s °C", city.getWeather().getTempMin(), city.getWeather().getTempMax()));
-        mWind.setText(String.format("Wind: %s m/s", city.getWeather().getWindSpeed()));
-        mCloudiness.setText(String.format("Cloudiness: %s %%", city.getWeather().getCloudiness()));
-        mPressure.setText(String.format("Pressure: %s hpa", city.getWeather().getPressure()));
-        String sunrise = DateUtils.getDateFromUTCTimestamp(city.getWeather().getSunrise(), AppConstants.TIME);
-        mSunrise.setText(String.format("Sunrise: %s", sunrise));
-        String sunset = DateUtils.getDateFromUTCTimestamp(city.getWeather().getSunset(), AppConstants.TIME);
-        mSunset.setText(String.format("Sunset: %s", sunset));
+        City city = (City) getArguments().getSerializable(ARG_CITY);
         List<Forecast> forecasts = city.getForecasts();
         drawLineChart(forecasts);
         drawBarChart(forecasts);
@@ -251,46 +166,5 @@ public class PageFragment extends BaseFragment implements PageFragmentView {
         xAxis.setTextColor(Color.WHITE);
 
         mBarChart.invalidate();
-    }
-
-    private void setBackground(String icon) {
-        switch (icon) {
-            case "01d": //clear sky
-                mBackground.setImageResource(R.drawable.day_noclouds);
-                break;
-            case "02d": //few clouds
-            case "03d": //scattered clouds
-            case "04d": //broken clouds
-            case "50d": //mist
-                mBackground.setImageResource(R.drawable.day_clouds);
-                break;
-            case "09d": //shower rain
-            case "10d": //rain
-            case "11d": //thunderstorm
-                mBackground.setImageResource(R.drawable.day_rain);
-                break;
-            case "13d": //snow
-                mBackground.setImageResource(R.drawable.day_snow);
-                break;
-            case "01n":
-                mBackground.setImageResource(R.drawable.night_noclouds);
-                break;
-            case "02n":
-            case "03n":
-            case "04n":
-            case "50n":
-                mBackground.setImageResource(R.drawable.night_clouds);
-                break;
-            case "09n":
-            case "10n":
-            case "11n":
-                mBackground.setImageResource(R.drawable.night_rain);
-                break;
-            case "13n":
-                mBackground.setImageResource(R.drawable.night_snow);
-                break;
-            default:
-                mBackground.setImageResource(R.drawable.day_noclouds);
-        }
     }
 }

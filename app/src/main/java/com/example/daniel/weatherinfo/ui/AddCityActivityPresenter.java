@@ -23,42 +23,15 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
         super(dataManager, schedulerProvider.io(), schedulerProvider.ui());
     }
 
-    public void loadCitiesFromDatabase() {
-        addDisposable(getDataManager()
-                .getCities()
-                .subscribeOn(getSubscribeScheduler())
-                .observeOn(getObserveScheduler())
-                .subscribeWith(new DisposableObserver<List<City>>() {
-                    @Override
-                    public void onNext(List<City> cities) {
-                        if (!cities.isEmpty()) {
-                            getView().displayCities(cities);
-                        } else {
-                            getView().showNoData();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        getView().showErrorInfo();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                }));
-    }
-
     public void addCityFromNetwork(String cityName) {
         addDisposable(getDataManager()
-                .getCityWeatherData(cityName)
+                .getCityWeatherDataByName(cityName)
                 .subscribeOn(getSubscribeScheduler())
                 .concatMap(new Function<CityWeatherData, ObservableSource<Boolean>>() {
                     @Override
                     public ObservableSource<Boolean> apply(CityWeatherData cityWeatherData) throws Exception {
                         City city = Mapper.mapCity(cityWeatherData);
-                        return Observable.zip(getDataManager().getCityForecastData(city.getId()), Observable.just(city), new BiFunction<CityForecastData, City, Boolean>() {
+                        return Observable.zip(getDataManager().getCityForecastDataById(city.getId()), Observable.just(city), new BiFunction<CityForecastData, City, Boolean>() {
                             @Override
                             public Boolean apply(CityForecastData cityForecastData, City city) throws Exception {
                                 List<Forecast> forecasts = Mapper.mapForecast(cityForecastData, city);
@@ -86,29 +59,6 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
                     @Override
                     public void onComplete() {
                         getView().onAddComplete();
-                    }
-                }));
-    }
-
-    public void deleteCityFromDatabase(int cityId) {
-        addDisposable(getDataManager()
-                .removeCity(cityId)
-                .subscribeOn(getSubscribeScheduler())
-                .observeOn(getObserveScheduler())
-                .subscribeWith(new DisposableObserver<Boolean>() {
-                    @Override
-                    public void onNext(Boolean value) {
-                        //ignore
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        //TODO
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        getView().onDeleteComplete();
                     }
                 }));
     }

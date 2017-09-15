@@ -2,7 +2,6 @@ package com.example.daniel.weatherinfo.data;
 
 import com.example.daniel.weatherinfo.data.database.Database;
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.data.database.model.Forecast;
 import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.data.network.model.CitiesWeatherData;
 import com.example.daniel.weatherinfo.data.network.model.CityForecastData;
@@ -93,17 +92,22 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
-    public Observable<CityWeatherData> getCityWeatherData(String cityName) {
-        return mOpenWeatherMapService.getCityWeatherData(cityName);
+    public Observable<CityWeatherData> getCityWeatherDataByName(String cityName) {
+        return mOpenWeatherMapService.getCityWeatherDataByName(cityName);
     }
 
     @Override
-    public Observable<CitiesWeatherData> getCitiesWeatherData(String cityIds) {
-        return mOpenWeatherMapService.getCitiesWeatherData(cityIds);
+    public Observable<CityWeatherData> getCityWeatherDataById(int cityId) {
+        return mOpenWeatherMapService.getCityWeatherDataById(cityId);
     }
 
     @Override
-    public Observable<CityForecastData> getCityForecastData(int cityId) {
-        return mOpenWeatherMapService.getCityForecastData(cityId);
+    public Observable<CitiesWeatherData> getCitiesWeatherDataByIds(String cityIds) {
+        return mOpenWeatherMapService.getCitiesWeatherDataByIds(cityIds);
+    }
+
+    @Override
+    public Observable<CityForecastData> getCityForecastDataById(int cityId) {
+        return mOpenWeatherMapService.getCityForecastDataById(cityId);
     }
 }

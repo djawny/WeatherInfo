@@ -3,6 +3,7 @@ package com.example.daniel.weatherinfo.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
@@ -11,66 +12,119 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.di.component.ActivityComponent;
-import com.example.daniel.weatherinfo.ui.adapter.CityPagerAdapter;
-import com.example.daniel.weatherinfo.ui.adapter.ZoomOutTransformer;
+import com.example.daniel.weatherinfo.ui.adapter.MainPagerAdapter;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
+import com.example.daniel.weatherinfo.util.BackgroundProvider;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.daniel.weatherinfo.ui.AddCityActivity.POSITION;
+import static com.example.daniel.weatherinfo.ui.CityListActivity.CITY_ID;
 
 public class MainActivity extends BaseActivity implements MainActivityView, SwipeRefreshLayout.OnRefreshListener {
 
-    private static final int ADD_CITY_REQUEST_CODE = 1;
+    private static final int CITY_LIST_REQUEST_CODE = 1;
 
-    @BindView(R.id.view_pager)
-    ViewPager mViewPager;
+    private int mCurrentCityId;
 
-    @BindView(R.id.main_background)
-    ImageView mImageView;
+    private String[] mTabTitles;
+
+    @BindView(R.id.bg_image_view)
+    ImageView mBackground;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
-    @BindView(R.id.refresh_layout)
+    @BindView(R.id.container)
+    ViewPager mViewPager;
+
+    @BindView(R.id.tabs)
+    TabLayout mTabLayout;
+
+    @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @BindView(R.id.status_info)
-    TextView mStatusInfo;
+//    @BindView(R.id.status_info)
+//    TextView mStatusInfo;
 
     @Inject
     MainActivityPresenter mPresenter;
 
-    private CityPagerAdapter mCityPagerAdapter;
+    private MainPagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        ActivityComponent activityComponent = getActivityComponent();
-        activityComponent.inject(this);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        initializePresenter();
+        initializeTabTitles();
+        getActivityComponent().inject(this);
+        setPresenter();
         setSwipeRefreshListener();
         setViewPagerListener();
-        loadCities();
+        mPresenter.loadDataFromDatabase();
+    }
+
+    private void initializeTabTitles() {
+        mTabTitles = getResources().getStringArray(R.array.tab_titles);
     }
 
     private void setSwipeRefreshListener() {
         mSwipeRefreshLayout.setOnRefreshListener(this);
+    }
+
+    private void setPresenter() {
+        mPresenter.setView(this);
+    }
+
+    @Override
+    public void displayData(City city) {
+//        mSwipeRefreshLayout.setVisibility(View.VISIBLE);
+//        mStatusInfo.setVisibility(View.GONE);
+        if (mPagerAdapter == null) {
+            mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), mTabTitles, city);
+            mViewPager.setAdapter(mPagerAdapter);
+            mTabLayout.setupWithViewPager(mViewPager);
+        } else {
+            mPagerAdapter.swapData(city);
+        }
+        mCurrentCityId = city.getId();
+        getSupportActionBar().setTitle(String.format("%s, %s", city.getName(), city.getCountry()));
+        mBackground.setImageResource(BackgroundProvider.getBackground(city.getWeather().getIcon()));
+
+//        if (mSwipeRefreshLayout.isRefreshing()) {
+//            mSwipeRefreshLayout.setRefreshing(false);
+//        }
+    }
+
+    @Override
+    public void showNoData() {
+//        mSwipeRefreshLayout.setVisibility(View.GONE);
+//        mStatusInfo.setVisibility(View.VISIBLE);
+//        mStatusInfo.setText(R.string.message_no_data);
+    }
+
+    @Override
+    public void showErrorInfo() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+        showSnackBar(getString(R.string.message_loading_data_error), Snackbar.LENGTH_LONG);
+    }
+
+    @Override
+    public void onRefreshComplete() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+        mPresenter.loadDataByIdFromDatabase(mCurrentCityId);
     }
 
     private void setViewPagerListener() {
@@ -92,16 +146,44 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     }
 
     @Override
+    public void onRefresh() {
+        if (NetworkUtils.isNetAvailable(MainActivity.this)) {
+            mPresenter.loadDataByIdFromNetwork(mCurrentCityId);
+        } else {
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+            showSnackBar(getString(R.string.message_network_connection_error), Snackbar.LENGTH_LONG);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_show_city_list:
+                Intent intent = new Intent(this, CityListActivity.class);
+                startActivityForResult(intent, CITY_LIST_REQUEST_CODE);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADD_CITY_REQUEST_CODE) {
+        if (requestCode == CITY_LIST_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                loadCities();
                 Bundle bundle = data.getExtras();
-                int position = bundle.getInt(POSITION);
-                mViewPager.setCurrentItem(position);
+                mCurrentCityId = bundle.getInt(CITY_ID);
+                mPresenter.loadDataByIdFromDatabase(mCurrentCityId);
             } else {
-                loadCities();
+                mPresenter.loadDataFromDatabase();
             }
         }
     }
@@ -110,72 +192,5 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     public void onDestroy() {
         super.onDestroy();
         mPresenter.clearDisposable();
-    }
-
-    private void initializePresenter() {
-        mPresenter.setView(this);
-    }
-
-    private void loadCities() {
-        mPresenter.loadCitiesFromDatabase();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_add:
-                Intent intent = new Intent(this, AddCityActivity.class);
-                startActivityForResult(intent, ADD_CITY_REQUEST_CODE);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void displayCities(List<City> cities) {
-        mSwipeRefreshLayout.setVisibility(View.VISIBLE);
-        mStatusInfo.setVisibility(View.GONE);
-        if (mCityPagerAdapter == null) {
-            mCityPagerAdapter = new CityPagerAdapter(getSupportFragmentManager(), cities);
-            mViewPager.setAdapter(mCityPagerAdapter);
-            mViewPager.setPageTransformer(true, new ZoomOutTransformer());
-            mViewPager.setCurrentItem(1);
-        } else {
-            mCityPagerAdapter.swapData(cities);
-        }
-
-        if (mSwipeRefreshLayout.isRefreshing()) {
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-    }
-
-    @Override
-    public void showNoData() {
-        mSwipeRefreshLayout.setVisibility(View.GONE);
-        mStatusInfo.setVisibility(View.VISIBLE);
-        mStatusInfo.setText(R.string.message_no_data);
-    }
-
-    @Override
-    public void showErrorInfo() {
-        mSwipeRefreshLayout.setVisibility(View.GONE);
-        mStatusInfo.setVisibility(View.VISIBLE);
-        mStatusInfo.setText(R.string.message_error);
-    }
-
-    @Override
-    public void onRefresh() {
-        if (NetworkUtils.isNetAvailable(MainActivity.this)) {
-            mPresenter.loadCitiesFromNetwork();
-        } else {
-            mSwipeRefreshLayout.setRefreshing(false);
-            showSnackBar("Network error! Check the network connection settings.", Snackbar.LENGTH_LONG);
-        }
     }
 }

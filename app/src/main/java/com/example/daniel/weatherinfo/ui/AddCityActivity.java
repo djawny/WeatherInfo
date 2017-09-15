@@ -1,20 +1,13 @@
 package com.example.daniel.weatherinfo.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
-import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.ui.adapter.CityAdapter;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
 import com.example.daniel.weatherinfo.util.KeyboardUtils;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
@@ -28,26 +21,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AddCityActivity extends BaseActivity implements AddCityActivityView, CityAdapter.OnRecycleViewClickListener {
-
-    public static final String POSITION = "position";
-
-    @BindView(R.id.recycle_view)
-    RecyclerView mRecycleView;
+public class AddCityActivity extends BaseActivity implements AddCityActivityView{
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
-    @BindView(R.id.status_info)
-    TextView mStatusInfo;
 
     @BindView(R.id.city_autocomplete_text_view)
     AutoCompleteTextView mAutoCompleteTextView;
 
     @Inject
     AddCityActivityPresenter mPresenter;
-
-    private CityAdapter mCityAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +40,6 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
         initializePresenter();
-        setRecycleView();
-        loadCities();
         setAutoCompleteTextView();
     }
 
@@ -67,15 +48,6 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
         List<String> cityList = Arrays.asList(cities);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, cityList);
         mAutoCompleteTextView.setAdapter(adapter);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mCityAdapter != null && mCityAdapter.getIsButtonVisibleFlag()) {
-            mCityAdapter.setIsButtonVisibleFlag(false);
-        } else {
-            super.onBackPressed();
-        }
     }
 
     private void initializePresenter() {
@@ -88,59 +60,13 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
         mPresenter.clearDisposable();
     }
 
-    private void loadCities() {
-        mPresenter.loadCitiesFromDatabase();
-    }
-
-    private void setRecycleView() {
-        mRecycleView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecycleView.setLayoutManager(linearLayoutManager);
-    }
-
     @Override
-    public void displayCities(List<City> cities) {
-        mRecycleView.setVisibility(View.VISIBLE);
-        mStatusInfo.setVisibility(View.GONE);
-        if (mCityAdapter == null) {
-            mCityAdapter = new CityAdapter(this, cities, this);
-            mRecycleView.setAdapter(mCityAdapter);
-        } else {
-            mCityAdapter.swapData(cities);
-        }
-    }
+    public void onAddComplete() {
 
-    @Override
-    public void showNoData() {
-        mRecycleView.setVisibility(View.GONE);
-        mStatusInfo.setVisibility(View.VISIBLE);
-        mStatusInfo.setText(R.string.message_no_data);
     }
 
     @Override
     public void showErrorInfo() {
-        mRecycleView.setVisibility(View.GONE);
-        mStatusInfo.setVisibility(View.VISIBLE);
-        mStatusInfo.setText(R.string.message_error);
-    }
-
-    @Override
-    public void deleteClickedItem(int cityId) {
-        mPresenter.deleteCityFromDatabase(cityId);
-    }
-
-    @Override
-    public void showClickedItem(int position) {
-        Intent intent = getIntent();
-        intent.putExtra(POSITION, position);
-        setResult(RESULT_OK, intent);
-        onBackPressed();
-    }
-
-    @Override
-    public void onDeleteComplete() {
-        loadCities();
     }
 
     @OnClick(R.id.add_button)
@@ -156,10 +82,5 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
                 showSnackBar("Network error! Check the network connection settings.", Snackbar.LENGTH_LONG);
             }
         }
-    }
-
-    @Override
-    public void onAddComplete() {
-        loadCities();
     }
 }

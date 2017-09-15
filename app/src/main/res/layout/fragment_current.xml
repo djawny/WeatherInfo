@@ -1,16 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/transparent"
-    tools:context="com.example.daniel.weatherinfo.ui.PageFragment">
-
-    <ImageView
-        android:id="@+id/bg_image_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:foreground="@color/transparent_black"
-        android:scaleType="centerCrop" />
+    tools:context="com.example.daniel.weatherinfo.ui.CurrentFragment">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -37,7 +29,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_toLeftOf="@+id/date"
                     android:layout_toStartOf="@+id/date"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/white"
                     android:textSize="30sp"
                     android:textStyle="bold"
                     tools:text="city, country"
@@ -50,7 +42,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/date"
-                    android:layout_marginTop="36dp" />
+                    android:layout_marginTop="36dp"
+                    android:contentDescription="@null" />
 
                 <TextView
                     android:id="@+id/description"
@@ -59,7 +52,7 @@
                     android:layout_alignBottom="@+id/icon"
                     android:layout_toEndOf="@+id/icon"
                     android:layout_toRightOf="@+id/icon"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/white"
                     android:textSize="20sp"
                     tools:text="description"
                     tools:textColor="@android:color/black" />
@@ -71,7 +64,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/white"
                     android:textSize="16sp"
                     tools:text="date"
                     tools:textColor="@android:color/black" />
@@ -83,21 +76,10 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/icon"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/white"
                     android:textSize="48sp"
                     tools:text="temp"
                     tools:textColor="@android:color/black" />
-
-                <!--<TextView-->
-                    <!--android:id="@+id/temperature_range"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_below="@id/temp"-->
-                    <!--android:layout_marginTop="12dp"-->
-                    <!--android:textColor="@android:color/white"-->
-                    <!--android:textSize="16sp"-->
-                    <!--tools:text="temperature_range"-->
-                    <!--tools:textColor="@android:color/black" />-->
 
             </RelativeLayout>
 
@@ -105,15 +87,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:layout_marginTop="140dp"
+                android:layout_marginTop="60dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:text="@string/header_details"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/white"
                     android:textSize="20sp"
                     tools:textColor="@android:color/black" />
 
@@ -129,7 +112,7 @@
                 android:id="@+id/wind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 tools:text="wind"
                 tools:textColor="@android:color/black" />
@@ -138,7 +121,7 @@
                 android:id="@+id/cloudiness"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 tools:text="all"
                 tools:textColor="@android:color/black" />
@@ -147,7 +130,7 @@
                 android:id="@+id/pressure"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 tools:text="pressure"
                 tools:textColor="@android:color/black" />
@@ -156,7 +139,7 @@
                 android:id="@+id/sunrise"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 tools:text="sunrise"
                 tools:textColor="@android:color/black" />
@@ -165,73 +148,13 @@
                 android:id="@+id/sunset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 tools:text="sunset"
                 tools:textColor="@android:color/black" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="8dp"
-                    android:text="@string/header_hourly_forecast"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
-                    tools:textColor="@android:color/black" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_gravity="center"
-                    android:background="@android:color/white" />
-
-            </LinearLayout>
-
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/line_chart"
-                android:layout_width="match_parent"
-                android:layout_height="200dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="8dp"
-                    android:text="@string/header_daily_forecast"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
-                    tools:textColor="@android:color/black" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_gravity="center"
-                    android:background="@android:color/white" />
-
-            </LinearLayout>
-
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/bar_chart"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginBottom="20dp" />
 
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
 
-</RelativeLayout>
-
+</android.support.design.widget.CoordinatorLayout>

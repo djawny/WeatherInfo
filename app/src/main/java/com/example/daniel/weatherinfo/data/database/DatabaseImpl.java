@@ -92,6 +92,7 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
     public void saveCity(City city) {
         try {
             getWritableDatabase().beginTransaction();
+            removeCity(city.getId());
             Weather weather = city.getWeather();
             setWeatherIdIfCityExists(city, weather);
             mWeatherDao.createOrUpdate(weather);
@@ -116,15 +117,17 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
     @Override
     public void removeCity(int cityId) {
         City city = mCityDao.queryForId(cityId);
-        mCityDao.deleteById(cityId);
-        mWeatherDao.deleteById(city.getWeather().getId());
-        DeleteBuilder<Forecast, Integer> deleteBuilder = mForecastDao.deleteBuilder();
-        Where<Forecast, Integer> where = deleteBuilder.where();
-        try {
-            where.eq(CITY_ID, cityId);
-            deleteBuilder.delete();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (city != null) {
+            mCityDao.deleteById(cityId);
+            mWeatherDao.deleteById(city.getWeather().getId());
+            DeleteBuilder<Forecast, Integer> deleteBuilder = mForecastDao.deleteBuilder();
+            Where<Forecast, Integer> where = deleteBuilder.where();
+            try {
+                where.eq(CITY_ID, cityId);
+                deleteBuilder.delete();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
