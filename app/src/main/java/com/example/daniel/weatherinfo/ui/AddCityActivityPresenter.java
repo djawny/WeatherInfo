@@ -53,7 +53,7 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
 
                     @Override
                     public void onError(Throwable e) {
-                        //TODO
+                        getView().showErrorInfo();
                     }
 
                     @Override

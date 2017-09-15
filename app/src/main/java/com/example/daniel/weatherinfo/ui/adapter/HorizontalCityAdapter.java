@@ -27,6 +27,8 @@ public class HorizontalCityAdapter extends BaseAdapter<City> {
         void deleteClickedItem(int cityId);
 
         void showClickedItem(int cityId);
+
+        void updateView();
     }
 
     private OnRecycleViewItemClickListener mListener;
@@ -70,6 +72,7 @@ public class HorizontalCityAdapter extends BaseAdapter<City> {
             @Override
             public boolean onLongClick(View v) {
                 setIsButtonVisibleFlag(true);
+                mListener.updateView();
                 return false;
             }
         });

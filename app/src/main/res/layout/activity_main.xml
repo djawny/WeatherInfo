@@ -53,14 +53,15 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <!--<TextView-->
-    <!--android:id="@+id/status_info"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center"-->
-    <!--android:textColor="@android:color/white"-->
-    <!--android:textSize="30sp"-->
-    <!--android:visibility="gone"-->
-    <!--tools:text="PRODUCT STATUS" />-->
+    <TextView
+        android:id="@+id/status_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/message_no_data"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:visibility="gone"
+        tools:text="PRODUCT STATUS" />
 
 </android.support.design.widget.CoordinatorLayout>

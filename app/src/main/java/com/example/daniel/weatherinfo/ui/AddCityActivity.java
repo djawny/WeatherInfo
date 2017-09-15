@@ -1,9 +1,12 @@
 package com.example.daniel.weatherinfo.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
@@ -21,7 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AddCityActivity extends BaseActivity implements AddCityActivityView{
+public class AddCityActivity extends BaseActivity implements AddCityActivityView {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -36,11 +39,20 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_city);
-        setSupportActionBar(mToolbar);
         ButterKnife.bind(this);
+        setToolbar();
         getActivityComponent().inject(this);
         initializePresenter();
         setAutoCompleteTextView();
+    }
+
+    private void setToolbar() {
+        setSupportActionBar(mToolbar);
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowTitleEnabled(false);
+        }
     }
 
     private void setAutoCompleteTextView() {
@@ -62,11 +74,24 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
 
     @Override
     public void onAddComplete() {
+        Intent intent = getIntent();
+        setResult(RESULT_OK, intent);
+        onBackPressed();
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void showErrorInfo() {
+        showSnackBar(getString(R.string.message_error_saving_data), Snackbar.LENGTH_LONG);
     }
 
     @OnClick(R.id.add_button)
@@ -79,7 +104,7 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
                 KeyboardUtils.hideSoftKeyboard(this);
             } else {
                 KeyboardUtils.hideSoftKeyboard(this);
-                showSnackBar("Network error! Check the network connection settings.", Snackbar.LENGTH_LONG);
+                showSnackBar(getString(R.string.message_network_connection_error), Snackbar.LENGTH_LONG);
             }
         }
     }

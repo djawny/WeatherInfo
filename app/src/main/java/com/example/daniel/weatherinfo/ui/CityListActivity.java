@@ -2,11 +2,15 @@ package com.example.daniel.weatherinfo.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
@@ -19,10 +23,11 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CityListActivity extends BaseActivity implements CityListActivityView, HorizontalCityAdapter.OnRecycleViewItemClickListener {
 
-    private static final int ADD_LOCATION_REQUEST_CODE = 2;
+    private static final int ADD_CITY_REQUEST_CODE = 2;
     public static final String CITY_ID = "cityId";
 
     @BindView(R.id.toolbar)
@@ -30,6 +35,9 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
+
+    @BindView(R.id.ready_button)
+    TextView mReadyButton;
 
     @Inject
     CityListActivityPresenter mPresenter;
@@ -54,8 +62,11 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
 
     private void setToolbar() {
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowTitleEnabled(false);
+        }
     }
 
     private void setRecycleView() {
@@ -70,6 +81,7 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
 
     @Override
     public void displayData(List<City> cities) {
+        mRecyclerView.setVisibility(View.VISIBLE);
         if (mHorizontalCityAdapter == null) {
             mHorizontalCityAdapter = new HorizontalCityAdapter(this, cities, this);
             mRecyclerView.setAdapter(mHorizontalCityAdapter);
@@ -89,7 +101,7 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
         switch (item.getItemId()) {
             case R.id.add_location:
                 Intent intent = new Intent(this, AddCityActivity.class);
-                startActivityForResult(intent, ADD_LOCATION_REQUEST_CODE);
+                startActivityForResult(intent, ADD_CITY_REQUEST_CODE);
                 break;
             case android.R.id.home:
                 onBackPressed();
@@ -99,18 +111,28 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADD_CITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                mPresenter.loadDataFromDatabase();
+            }
+        }
+    }
+
+    @Override
     public void showNoData() {
-
+        mRecyclerView.setVisibility(View.INVISIBLE);
     }
 
     @Override
-    public void showErrorInfo() {
-
+    public void showLoadErrorInfo() {
+        showSnackBar(getString(R.string.message_error_loading_data), Snackbar.LENGTH_LONG);
     }
 
     @Override
-    public void onAddComplete() {
-
+    public void showDeleteErrorInfo() {
+        showSnackBar(getString(R.string.message_error_deleting_data), Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -138,11 +160,15 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
     }
 
     @Override
-    public void onBackPressed() {
+    public void updateView() {
+        mReadyButton.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.ready_button)
+    public void submit(View view) {
+        mReadyButton.setVisibility(View.GONE);
         if (mHorizontalCityAdapter != null && mHorizontalCityAdapter.getIsButtonVisibleFlag()) {
             mHorizontalCityAdapter.setIsButtonVisibleFlag(false);
-        } else {
-            super.onBackPressed();
         }
     }
 }

@@ -6,12 +6,14 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
@@ -50,8 +52,8 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-//    @BindView(R.id.status_info)
-//    TextView mStatusInfo;
+    @BindView(R.id.status_info)
+    TextView mStatusInfo;
 
     @Inject
     MainActivityPresenter mPresenter;
@@ -86,8 +88,8 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
 
     @Override
     public void displayData(City city) {
-//        mSwipeRefreshLayout.setVisibility(View.VISIBLE);
-//        mStatusInfo.setVisibility(View.GONE);
+        mSwipeRefreshLayout.setVisibility(View.VISIBLE);
+        mStatusInfo.setVisibility(View.GONE);
         if (mPagerAdapter == null) {
             mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), mTabTitles, city);
             mViewPager.setAdapter(mPagerAdapter);
@@ -96,19 +98,22 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
             mPagerAdapter.swapData(city);
         }
         mCurrentCityId = city.getId();
-        getSupportActionBar().setTitle(String.format("%s, %s", city.getName(), city.getCountry()));
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setTitle(String.format("%s, %s", city.getName(), city.getCountry()));
+        }
         mBackground.setImageResource(BackgroundProvider.getBackground(city.getWeather().getIcon()));
 
-//        if (mSwipeRefreshLayout.isRefreshing()) {
-//            mSwipeRefreshLayout.setRefreshing(false);
-//        }
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     @Override
     public void showNoData() {
-//        mSwipeRefreshLayout.setVisibility(View.GONE);
-//        mStatusInfo.setVisibility(View.VISIBLE);
-//        mStatusInfo.setText(R.string.message_no_data);
+        mSwipeRefreshLayout.setVisibility(View.GONE);
+        mStatusInfo.setVisibility(View.VISIBLE);
+        mBackground.setImageResource(R.drawable.bg);
     }
 
     @Override
@@ -116,7 +121,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }
-        showSnackBar(getString(R.string.message_loading_data_error), Snackbar.LENGTH_LONG);
+        showSnackBar(getString(R.string.message_error_loading_data), Snackbar.LENGTH_LONG);
     }
 
     @Override

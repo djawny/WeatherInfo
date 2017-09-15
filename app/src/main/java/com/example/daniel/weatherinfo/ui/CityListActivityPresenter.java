@@ -32,7 +32,7 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
 
                     @Override
                     public void onError(Throwable e) {
-                        getView().showErrorInfo();
+                        getView().showLoadErrorInfo();
                     }
 
                     @Override
@@ -55,7 +55,7 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
 
                     @Override
                     public void onError(Throwable e) {
-                        //TODO
+                        getView().showDeleteErrorInfo();
                     }
 
                     @Override
