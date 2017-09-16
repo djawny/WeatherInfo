@@ -3,9 +3,12 @@ package com.example.daniel.weatherinfo.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -55,6 +58,12 @@ public class CurrentFragment extends Fragment {
     @BindView(R.id.sunset)
     TextView mSunset;
 
+    @BindView(R.id.card_view_general)
+    CardView mCardViewGeneral;
+
+    @BindView(R.id.card_view_details)
+    CardView mCardViewDetails;
+
     public CurrentFragment() {
     }
 
@@ -79,6 +88,13 @@ public class CurrentFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         City city = (City) getArguments().getSerializable(ARG_CITY);
         displayCity(city);
+        animateViews();
+    }
+
+    private void animateViews() {
+        Animation computerAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.magnification);
+        mCardViewGeneral.startAnimation(computerAnimation);
+        mCardViewDetails.startAnimation(computerAnimation);
     }
 
     public void displayCity(City city) {

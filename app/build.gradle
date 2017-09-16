@@ -51,4 +51,6 @@ dependencies {
     debugCompile 'im.dino:dbinspector:3.4.1@aar'
     provided 'javax.annotation:jsr250-api:1.0'
     compile 'com.gjiazhe:PanoramaImageView:1.0'
+    compile 'com.daimajia.easing:library:2.0@aar'
+    compile 'com.daimajia.androidanimations:library:2.3@aar'
 }
