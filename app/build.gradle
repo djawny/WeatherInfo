@@ -50,4 +50,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     debugCompile 'im.dino:dbinspector:3.4.1@aar'
     provided 'javax.annotation:jsr250-api:1.0'
+    compile 'com.gjiazhe:PanoramaImageView:1.0'
 }

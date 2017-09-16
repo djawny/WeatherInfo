@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
@@ -21,6 +20,8 @@ import com.example.daniel.weatherinfo.ui.adapter.MainPagerAdapter;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
 import com.example.daniel.weatherinfo.util.BackgroundProvider;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
+import com.gjiazhe.panoramaimageview.GyroscopeObserver;
+import com.gjiazhe.panoramaimageview.PanoramaImageView;
 
 import javax.inject.Inject;
 
@@ -38,7 +39,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     private String[] mTabTitles;
 
     @BindView(R.id.bg_image_view)
-    ImageView mBackground;
+    PanoramaImageView mBackground;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -59,6 +60,8 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     MainActivityPresenter mPresenter;
 
     private MainPagerAdapter mPagerAdapter;
+    private GyroscopeObserver mGyroscopeObserver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +74,26 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         setPresenter();
         setSwipeRefreshListener();
         setViewPagerListener();
+        setGyroscopeForPanoramaImageView();
         mPresenter.loadDataFromDatabase();
+    }
+
+    private void setGyroscopeForPanoramaImageView() {
+        mGyroscopeObserver = new GyroscopeObserver();
+        mGyroscopeObserver.setMaxRotateRadian(Math.PI / 2);
+        mBackground.setGyroscopeObserver(mGyroscopeObserver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mGyroscopeObserver.register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mGyroscopeObserver.unregister();
     }
 
     private void initializeTabTitles() {

@@ -8,13 +8,23 @@
     android:fitsSystemWindows="true"
     tools:context="com.example.daniel.weatherinfo.ui.MainActivity">
 
-    <ImageView
+    <!--<ImageView-->
+        <!--android:id="@+id/bg_image_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:contentDescription="@null"-->
+        <!--android:foreground="@color/transparent_black"-->
+        <!--android:scaleType="centerCrop" />-->
+
+    <com.gjiazhe.panoramaimageview.PanoramaImageView
         android:id="@+id/bg_image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@null"
         android:foreground="@color/transparent_black"
-        android:scaleType="centerCrop" />
+        app:piv_enablePanoramaMode="true"
+        app:piv_invertScrollDirection="false"
+        app:piv_show_scrollbar="false" />
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
