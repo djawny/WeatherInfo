@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -30,7 +31,7 @@ import butterknife.ButterKnife;
 
 import static com.example.daniel.weatherinfo.ui.CityListActivity.CITY_ID;
 
-public class MainActivity extends BaseActivity implements MainActivityView, SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends BaseActivity implements MainActivityView, SwipeRefreshLayout.OnRefreshListener, ViewPager.OnPageChangeListener {
 
     private static final int CITY_LIST_REQUEST_CODE = 1;
 
@@ -78,12 +79,6 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         mPresenter.loadDataFromDatabase();
     }
 
-    private void setGyroscopeForPanoramaImageView() {
-        mGyroscopeObserver = new GyroscopeObserver();
-        mGyroscopeObserver.setMaxRotateRadian(Math.PI / 2);
-        mBackground.setGyroscopeObserver(mGyroscopeObserver);
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -96,92 +91,10 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         mGyroscopeObserver.unregister();
     }
 
-    private void initializeTabTitles() {
-        mTabTitles = getResources().getStringArray(R.array.tab_titles);
-    }
-
-    private void setSwipeRefreshListener() {
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-    }
-
-    private void setPresenter() {
-        mPresenter.setView(this);
-    }
-
     @Override
-    public void displayData(City city) {
-        mSwipeRefreshLayout.setVisibility(View.VISIBLE);
-        mStatusInfo.setVisibility(View.GONE);
-        if (mPagerAdapter == null) {
-            mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), mTabTitles, city);
-            mViewPager.setAdapter(mPagerAdapter);
-            mTabLayout.setupWithViewPager(mViewPager);
-        } else {
-            mPagerAdapter.swapData(city);
-        }
-        mCurrentCityId = city.getId();
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setTitle(String.format("%s, %s", city.getName(), city.getCountry()));
-        }
-        mBackground.setImageResource(BackgroundProvider.getBackground(city.getWeather().getIcon()));
-
-        if (mSwipeRefreshLayout.isRefreshing()) {
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-    }
-
-    @Override
-    public void showNoData() {
-        mSwipeRefreshLayout.setVisibility(View.GONE);
-        mStatusInfo.setVisibility(View.VISIBLE);
-        mBackground.setImageResource(R.drawable.bg);
-    }
-
-    @Override
-    public void showErrorInfo() {
-        if (mSwipeRefreshLayout.isRefreshing()) {
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-        showSnackBar(getString(R.string.message_error_loading_data), Snackbar.LENGTH_LONG);
-    }
-
-    @Override
-    public void onRefreshComplete() {
-        if (mSwipeRefreshLayout.isRefreshing()) {
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-        mPresenter.loadDataByIdFromDatabase(mCurrentCityId);
-    }
-
-    private void setViewPagerListener() {
-        mViewPager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_MOVE:
-                        mSwipeRefreshLayout.setEnabled(false);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                    case MotionEvent.ACTION_CANCEL:
-                        mSwipeRefreshLayout.setEnabled(true);
-                        break;
-                }
-                return false;
-            }
-        });
-    }
-
-    @Override
-    public void onRefresh() {
-        if (NetworkUtils.isNetAvailable(MainActivity.this)) {
-            mPresenter.loadDataByIdFromNetwork(mCurrentCityId);
-        } else {
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-            showSnackBar(getString(R.string.message_network_connection_error), Snackbar.LENGTH_LONG);
-        }
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.clearDisposable();
     }
 
     @Override
@@ -215,9 +128,121 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         }
     }
 
+    private void initializeTabTitles() {
+        mTabTitles = getResources().getStringArray(R.array.tab_titles);
+    }
+
+    private void setPresenter() {
+        mPresenter.setView(this);
+    }
+
+    private void setSwipeRefreshListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+    }
+
+    private void setViewPagerListener() {
+        mViewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        mSwipeRefreshLayout.setEnabled(false);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        mSwipeRefreshLayout.setEnabled(true);
+                        break;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void setGyroscopeForPanoramaImageView() {
+        mGyroscopeObserver = new GyroscopeObserver();
+        mGyroscopeObserver.setMaxRotateRadian(Math.PI / 2);
+        mBackground.setGyroscopeObserver(mGyroscopeObserver);
+    }
+
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mPresenter.clearDisposable();
+    public void displayData(City city) {
+        mSwipeRefreshLayout.setVisibility(View.VISIBLE);
+        mStatusInfo.setVisibility(View.GONE);
+        if (mPagerAdapter == null) {
+            mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), mTabTitles, city);
+            mViewPager.setAdapter(mPagerAdapter);
+            mTabLayout.setupWithViewPager(mViewPager);
+            mViewPager.addOnPageChangeListener(this);
+        } else {
+            mPagerAdapter.swapData(city);
+        }
+
+        mCurrentCityId = city.getId();
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setTitle(String.format("%s, %s", city.getName(), city.getCountry()));
+        }
+        mBackground.setImageResource(BackgroundProvider.getBackground(city.getWeather().getIcon()));
+
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void showNoData() {
+        mSwipeRefreshLayout.setVisibility(View.GONE);
+        mStatusInfo.setVisibility(View.VISIBLE);
+        mBackground.setImageResource(R.drawable.bg);
+    }
+
+    @Override
+    public void showErrorInfo() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+        showSnackBar(getString(R.string.message_error_loading_data), Snackbar.LENGTH_LONG);
+    }
+
+    @Override
+    public void onRefresh() {
+        if (NetworkUtils.isNetAvailable(MainActivity.this)) {
+            mPresenter.loadDataByIdFromNetwork(mCurrentCityId);
+        } else {
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+            showSnackBar(getString(R.string.message_network_connection_error), Snackbar.LENGTH_LONG);
+        }
+    }
+
+    @Override
+    public void onRefreshComplete() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+        mPresenter.loadDataByIdFromDatabase(mCurrentCityId);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        //ignore
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        if (mPagerAdapter != null) {
+            Fragment fragment = (Fragment) mPagerAdapter.instantiateItem(mViewPager, position);
+            if (fragment instanceof CurrentFragment) {
+                ((CurrentFragment) fragment).animateViews();
+            } else if (fragment instanceof ForecastFragment) {
+                ((ForecastFragment) fragment).animateViews();
+            }
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        //ignore
     }
 }

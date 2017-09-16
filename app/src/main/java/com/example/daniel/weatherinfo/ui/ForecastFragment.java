@@ -83,7 +83,7 @@ public class ForecastFragment extends Fragment {
         animateViews();
     }
 
-    private void animateViews() {
+    public void animateViews() {
         Animation computerAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.magnification);
         mCardViewBC.startAnimation(computerAnimation);
         mCardViewLC.startAnimation(computerAnimation);

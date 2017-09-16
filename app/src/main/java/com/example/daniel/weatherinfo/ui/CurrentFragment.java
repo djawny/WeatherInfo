@@ -91,7 +91,7 @@ public class CurrentFragment extends Fragment {
         animateViews();
     }
 
-    private void animateViews() {
+    public void animateViews() {
         Animation computerAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.magnification);
         mCardViewGeneral.startAnimation(computerAnimation);
         mCardViewDetails.startAnimation(computerAnimation);
@@ -102,7 +102,6 @@ public class CurrentFragment extends Fragment {
         Picasso.with(getActivity())
                 .load("http://openweathermap.org/img/w/" + icon + ".png")
                 .into(mIcon);
-//        setBackground(icon);
         mCityCountry.setText(String.format("%s, %s", city.getName(), city.getCountry()));
         String date = DateUtils.getDateFromUTCTimestamp(city.getWeather().getDate(), AppConstants.DATE_NEW_LINE_TIME);
         mDate.setText(date);
