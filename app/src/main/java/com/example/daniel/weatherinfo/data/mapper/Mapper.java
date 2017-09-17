@@ -18,6 +18,8 @@ public class Mapper {
         if (cityWeatherData != null) {
             city.setId(cityWeatherData.getId());
             city.setName(cityWeatherData.getName());
+            city.setLongitude(cityWeatherData.getCoordinates().getLon());
+            city.setLatitude(cityWeatherData.getCoordinates().getLat());
             city.setCountry(cityWeatherData.getSys().getCountry());
             Weather weather = new Weather();
             weather.setTemp(cityWeatherData.getMain().getTemp());

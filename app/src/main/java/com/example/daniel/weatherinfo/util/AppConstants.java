@@ -15,4 +15,6 @@ public final class AppConstants {
 
     public static final int CHART_TEMP_OFFSET = 10;
     public static final int LINE_CHART_FORECAST_SIZE = 10;
+
+    public static final int MAP_ZOOM = 5;
 }
