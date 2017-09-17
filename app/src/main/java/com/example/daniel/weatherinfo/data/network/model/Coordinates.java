@@ -1,16 +1,13 @@
 package com.example.daniel.weatherinfo.data.network.model;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Coordinates {
 
     @SerializedName("lon")
-    @Expose
     private double lon;
 
     @SerializedName("lat")
-    @Expose
     private double lat;
 
     public double getLon() {

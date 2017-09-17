@@ -1,6 +1,5 @@
 package com.example.daniel.weatherinfo.data.network.model;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -8,31 +7,24 @@ import java.util.List;
 public class CityForecast {
 
     @SerializedName("dt")
-    @Expose
     private long date;
 
     @SerializedName("main")
-    @Expose
     private Main main;
 
     @SerializedName("clouds")
-    @Expose
     private Clouds clouds;
 
     @SerializedName("wind")
-    @Expose
     private Wind wind;
 
     @SerializedName("rain")
-    @Expose
     private Rain rain;
 
     @SerializedName("dt_txt")
-    @Expose
     private String dateTxt;
 
     @SerializedName("weather")
-    @Expose
     private List<Weather> weather;
 
     public long getDate() {

@@ -1,6 +1,5 @@
 package com.example.daniel.weatherinfo.data.network.model;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -8,11 +7,9 @@ import java.util.List;
 public class CityForecastData {
 
     @SerializedName("city")
-    @Expose
     private City city;
 
     @SerializedName("list")
-    @Expose
     private List<CityForecast> list;
 
     public City getCity() {

@@ -1,24 +1,19 @@
 package com.example.daniel.weatherinfo.data.network.model;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class City {
 
     @SerializedName("id")
-    @Expose
     private int id;
 
     @SerializedName("name")
-    @Expose
     private String name;
 
     @SerializedName("coord")
-    @Expose
     private Coordinates coord;
 
     @SerializedName("country")
-    @Expose
     private String country;
 
     public int getId() {
