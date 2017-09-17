@@ -24,11 +24,11 @@ public interface DataManager {
 
     Observable<Boolean> removeCities();
 
-    Observable<CityWeatherData> getCityWeatherDataByName(String cityName);
+    Observable<CityWeatherData> getCityWeatherDataByName(String apiKey, String cityName);
 
-    Observable<CityWeatherData> getCityWeatherDataById(int cityId);
+    Observable<CityWeatherData> getCityWeatherDataById(String apiKey, int cityId);
 
-    Observable<CitiesWeatherData> getCitiesWeatherDataByIds(String cityIds);
+    Observable<CitiesWeatherData> getCitiesWeatherDataByIds(String apiKey, String cityIds);
 
-    Observable<CityForecastData> getCityForecastDataById(int cityId);
+    Observable<CityForecastData> getCityForecastDataById(String apiKey, int cityId);
 }

@@ -77,15 +77,15 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
         );
     }
 
-    public void loadDataByIdFromNetwork(int cityId) {
+    public void loadDataByIdFromNetwork(final String apiKey, int cityId) {
         addDisposable(getDataManager()
-                .getCityWeatherDataById(cityId)
+                .getCityWeatherDataById(apiKey, cityId)
                 .subscribeOn(getSubscribeScheduler())
                 .concatMap(new Function<CityWeatherData, ObservableSource<Boolean>>() {
                     @Override
                     public ObservableSource<Boolean> apply(CityWeatherData cityWeatherData) throws Exception {
                         City city = Mapper.mapCity(cityWeatherData);
-                        return Observable.zip(getDataManager().getCityForecastDataById(city.getId()), Observable.just(city), new BiFunction<CityForecastData, City, Boolean>() {
+                        return Observable.zip(getDataManager().getCityForecastDataById(apiKey, city.getId()), Observable.just(city), new BiFunction<CityForecastData, City, Boolean>() {
                             @Override
                             public Boolean apply(CityForecastData cityForecastData, City city) throws Exception {
                                 List<Forecast> forecasts = Mapper.mapForecast(cityForecastData, city);

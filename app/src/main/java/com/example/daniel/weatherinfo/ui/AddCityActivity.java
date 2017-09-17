@@ -99,7 +99,7 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
         String cityName = mAutoCompleteTextView.getText().toString().trim();
         if (!TextUtils.isEmpty(cityName)) {
             if (NetworkUtils.isNetAvailable(this)) {
-                mPresenter.addCityFromNetwork(cityName);
+                mPresenter.addCityFromNetwork(getString(R.string.open_weather_map_api_key), cityName);
                 mAutoCompleteTextView.setText("");
                 KeyboardUtils.hideSoftKeyboard(this);
             } else {

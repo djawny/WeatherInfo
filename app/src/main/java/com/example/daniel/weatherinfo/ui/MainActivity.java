@@ -194,6 +194,10 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         mSwipeRefreshLayout.setVisibility(View.GONE);
         mStatusInfo.setVisibility(View.VISIBLE);
         mBackground.setImageResource(R.drawable.bg);
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setTitle("");
+        }
     }
 
     @Override
@@ -207,7 +211,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     @Override
     public void onRefresh() {
         if (NetworkUtils.isNetAvailable(MainActivity.this)) {
-            mPresenter.loadDataByIdFromNetwork(mCurrentCityId);
+            mPresenter.loadDataByIdFromNetwork(getString(R.string.open_weather_map_api_key), mCurrentCityId);
         } else {
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);

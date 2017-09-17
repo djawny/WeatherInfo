@@ -10,15 +10,15 @@ import retrofit2.http.Query;
 
 public interface OpenWeatherMapService {
 
-    @GET("weather?appid=779bcb1c99f4dcd8ffe6b596d5dc919d&units=metric")
-    Observable<CityWeatherData> getCityWeatherDataByName(@Query("q") String cityName);
+    @GET("weather?units=metric")
+    Observable<CityWeatherData> getCityWeatherDataByName(@Query("appid") String apiKey, @Query("q") String cityName);
 
-    @GET("weather?appid=779bcb1c99f4dcd8ffe6b596d5dc919d&units=metric")
-    Observable<CityWeatherData> getCityWeatherDataById(@Query("id") int cityId);
+    @GET("weather?units=metric")
+    Observable<CityWeatherData> getCityWeatherDataById(@Query("appid") String apiKey, @Query("id") int cityId);
 
-    @GET("group?appid=779bcb1c99f4dcd8ffe6b596d5dc919d&units=metric")
-    Observable<CitiesWeatherData> getCitiesWeatherDataByIds(@Query("id") String cityIds);
+    @GET("group?units=metric")
+    Observable<CitiesWeatherData> getCitiesWeatherDataByIds(@Query("appid") String apiKey, @Query("id") String cityIds);
 
-    @GET("forecast?appid=779bcb1c99f4dcd8ffe6b596d5dc919d&units=metric")
-    Observable<CityForecastData> getCityForecastDataById(@Query("id") int cityId);
+    @GET("forecast?units=metric")
+    Observable<CityForecastData> getCityForecastDataById(@Query("appid") String apiKey, @Query("id") int cityId);
 }
