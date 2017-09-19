@@ -8,6 +8,7 @@ import com.example.daniel.weatherinfo.data.network.model.CitiesWeatherData;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 public interface DataManager {
@@ -20,7 +21,9 @@ public interface DataManager {
 
     Observable<Boolean> saveCity(City city);
 
-    Observable<Boolean> removeCity(int cityId);
+//    Observable<Boolean> removeCity(int cityId);
+
+    Completable removeCity(int cityId);
 
     Observable<Boolean> removeCities();
 

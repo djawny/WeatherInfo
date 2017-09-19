@@ -7,6 +7,7 @@ import com.example.daniel.weatherinfo.util.SchedulerProvider;
 
 import java.util.List;
 
+import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableObserver;
 
 public class CityListActivityPresenter extends BasePresenter<CityListActivityView> {
@@ -47,20 +48,15 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
                 .removeCity(cityId)
                 .subscribeOn(getSubscribeScheduler())
                 .observeOn(getObserveScheduler())
-                .subscribeWith(new DisposableObserver<Boolean>() {
+                .subscribeWith(new DisposableCompletableObserver() {
                     @Override
-                    public void onNext(Boolean value) {
-                        //ignore
+                    public void onComplete() {
+                        getView().onDeleteComplete();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         getView().showDeleteErrorInfo();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        getView().onDeleteComplete();
                     }
                 }));
     }

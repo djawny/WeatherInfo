@@ -13,7 +13,9 @@ import java.util.concurrent.Callable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.functions.Action;
 
 @Singleton
 public class DataManagerImpl implements DataManager {
@@ -70,12 +72,11 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
-    public Observable<Boolean> removeCity(final int cityId) {
-        return Observable.fromCallable(new Callable<Boolean>() {
+    public Completable removeCity(final int cityId) {
+        return Completable.fromAction(new Action() {
             @Override
-            public Boolean call() throws Exception {
+            public void run() throws Exception {
                 mDatabase.removeCity(cityId);
-                return true;
             }
         });
     }
