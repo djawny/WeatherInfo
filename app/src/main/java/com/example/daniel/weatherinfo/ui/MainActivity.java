@@ -36,7 +36,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     private static final int CITY_LIST_REQUEST_CODE = 1;
 
     private int mCurrentCityId;
-    private boolean isCurrentCityAvailable;
+    private boolean mIsCurrentCityAvailable;
 
     private String[] mTabTitles;
 
@@ -122,7 +122,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
                 Bundle bundle = data.getExtras();
                 mCurrentCityId = bundle.getInt(CITY_ID);
             } else {
-                isCurrentCityAvailable = true;
+                mIsCurrentCityAvailable = true;
             }
             mPresenter.loadCityFromDatabase(mCurrentCityId);
         }
@@ -202,8 +202,8 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
 
     @Override
     public void showErrorInfo() {
-        if (isCurrentCityAvailable) {
-            isCurrentCityAvailable = false;
+        if (mIsCurrentCityAvailable) {
+            mIsCurrentCityAvailable = false;
             mPresenter.loadFirstCityFromDatabase();
         } else {
             showSnackBar(getString(R.string.message_error_loading_deleting_data), Snackbar.LENGTH_LONG);
