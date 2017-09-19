@@ -1,4 +1,6 @@
-package com.example.daniel.weatherinfo.data.database.model;
+package com.example.daniel.weatherinfo.data.chart;
+
+import com.example.daniel.weatherinfo.data.database.model.Forecast;
 
 import java.util.ArrayList;
 import java.util.List;

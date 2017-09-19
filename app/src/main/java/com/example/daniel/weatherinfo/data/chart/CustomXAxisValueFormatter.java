@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.ui.adapter;
+package com.example.daniel.weatherinfo.data.chart;
 
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;

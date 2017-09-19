@@ -1,5 +1,6 @@
-package com.example.daniel.weatherinfo.data.database.model;
+package com.example.daniel.weatherinfo.data.chart;
 
+import com.example.daniel.weatherinfo.data.database.model.Forecast;
 import com.example.daniel.weatherinfo.util.DateUtils;
 import com.github.mikephil.charting.data.BarEntry;
 
