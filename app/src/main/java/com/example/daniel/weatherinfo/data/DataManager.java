@@ -17,15 +17,13 @@ public interface DataManager {
 
     Observable<City> getCity(int cityId);
 
-    Observable<Boolean> saveCities(List<City> cities);
+    Completable saveCities(List<City> cities);
 
-    Observable<Boolean> saveCity(City city);
-
-//    Observable<Boolean> removeCity(int cityId);
+    Completable saveCity(City city);
 
     Completable removeCity(int cityId);
 
-    Observable<Boolean> removeCities();
+    Completable removeCities();
 
     Observable<CityWeatherData> getCityWeatherDataByName(String apiKey, String cityName);
 

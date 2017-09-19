@@ -11,11 +11,12 @@ import com.example.daniel.weatherinfo.util.SchedulerProvider;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
-import io.reactivex.observers.DisposableObserver;
+import io.reactivex.observers.DisposableCompletableObserver;
 
 public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView> {
 
@@ -45,28 +46,24 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
                             }
                         });
                     }
-                }).flatMap(new Function<City, ObservableSource<Boolean>>() {
+                }).flatMapCompletable(new Function<City, Completable>() {
                     @Override
-                    public ObservableSource<Boolean> apply(City city) throws Exception {
+                    public Completable apply(City city) throws Exception {
                         return getDataManager().saveCity(city);
                     }
                 })
                 .observeOn(getObserveScheduler())
-                .subscribeWith(new DisposableObserver<Boolean>() {
+                .subscribeWith(new DisposableCompletableObserver() {
                     @Override
-                    public void onNext(Boolean value) {
-                        //ignore
+                    public void onComplete() {
+                        getView().onAddComplete();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         getView().showErrorInfo();
                     }
-
-                    @Override
-                    public void onComplete() {
-                        getView().onAddComplete();
-                    }
                 }));
     }
 }
+

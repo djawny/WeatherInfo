@@ -50,23 +50,21 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
-    public Observable<Boolean> saveCities(final List<City> cities) {
-        return Observable.fromCallable(new Callable<Boolean>() {
+    public Completable saveCities(final List<City> cities) {
+        return Completable.fromAction(new Action() {
             @Override
-            public Boolean call() throws Exception {
+            public void run() throws Exception {
                 mDatabase.saveCities(cities);
-                return true;
             }
         });
     }
 
     @Override
-    public Observable<Boolean> saveCity(final City city) {
-        return Observable.fromCallable(new Callable<Boolean>() {
+    public Completable saveCity(final City city) {
+        return Completable.fromAction(new Action() {
             @Override
-            public Boolean call() throws Exception {
+            public void run() throws Exception {
                 mDatabase.saveCity(city);
-                return true;
             }
         });
     }
@@ -82,19 +80,18 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
-    public Observable<Boolean> removeCities() {
-        return Observable.fromCallable(new Callable<Boolean>() {
+    public Completable removeCities() {
+        return Completable.fromAction(new Action() {
             @Override
-            public Boolean call() throws Exception {
+            public void run() throws Exception {
                 mDatabase.removeAllCities();
-                return true;
             }
         });
     }
 
     @Override
     public Observable<CityWeatherData> getCityWeatherDataByName(String apiKey, String cityName) {
-        return mOpenWeatherMapService.getCityWeatherDataByName(apiKey,cityName);
+        return mOpenWeatherMapService.getCityWeatherDataByName(apiKey, cityName);
     }
 
     @Override
