@@ -7,8 +7,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ProgressBar;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
@@ -28,6 +30,9 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+
+    @BindView(R.id.spinner)
+    ProgressBar mProgressBar;
 
     @BindView(R.id.city_autocomplete_text_view)
     AutoCompleteTextView mAutoCompleteTextView;
@@ -76,6 +81,7 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
     public void onAddComplete() {
         Intent intent = getIntent();
         setResult(RESULT_OK, intent);
+        mProgressBar.setVisibility(View.INVISIBLE);
         onBackPressed();
     }
 
@@ -91,7 +97,8 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
 
     @Override
     public void showErrorInfo() {
-        showSnackBar(getString(R.string.message_error_saving_data), Snackbar.LENGTH_LONG);
+        mProgressBar.setVisibility(View.INVISIBLE);
+        showSnackBar(getString(R.string.message_error_loading_data_from_network), Snackbar.LENGTH_LONG);
     }
 
     @OnClick(R.id.add_button)
@@ -99,6 +106,7 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
         String cityName = mAutoCompleteTextView.getText().toString().trim();
         if (!TextUtils.isEmpty(cityName)) {
             if (NetworkUtils.isNetAvailable(this)) {
+                mProgressBar.setVisibility(View.VISIBLE);
                 mPresenter.addCityFromNetwork(getString(R.string.open_weather_map_api_key), cityName);
                 mAutoCompleteTextView.setText("");
                 KeyboardUtils.hideSoftKeyboard(this);

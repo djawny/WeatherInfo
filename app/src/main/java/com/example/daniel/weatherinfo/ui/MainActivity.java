@@ -202,10 +202,15 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
 
     @Override
     public void showErrorInfo() {
+        showSnackBar(getString(R.string.message_error_loading_deleting_data), Snackbar.LENGTH_LONG);
+    }
+
+    @Override
+    public void showNetworkErrorInfo() {
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }
-        showSnackBar(getString(R.string.message_error_loading_data), Snackbar.LENGTH_LONG);
+        showSnackBar(getString(R.string.message_error_loading_data_from_network), Snackbar.LENGTH_LONG);
     }
 
     @Override

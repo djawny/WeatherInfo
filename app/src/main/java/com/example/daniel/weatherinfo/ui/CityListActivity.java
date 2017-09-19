@@ -127,12 +127,12 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
 
     @Override
     public void showLoadErrorInfo() {
-        showSnackBar(getString(R.string.message_error_loading_data), Snackbar.LENGTH_LONG);
+        showSnackBar(getString(R.string.message_error_loading_deleting_data), Snackbar.LENGTH_LONG);
     }
 
     @Override
     public void showDeleteErrorInfo() {
-        showSnackBar(getString(R.string.message_error_deleting_data), Snackbar.LENGTH_LONG);
+        showSnackBar(getString(R.string.message_error_loading_deleting_data), Snackbar.LENGTH_LONG);
     }
 
     @Override

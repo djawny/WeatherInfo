@@ -12,5 +12,7 @@ public interface MainActivityView extends BaseView {
 
     void showErrorInfo();
 
+    void showNetworkErrorInfo();
+
     void onRefreshComplete();
 }

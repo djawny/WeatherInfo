@@ -107,7 +107,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
                     @Override
                     public void onError(Throwable e) {
-                        getView().showErrorInfo();
+                        getView().showNetworkErrorInfo();
                     }
 
                     @Override

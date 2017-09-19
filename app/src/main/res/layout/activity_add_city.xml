@@ -48,10 +48,10 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:theme="@style/AutoComplete"
             android:background="@drawable/text_background"
             android:hint="@string/hint_city_name_edit_text"
-            android:padding="10dp" />
+            android:padding="10dp"
+            android:theme="@style/AutoComplete" />
 
         <ImageButton
             android:id="@+id/add_button"
@@ -62,5 +62,15 @@
             android:src="@drawable/ic_add_circle" />
 
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/spinner"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:visibility="invisible"
+        app:layout_anchor="@+id/main_background"
+        app:layout_anchorGravity="center_vertical|center_horizontal" />
 
 </android.support.design.widget.CoordinatorLayout>
