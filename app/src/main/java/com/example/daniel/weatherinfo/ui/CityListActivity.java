@@ -76,7 +76,7 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
     }
 
     private void loadData() {
-        mPresenter.loadDataFromDatabase();
+        mPresenter.loadAllCitiesFromDatabase();
     }
 
     @Override
@@ -115,7 +115,7 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ADD_CITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                mPresenter.loadDataFromDatabase();
+                mPresenter.loadAllCitiesFromDatabase();
             }
         }
     }
@@ -137,7 +137,7 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
 
     @Override
     public void onDeleteComplete() {
-        mPresenter.loadDataFromDatabase();
+        mPresenter.loadAllCitiesFromDatabase();
     }
 
     @Override

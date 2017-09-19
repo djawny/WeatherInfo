@@ -36,6 +36,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     private static final int CITY_LIST_REQUEST_CODE = 1;
 
     private int mCurrentCityId;
+    private boolean isCurrentCityAvailable;
 
     private String[] mTabTitles;
 
@@ -59,7 +60,6 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
 
     @Inject
     MainActivityPresenter mPresenter;
-
     private MainPagerAdapter mPagerAdapter;
     private GyroscopeObserver mGyroscopeObserver;
 
@@ -76,7 +76,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         setSwipeRefreshListener();
         setViewPagerListener();
         setGyroscopeForPanoramaImageView();
-        mPresenter.loadDataFromDatabase();
+        mPresenter.loadFirstCityFromDatabase();
     }
 
     @Override
@@ -121,10 +121,10 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
             if (resultCode == RESULT_OK) {
                 Bundle bundle = data.getExtras();
                 mCurrentCityId = bundle.getInt(CITY_ID);
-                mPresenter.loadDataByIdFromDatabase(mCurrentCityId);
             } else {
-                mPresenter.loadDataFromDatabase();
+                isCurrentCityAvailable = true;
             }
+            mPresenter.loadCityFromDatabase(mCurrentCityId);
         }
     }
 
@@ -202,7 +202,12 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
 
     @Override
     public void showErrorInfo() {
-        showSnackBar(getString(R.string.message_error_loading_deleting_data), Snackbar.LENGTH_LONG);
+        if (isCurrentCityAvailable) {
+            isCurrentCityAvailable = false;
+            mPresenter.loadFirstCityFromDatabase();
+        } else {
+            showSnackBar(getString(R.string.message_error_loading_deleting_data), Snackbar.LENGTH_LONG);
+        }
     }
 
     @Override
@@ -216,7 +221,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     @Override
     public void onRefresh() {
         if (NetworkUtils.isNetAvailable(MainActivity.this)) {
-            mPresenter.loadDataByIdFromNetwork(getString(R.string.open_weather_map_api_key), mCurrentCityId);
+            mPresenter.refreshCityFromNetwork(getString(R.string.open_weather_map_api_key), mCurrentCityId);
         } else {
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -230,7 +235,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }
-        mPresenter.loadDataByIdFromDatabase(mCurrentCityId);
+        mPresenter.loadCityFromDatabase(mCurrentCityId);
     }
 
     @Override

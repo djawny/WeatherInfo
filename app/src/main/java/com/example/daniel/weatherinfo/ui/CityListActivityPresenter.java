@@ -15,7 +15,7 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
         super(dataManager, schedulerProvider.io(), schedulerProvider.ui());
     }
 
-    public void loadDataFromDatabase() {
+    public void loadAllCitiesFromDatabase() {
         addDisposable(getDataManager()
                 .getCities()
                 .subscribeOn(getSubscribeScheduler())
@@ -37,7 +37,7 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
 
                     @Override
                     public void onComplete() {
-
+                        //ignore
                     }
                 }));
     }

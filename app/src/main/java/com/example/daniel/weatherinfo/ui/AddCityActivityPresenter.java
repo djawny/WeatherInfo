@@ -27,21 +27,28 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
         addDisposable(getDataManager()
                 .getCityWeatherDataByName(apiKey, cityName)
                 .subscribeOn(getSubscribeScheduler())
-                .concatMap(new Function<CityWeatherData, ObservableSource<Boolean>>() {
+                .map(new Function<CityWeatherData, City>() {
                     @Override
-                    public ObservableSource<Boolean> apply(CityWeatherData cityWeatherData) throws Exception {
-                        City city = Mapper.mapCity(cityWeatherData);
-                        return Observable.zip(getDataManager().getCityForecastDataById(apiKey, city.getId()), Observable.just(city), new BiFunction<CityForecastData, City, Boolean>() {
+                    public City apply(CityWeatherData cityWeatherData) throws Exception {
+                        return Mapper.mapCity(cityWeatherData);
+                    }
+                })
+                .flatMap(new Function<City, ObservableSource<City>>() {
+                    @Override
+                    public ObservableSource<City> apply(City city) throws Exception {
+                        return Observable.zip(getDataManager().getCityForecastDataById(apiKey, city.getId()), Observable.just(city), new BiFunction<CityForecastData, City, City>() {
                             @Override
-                            public Boolean apply(CityForecastData cityForecastData, City city) throws Exception {
+                            public City apply(CityForecastData cityForecastData, City city) throws Exception {
                                 List<Forecast> forecasts = Mapper.mapForecast(cityForecastData, city);
                                 city.setForecastCollection(forecasts);
-                                return getDataManager()
-                                        .saveCity(city)
-                                        .subscribeOn(getSubscribeScheduler())
-                                        .blockingFirst();
+                                return city;
                             }
                         });
+                    }
+                }).flatMap(new Function<City, ObservableSource<Boolean>>() {
+                    @Override
+                    public ObservableSource<Boolean> apply(City city) throws Exception {
+                        return getDataManager().saveCity(city);
                     }
                 })
                 .observeOn(getObserveScheduler())
