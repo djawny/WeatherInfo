@@ -250,8 +250,12 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
             Fragment fragment = (Fragment) mPagerAdapter.instantiateItem(mViewPager, position);
             if (fragment instanceof CurrentFragment) {
                 ((CurrentFragment) fragment).animateViews();
+                mSwipeRefreshLayout.setEnabled(true);
             } else if (fragment instanceof ForecastFragment) {
                 ((ForecastFragment) fragment).animateViews();
+                mSwipeRefreshLayout.setEnabled(true);
+            } else {
+                mSwipeRefreshLayout.setEnabled(false);
             }
         }
     }

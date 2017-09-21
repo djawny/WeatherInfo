@@ -61,7 +61,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         LatLng currentCoordinates = new LatLng(mCity.getLatitude(), mCity.getLongitude());
         googleMap.addMarker(new MarkerOptions().position(currentCoordinates).title(mCity.getName()));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCoordinates, AppConstants.MAP_ZOOM));
-        googleMap.getUiSettings().setAllGesturesEnabled(false);
+//        googleMap.getUiSettings().setAllGesturesEnabled(false);
     }
 
     private SupportMapFragment getMapFragment() {
