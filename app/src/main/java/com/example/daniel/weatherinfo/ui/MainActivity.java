@@ -172,6 +172,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
             mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), mTabTitles, city);
             mViewPager.setAdapter(mPagerAdapter);
             mTabLayout.setupWithViewPager(mViewPager);
+            mViewPager.setOffscreenPageLimit(2);
             mViewPager.addOnPageChangeListener(this);
         } else {
             mPagerAdapter.swapData(city);
