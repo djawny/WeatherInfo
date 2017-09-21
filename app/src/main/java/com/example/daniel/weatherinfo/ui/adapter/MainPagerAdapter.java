@@ -2,14 +2,14 @@ package com.example.daniel.weatherinfo.ui.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.ui.CurrentFragment;
 import com.example.daniel.weatherinfo.ui.ForecastFragment;
 import com.example.daniel.weatherinfo.ui.MapFragment;
 
-public class MainPagerAdapter extends FragmentStatePagerAdapter {
+public class MainPagerAdapter extends FragmentPagerAdapter {
 
     private String[] mTabTitles;
     private City mCity;
