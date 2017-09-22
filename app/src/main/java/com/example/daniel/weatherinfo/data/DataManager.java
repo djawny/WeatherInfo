@@ -1,10 +1,8 @@
 package com.example.daniel.weatherinfo.data;
 
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.data.database.model.Forecast;
 import com.example.daniel.weatherinfo.data.network.model.CityForecastData;
 import com.example.daniel.weatherinfo.data.network.model.CityWeatherData;
-import com.example.daniel.weatherinfo.data.network.model.CitiesWeatherData;
 
 import java.util.List;
 
@@ -17,19 +15,19 @@ public interface DataManager {
 
     Observable<City> getCity(int cityId);
 
-    Completable saveCities(List<City> cities);
+//    Completable saveCities(List<City> cities);
 
     Completable saveCity(City city);
 
     Completable removeCity(int cityId);
 
-    Completable removeCities();
+//    Completable removeCities();
 
     Observable<CityWeatherData> getCityWeatherDataByName(String apiKey, String cityName);
 
     Observable<CityWeatherData> getCityWeatherDataById(String apiKey, int cityId);
 
-    Observable<CitiesWeatherData> getCitiesWeatherDataByIds(String apiKey, String cityIds);
-
     Observable<CityForecastData> getCityForecastDataById(String apiKey, int cityId);
+
+//    Observable<CitiesWeatherData> getCitiesWeatherDataByIds(String apiKey, String cityIds);
 }

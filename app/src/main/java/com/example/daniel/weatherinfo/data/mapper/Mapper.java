@@ -3,7 +3,6 @@ package com.example.daniel.weatherinfo.data.mapper;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.database.model.Forecast;
 import com.example.daniel.weatherinfo.data.database.model.Weather;
-import com.example.daniel.weatherinfo.data.network.model.CitiesWeatherData;
 import com.example.daniel.weatherinfo.data.network.model.CityForecast;
 import com.example.daniel.weatherinfo.data.network.model.CityForecastData;
 import com.example.daniel.weatherinfo.data.network.model.CityWeatherData;
@@ -40,17 +39,17 @@ public class Mapper {
         return city;
     }
 
-    public static List<City> mapCities(CitiesWeatherData citiesWeatherData) {
-        List<City> cities = new ArrayList<>();
-        if (citiesWeatherData != null) {
-            List<CityWeatherData> dataList = citiesWeatherData.getList();
-            for (CityWeatherData cityWeatherData : dataList) {
-                City city = mapCity(cityWeatherData);
-                cities.add(city);
-            }
-        }
-        return cities;
-    }
+//    public static List<City> mapCities(CitiesWeatherData citiesWeatherData) {
+//        List<City> cities = new ArrayList<>();
+//        if (citiesWeatherData != null) {
+//            List<CityWeatherData> dataList = citiesWeatherData.getList();
+//            for (CityWeatherData cityWeatherData : dataList) {
+//                City city = mapCity(cityWeatherData);
+//                cities.add(city);
+//            }
+//        }
+//        return cities;
+//    }
 
     public static List<Forecast> mapForecast(CityForecastData cityForecastData, City city) {
         List<Forecast> forecasts = new ArrayList<>();

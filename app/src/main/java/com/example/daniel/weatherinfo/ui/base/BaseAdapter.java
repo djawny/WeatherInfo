@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.ui.adapter;
+package com.example.daniel.weatherinfo.ui.base;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

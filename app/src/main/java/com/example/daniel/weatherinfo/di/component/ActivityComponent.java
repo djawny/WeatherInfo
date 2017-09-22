@@ -2,9 +2,9 @@ package com.example.daniel.weatherinfo.di.component;
 
 import com.example.daniel.weatherinfo.di.PerActivity;
 import com.example.daniel.weatherinfo.di.mudule.ActivityModule;
-import com.example.daniel.weatherinfo.ui.AddCityActivity;
-import com.example.daniel.weatherinfo.ui.CityListActivity;
-import com.example.daniel.weatherinfo.ui.MainActivity;
+import com.example.daniel.weatherinfo.ui.activity.AddCityActivity;
+import com.example.daniel.weatherinfo.ui.activity.CityListActivity;
+import com.example.daniel.weatherinfo.ui.activity.MainActivity;
 
 import dagger.Component;
 

@@ -72,21 +72,21 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
         return mCityDao.queryForId(cityId);
     }
 
-    @Override
-    public void saveCities(List<City> cities) {
-        try {
-            getWritableDatabase().beginTransaction();
-            for (City city : cities) {
-                Weather weather = city.getWeather();
-                setWeatherIdIfCityExists(city, weather);
-                mWeatherDao.createOrUpdate(weather);
-                mCityDao.createOrUpdate(city);
-            }
-            getWritableDatabase().setTransactionSuccessful();
-        } finally {
-            getWritableDatabase().endTransaction();
-        }
-    }
+//    @Override
+//    public void saveCities(List<City> cities) {
+//        try {
+//            getWritableDatabase().beginTransaction();
+//            for (City city : cities) {
+//                Weather weather = city.getWeather();
+//                setWeatherIdIfCityExists(city, weather);
+//                mWeatherDao.createOrUpdate(weather);
+//                mCityDao.createOrUpdate(city);
+//            }
+//            getWritableDatabase().setTransactionSuccessful();
+//        } finally {
+//            getWritableDatabase().endTransaction();
+//        }
+//    }
 
     @Override
     public void saveCity(City city) {
@@ -131,14 +131,14 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
         }
     }
 
-    @Override
-    public void removeAllCities() {
-        try {
-            TableUtils.clearTable(getConnectionSource(), City.class);
-            TableUtils.clearTable(getConnectionSource(), Weather.class);
-            TableUtils.clearTable(getConnectionSource(), Forecast.class);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//    @Override
+//    public void removeAllCities() {
+//        try {
+//            TableUtils.clearTable(getConnectionSource(), City.class);
+//            TableUtils.clearTable(getConnectionSource(), Weather.class);
+//            TableUtils.clearTable(getConnectionSource(), Forecast.class);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

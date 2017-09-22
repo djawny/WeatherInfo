@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.ui;
+package com.example.daniel.weatherinfo.ui.view;
 
 
 import com.example.daniel.weatherinfo.data.database.model.City;
@@ -14,5 +14,5 @@ public interface MainActivityView extends BaseView {
 
     void showNetworkErrorInfo();
 
-    void onRefreshComplete();
+    void reloadData();
 }

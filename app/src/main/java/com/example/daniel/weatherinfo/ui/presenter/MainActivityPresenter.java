@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.ui;
+package com.example.daniel.weatherinfo.ui.presenter;
 
 import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.database.model.City;
@@ -7,6 +7,7 @@ import com.example.daniel.weatherinfo.data.mapper.Mapper;
 import com.example.daniel.weatherinfo.data.network.model.CityForecastData;
 import com.example.daniel.weatherinfo.data.network.model.CityWeatherData;
 import com.example.daniel.weatherinfo.ui.base.BasePresenter;
+import com.example.daniel.weatherinfo.ui.view.MainActivityView;
 import com.example.daniel.weatherinfo.util.SchedulerProvider;
 
 import java.util.List;
@@ -50,7 +51,6 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                         //ignore
                     }
                 })
-
         );
     }
 
@@ -75,7 +75,6 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                         //ignore
                     }
                 })
-
         );
     }
 
@@ -111,7 +110,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
-                        getView().onRefreshComplete();
+                        getView().reloadData();
                     }
 
                     @Override

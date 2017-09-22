@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.ui;
+package com.example.daniel.weatherinfo.ui.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;

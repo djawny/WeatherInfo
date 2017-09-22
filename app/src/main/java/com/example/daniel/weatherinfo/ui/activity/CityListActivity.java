@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.ui;
+package com.example.daniel.weatherinfo.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +16,8 @@ import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.ui.adapter.HorizontalCityAdapter;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
+import com.example.daniel.weatherinfo.ui.presenter.CityListActivityPresenter;
+import com.example.daniel.weatherinfo.ui.view.CityListActivityView;
 
 import java.util.List;
 
@@ -49,45 +51,11 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_list);
         ButterKnife.bind(this);
-        setToolbar();
         getActivityComponent().inject(this);
-        setPresenter();
-        setRecycleView();
-        loadData();
-    }
-
-    private void setPresenter() {
         mPresenter.setView(this);
-    }
-
-    private void setToolbar() {
-        setSupportActionBar(mToolbar);
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setDisplayHomeAsUpEnabled(true);
-            supportActionBar.setDisplayShowTitleEnabled(false);
-        }
-    }
-
-    private void setRecycleView() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-    }
-
-    private void loadData() {
-        mPresenter.loadAllCitiesFromDatabase();
-    }
-
-    @Override
-    public void displayData(List<City> cities) {
-        mRecyclerView.setVisibility(View.VISIBLE);
-        if (mHorizontalCityAdapter == null) {
-            mHorizontalCityAdapter = new HorizontalCityAdapter(this, cities, this);
-            mRecyclerView.setAdapter(mHorizontalCityAdapter);
-        } else {
-            mHorizontalCityAdapter.swapData(cities);
-        }
+        setToolbar();
+        setRecycleView();
+        mPresenter.loadCitiesFromDatabase();
     }
 
     @Override
@@ -115,8 +83,40 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ADD_CITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                mPresenter.loadAllCitiesFromDatabase();
+                mPresenter.loadCitiesFromDatabase();
             }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.clearDisposable();
+    }
+
+    private void setToolbar() {
+        setSupportActionBar(mToolbar);
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowTitleEnabled(false);
+        }
+    }
+
+    private void setRecycleView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+    }
+
+    @Override
+    public void displayData(List<City> cities) {
+        mRecyclerView.setVisibility(View.VISIBLE);
+        if (mHorizontalCityAdapter == null) {
+            mHorizontalCityAdapter = new HorizontalCityAdapter(this, cities, this);
+            mRecyclerView.setAdapter(mHorizontalCityAdapter);
+        } else {
+            mHorizontalCityAdapter.swapData(cities);
         }
     }
 
@@ -136,14 +136,8 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
     }
 
     @Override
-    public void onDeleteComplete() {
-        mPresenter.loadAllCitiesFromDatabase();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mPresenter.clearDisposable();
+    public void reloadData() {
+        mPresenter.loadCitiesFromDatabase();
     }
 
     @Override

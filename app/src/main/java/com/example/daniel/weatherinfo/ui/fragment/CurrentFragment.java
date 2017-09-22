@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.ui;
+package com.example.daniel.weatherinfo.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

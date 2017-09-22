@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.daniel.weatherinfo.ui.CityListActivity">
+    tools:context="com.example.daniel.weatherinfo.ui.activity.CityListActivity">
 
     <ImageView
         android:id="@+id/main_background"

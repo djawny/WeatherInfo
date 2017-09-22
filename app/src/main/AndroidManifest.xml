@@ -27,7 +27,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar">
@@ -37,11 +37,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.CityListActivity"
+            android:name=".ui.activity.CityListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".ui.AddCityActivity"
+            android:name=".ui.activity.AddCityActivity"
             android:label="@string/title_activity_add_city"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"

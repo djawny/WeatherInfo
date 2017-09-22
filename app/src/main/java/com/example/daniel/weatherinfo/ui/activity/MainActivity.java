@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.ui;
+package com.example.daniel.weatherinfo.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,8 +17,12 @@ import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.ui.fragment.CurrentFragment;
+import com.example.daniel.weatherinfo.ui.fragment.ForecastFragment;
 import com.example.daniel.weatherinfo.ui.adapter.MainPagerAdapter;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
+import com.example.daniel.weatherinfo.ui.presenter.MainActivityPresenter;
+import com.example.daniel.weatherinfo.ui.view.MainActivityView;
 import com.example.daniel.weatherinfo.util.BackgroundProvider;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
 import com.gjiazhe.panoramaimageview.GyroscopeObserver;
@@ -28,8 +32,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.example.daniel.weatherinfo.ui.CityListActivity.CITY_ID;
 
 public class MainActivity extends BaseActivity implements MainActivityView, SwipeRefreshLayout.OnRefreshListener, ViewPager.OnPageChangeListener {
 
@@ -69,32 +71,14 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        getActivityComponent().inject(this);
+        mPresenter.setView(this);
         setSupportActionBar(mToolbar);
         initializeTabTitles();
-        getActivityComponent().inject(this);
-        setPresenter();
         setSwipeRefreshListener();
         setViewPagerListener();
         setGyroscopeForPanoramaImageView();
         mPresenter.loadFirstCityFromDatabase();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mGyroscopeObserver.register(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mGyroscopeObserver.unregister();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mPresenter.clearDisposable();
     }
 
     @Override
@@ -115,12 +99,18 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mGyroscopeObserver.register(this);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CITY_LIST_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Bundle bundle = data.getExtras();
-                mCurrentCityId = bundle.getInt(CITY_ID);
+                mCurrentCityId = bundle.getInt(CityListActivity.CITY_ID);
             } else {
                 mIsCurrentCityAvailable = true;
             }
@@ -128,12 +118,20 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         }
     }
 
-    private void initializeTabTitles() {
-        mTabTitles = getResources().getStringArray(R.array.tab_titles);
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mGyroscopeObserver.unregister();
     }
 
-    private void setPresenter() {
-        mPresenter.setView(this);
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.clearDisposable();
+    }
+
+    private void initializeTabTitles() {
+        mTabTitles = getResources().getStringArray(R.array.tab_titles);
     }
 
     private void setSwipeRefreshListener() {
@@ -232,7 +230,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     }
 
     @Override
-    public void onRefreshComplete() {
+    public void reloadData() {
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }

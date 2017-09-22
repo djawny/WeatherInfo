@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.ui;
+package com.example.daniel.weatherinfo.ui.view;
 
 import com.example.daniel.weatherinfo.ui.base.BaseView;
 import com.example.daniel.weatherinfo.data.database.model.City;
@@ -9,5 +9,5 @@ public interface AddCityActivityView extends BaseView {
 
     void showErrorInfo();
 
-    void onAddComplete();
+    void closeScreen();
 }

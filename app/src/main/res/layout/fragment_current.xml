@@ -4,7 +4,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.daniel.weatherinfo.ui.CurrentFragment">
+    tools:context="com.example.daniel.weatherinfo.ui.fragment.CurrentFragment">
 
     <!--app:layout_anchor="@id/container"--><!--app:layout_anchorGravity="bottom"-->
 

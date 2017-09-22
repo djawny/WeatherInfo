@@ -1,8 +1,9 @@
-package com.example.daniel.weatherinfo.ui;
+package com.example.daniel.weatherinfo.ui.presenter;
 
 import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.ui.base.BasePresenter;
+import com.example.daniel.weatherinfo.ui.view.CityListActivityView;
 import com.example.daniel.weatherinfo.util.SchedulerProvider;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
         super(dataManager, schedulerProvider.io(), schedulerProvider.ui());
     }
 
-    public void loadAllCitiesFromDatabase() {
+    public void loadCitiesFromDatabase() {
         addDisposable(getDataManager()
                 .getCities()
                 .subscribeOn(getSubscribeScheduler())
@@ -51,7 +52,7 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
-                        getView().onDeleteComplete();
+                        getView().reloadData();
                     }
 
                     @Override

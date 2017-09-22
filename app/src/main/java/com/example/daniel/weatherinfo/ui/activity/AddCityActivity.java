@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.ui;
+package com.example.daniel.weatherinfo.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,8 @@ import android.widget.ProgressBar;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
+import com.example.daniel.weatherinfo.ui.presenter.AddCityActivityPresenter;
+import com.example.daniel.weatherinfo.ui.view.AddCityActivityView;
 import com.example.daniel.weatherinfo.util.KeyboardUtils;
 import com.example.daniel.weatherinfo.util.NetworkUtils;
 
@@ -45,10 +47,26 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_city);
         ButterKnife.bind(this);
-        setToolbar();
         getActivityComponent().inject(this);
-        initializePresenter();
+        mPresenter.setView(this);
+        setToolbar();
         setAutoCompleteTextView();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.clearDisposable();
     }
 
     private void setToolbar() {
@@ -67,38 +85,18 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
         mAutoCompleteTextView.setAdapter(adapter);
     }
 
-    private void initializePresenter() {
-        mPresenter.setView(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mPresenter.clearDisposable();
-    }
-
-    @Override
-    public void onAddComplete() {
-        Intent intent = getIntent();
-        setResult(RESULT_OK, intent);
-        mProgressBar.setVisibility(View.INVISIBLE);
-        onBackPressed();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     @Override
     public void showErrorInfo() {
         mProgressBar.setVisibility(View.INVISIBLE);
         showSnackBar(getString(R.string.message_error_loading_data_from_network), Snackbar.LENGTH_LONG);
+    }
+
+    @Override
+    public void closeScreen() {
+        Intent intent = getIntent();
+        setResult(RESULT_OK, intent);
+        mProgressBar.setVisibility(View.INVISIBLE);
+        onBackPressed();
     }
 
     @OnClick(R.id.add_button)

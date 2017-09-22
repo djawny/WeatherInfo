@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.ui.base.BaseAdapter;
 import com.example.daniel.weatherinfo.util.BackgroundProvider;
 import com.squareup.picasso.Picasso;
 
