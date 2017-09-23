@@ -54,7 +54,6 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
         getActivityComponent().inject(this);
         mPresenter.setView(this);
         setToolbar();
-        setRecycleView();
         mPresenter.loadCitiesFromDatabase();
     }
 
@@ -103,21 +102,22 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
         }
     }
 
-    private void setRecycleView() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-    }
-
     @Override
-    public void displayData(List<City> cities) {
+    public void displayCities(List<City> cities) {
         mRecyclerView.setVisibility(View.VISIBLE);
         if (mHorizontalCityAdapter == null) {
-            mHorizontalCityAdapter = new HorizontalCityAdapter(this, cities, this);
-            mRecyclerView.setAdapter(mHorizontalCityAdapter);
+            initializeRecycleView(cities);
         } else {
             mHorizontalCityAdapter.swapData(cities);
         }
+    }
+
+    private void initializeRecycleView(List<City> cities) {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        mHorizontalCityAdapter = new HorizontalCityAdapter(this, cities, this);
+        mRecyclerView.setAdapter(mHorizontalCityAdapter);
     }
 
     @Override

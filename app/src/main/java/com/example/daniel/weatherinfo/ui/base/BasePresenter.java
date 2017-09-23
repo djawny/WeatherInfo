@@ -24,6 +24,14 @@ public abstract class BasePresenter<V extends BaseView> {
         return mView;
     }
 
+    public void setSubscribeScheduler(Scheduler subscribeScheduler) {
+        mSubscribeScheduler = subscribeScheduler;
+    }
+
+    public void setObserveScheduler(Scheduler observeScheduler) {
+        mObserveScheduler = observeScheduler;
+    }
+
     public DataManager getDataManager() {
         return mDataManager;
     }

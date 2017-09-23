@@ -17,10 +17,10 @@ import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.ui.fragment.CurrentFragment;
-import com.example.daniel.weatherinfo.ui.fragment.ForecastFragment;
 import com.example.daniel.weatherinfo.ui.adapter.MainPagerAdapter;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
+import com.example.daniel.weatherinfo.ui.fragment.CurrentFragment;
+import com.example.daniel.weatherinfo.ui.fragment.ForecastFragment;
 import com.example.daniel.weatherinfo.ui.presenter.MainActivityPresenter;
 import com.example.daniel.weatherinfo.ui.view.MainActivityView;
 import com.example.daniel.weatherinfo.util.BackgroundProvider;
@@ -81,6 +81,38 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         mPresenter.loadFirstCityFromDatabase();
     }
 
+    private void initializeTabTitles() {
+        mTabTitles = getResources().getStringArray(R.array.tab_titles);
+    }
+
+    private void setSwipeRefreshListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+    }
+
+    private void setViewPagerListener() {
+        mViewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        mSwipeRefreshLayout.setEnabled(false);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        mSwipeRefreshLayout.setEnabled(true);
+                        break;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void setGyroscopeForPanoramaImageView() {
+        mGyroscopeObserver = new GyroscopeObserver();
+        mGyroscopeObserver.setMaxRotateRadian(Math.PI / 2);
+        mBackground.setGyroscopeObserver(mGyroscopeObserver);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -130,62 +162,27 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         mPresenter.clearDisposable();
     }
 
-    private void initializeTabTitles() {
-        mTabTitles = getResources().getStringArray(R.array.tab_titles);
-    }
-
-    private void setSwipeRefreshListener() {
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-    }
-
-    private void setViewPagerListener() {
-        mViewPager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_MOVE:
-                        mSwipeRefreshLayout.setEnabled(false);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                    case MotionEvent.ACTION_CANCEL:
-                        mSwipeRefreshLayout.setEnabled(true);
-                        break;
-                }
-                return false;
-            }
-        });
-    }
-
-    private void setGyroscopeForPanoramaImageView() {
-        mGyroscopeObserver = new GyroscopeObserver();
-        mGyroscopeObserver.setMaxRotateRadian(Math.PI / 2);
-        mBackground.setGyroscopeObserver(mGyroscopeObserver);
-    }
-
     @Override
-    public void displayData(City city) {
+    public void displayCityData(City city) {
         mSwipeRefreshLayout.setVisibility(View.VISIBLE);
         mStatusInfo.setVisibility(View.GONE);
         if (mPagerAdapter == null) {
-            mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), mTabTitles, city);
-            mViewPager.setAdapter(mPagerAdapter);
-            mTabLayout.setupWithViewPager(mViewPager);
-            mViewPager.setOffscreenPageLimit(2);
-            mViewPager.addOnPageChangeListener(this);
+            initializeViewPager(city);
         } else {
             mPagerAdapter.swapData(city);
         }
-
         mCurrentCityId = city.getId();
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setTitle(String.format("%s, %s", city.getName(), city.getCountry()));
-        }
+        setToolbarTitle(String.format("%s, %s", city.getName(), city.getCountry()));
         mBackground.setImageResource(BackgroundProvider.getBackground(city.getWeather().getIcon()));
+        hideSwipeRefreshLayoutProgressSpinner();
+    }
 
-        if (mSwipeRefreshLayout.isRefreshing()) {
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
+    private void initializeViewPager(City city) {
+        mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), mTabTitles, city);
+        mViewPager.setAdapter(mPagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
+        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.addOnPageChangeListener(this);
     }
 
     @Override
@@ -193,14 +190,18 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         mSwipeRefreshLayout.setVisibility(View.GONE);
         mStatusInfo.setVisibility(View.VISIBLE);
         mBackground.setImageResource(R.drawable.bg);
+        setToolbarTitle("");
+    }
+
+    private void setToolbarTitle(String title) {
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
-            supportActionBar.setTitle("");
+            supportActionBar.setTitle(title);
         }
     }
 
     @Override
-    public void showErrorInfo() {
+    public void showDatabaseErrorInfo() {
         if (mIsCurrentCityAvailable) {
             mIsCurrentCityAvailable = false;
             mPresenter.loadFirstCityFromDatabase();
@@ -211,9 +212,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
 
     @Override
     public void showNetworkErrorInfo() {
-        if (mSwipeRefreshLayout.isRefreshing()) {
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
+        hideSwipeRefreshLayoutProgressSpinner();
         showSnackBar(getString(R.string.message_error_loading_data_from_network), Snackbar.LENGTH_LONG);
     }
 
@@ -222,19 +221,21 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         if (NetworkUtils.isNetAvailable(MainActivity.this)) {
             mPresenter.refreshCityFromNetwork(getString(R.string.open_weather_map_api_key), mCurrentCityId);
         } else {
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
+            hideSwipeRefreshLayoutProgressSpinner();
             showSnackBar(getString(R.string.message_network_connection_error), Snackbar.LENGTH_LONG);
         }
     }
 
     @Override
     public void reloadData() {
+        mPresenter.loadCityFromDatabase(mCurrentCityId);
+        hideSwipeRefreshLayoutProgressSpinner();
+    }
+
+    public void hideSwipeRefreshLayoutProgressSpinner() {
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }
-        mPresenter.loadCityFromDatabase(mCurrentCityId);
     }
 
     @Override

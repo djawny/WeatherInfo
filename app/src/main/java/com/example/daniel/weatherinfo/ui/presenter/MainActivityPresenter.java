@@ -35,7 +35,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                     @Override
                     public void onNext(List<City> cities) {
                         if (!cities.isEmpty()) {
-                            getView().displayData(cities.get(0));
+                            getView().displayCityData(cities.get(0));
                         } else {
                             getView().showNoData();
                         }
@@ -43,7 +43,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
                     @Override
                     public void onError(Throwable e) {
-                        getView().showErrorInfo();
+                        getView().showDatabaseErrorInfo();
                     }
 
                     @Override
@@ -62,12 +62,12 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                 .subscribeWith(new DisposableObserver<City>() {
                     @Override
                     public void onNext(City city) {
-                        getView().displayData(city);
+                        getView().displayCityData(city);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        getView().showErrorInfo();
+                        getView().showDatabaseErrorInfo();
                     }
 
                     @Override
