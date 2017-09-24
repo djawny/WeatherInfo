@@ -21,8 +21,11 @@ import io.reactivex.observers.DisposableCompletableObserver;
 
 public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView> {
 
-    public AddCityActivityPresenter(DataManager dataManager, SchedulerProvider schedulerProvider) {
+    private Mapper mMapper;
+
+    public AddCityActivityPresenter(DataManager dataManager, SchedulerProvider schedulerProvider, Mapper mapper) {
         super(dataManager, schedulerProvider.io(), schedulerProvider.ui());
+        mMapper = mapper;
     }
 
     public void addCityFromNetwork(final String apiKey, String cityName) {
@@ -32,7 +35,7 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
                 .map(new Function<CityWeatherData, City>() {
                     @Override
                     public City apply(CityWeatherData cityWeatherData) throws Exception {
-                        return Mapper.mapCity(cityWeatherData);
+                        return mMapper.mapCity(cityWeatherData);
                     }
                 })
                 .flatMap(new Function<City, ObservableSource<City>>() {
@@ -41,7 +44,7 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
                         return Observable.zip(getDataManager().getCityForecastDataById(apiKey, city.getId()), Observable.just(city), new BiFunction<CityForecastData, City, City>() {
                             @Override
                             public City apply(CityForecastData cityForecastData, City city) throws Exception {
-                                List<Forecast> forecasts = Mapper.mapForecast(cityForecastData, city);
+                                List<Forecast> forecasts = mMapper.mapForecast(cityForecastData, city);
                                 city.setForecastCollection(forecasts);
                                 return city;
                             }
@@ -62,7 +65,7 @@ public class AddCityActivityPresenter extends BasePresenter<AddCityActivityView>
 
                     @Override
                     public void onError(Throwable e) {
-                        getView().showErrorInfo();
+                        getView().showNetworkErrorInfo();
                     }
                 }));
     }

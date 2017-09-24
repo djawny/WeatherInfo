@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface AddCityActivityView extends BaseView {
 
-    void showErrorInfo();
+    void showNetworkErrorInfo();
 
     void closeScreen();
 }

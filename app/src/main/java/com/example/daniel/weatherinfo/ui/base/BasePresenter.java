@@ -44,10 +44,6 @@ public abstract class BasePresenter<V extends BaseView> {
         return mObserveScheduler;
     }
 
-    public CompositeDisposable getmCompositeDisposable() {
-        return mCompositeDisposable;
-    }
-
     public void setView(V view) {
         if (view == null) {
             throw new IllegalArgumentException("Null view in PageFragmentPresenter");

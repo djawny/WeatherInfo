@@ -86,7 +86,7 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
     }
 
     @Override
-    public void showErrorInfo() {
+    public void showNetworkErrorInfo() {
         mProgressBar.setVisibility(View.INVISIBLE);
         showSnackBar(getString(R.string.message_error_loading_data_from_network), Snackbar.LENGTH_LONG);
     }

@@ -22,8 +22,11 @@ import io.reactivex.observers.DisposableObserver;
 
 public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
-    public MainActivityPresenter(DataManager dataManager, SchedulerProvider schedulerProvider) {
+    private Mapper mMapper;
+
+    public MainActivityPresenter(DataManager dataManager, SchedulerProvider schedulerProvider, Mapper mapper) {
         super(dataManager, schedulerProvider.io(), schedulerProvider.ui());
+        mMapper = mapper;
     }
 
     public void loadFirstCityFromDatabase() {
@@ -85,7 +88,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                 .map(new Function<CityWeatherData, City>() {
                     @Override
                     public City apply(CityWeatherData cityWeatherData) throws Exception {
-                        return Mapper.mapCity(cityWeatherData);
+                        return mMapper.mapCity(cityWeatherData);
                     }
                 })
                 .flatMap(new Function<City, ObservableSource<City>>() {
@@ -94,7 +97,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                         return Observable.zip(getDataManager().getCityForecastDataById(apiKey, city.getId()), Observable.just(city), new BiFunction<CityForecastData, City, City>() {
                             @Override
                             public City apply(CityForecastData cityForecastData, City city) throws Exception {
-                                List<Forecast> forecasts = Mapper.mapForecast(cityForecastData, city);
+                                List<Forecast> forecasts = mMapper.mapForecast(cityForecastData, city);
                                 city.setForecastCollection(forecasts);
                                 return city;
                             }
