@@ -1,9 +1,10 @@
 package com.example.daniel.weatherinfo.data;
 
+import android.content.SharedPreferences;
+
 import com.example.daniel.weatherinfo.data.database.Database;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
-import com.example.daniel.weatherinfo.data.network.model.CitiesWeatherData;
 import com.example.daniel.weatherinfo.data.network.model.CityForecastData;
 import com.example.daniel.weatherinfo.data.network.model.CityWeatherData;
 
@@ -22,11 +23,13 @@ public class DataManagerImpl implements DataManager {
 
     private final Database mDatabase;
     private final OpenWeatherMapService mOpenWeatherMapService;
+    private final SharedPreferences mSharedPreferences;
 
     @Inject
-    public DataManagerImpl(Database database, OpenWeatherMapService openWeatherMapService) {
+    public DataManagerImpl(Database database, OpenWeatherMapService openWeatherMapService, SharedPreferences sharedPreferences) {
         mDatabase = database;
         mOpenWeatherMapService = openWeatherMapService;
+        mSharedPreferences = sharedPreferences;
     }
 
     @Override
@@ -108,4 +111,22 @@ public class DataManagerImpl implements DataManager {
 //    public Observable<CitiesWeatherData> getCitiesWeatherDataByIds(String apiKey, String cityIds) {
 //        return mOpenWeatherMapService.getCitiesWeatherDataByIds(apiKey, cityIds);
 //    }
+
+    public Completable putIntSharedPreferences(final String key, final int data) {
+        return Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                mSharedPreferences.edit().putInt(key, data).apply();
+            }
+        });
+    }
+
+    public Observable<Integer> getIntSharedPreferences(final String key) {
+        return Observable.fromCallable(new Callable<Integer>() {
+            @Override
+            public Integer call() throws Exception {
+                return mSharedPreferences.getInt(key, 0);
+            }
+        });
+    }
 }

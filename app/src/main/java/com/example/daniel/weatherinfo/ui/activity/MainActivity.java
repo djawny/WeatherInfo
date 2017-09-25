@@ -40,8 +40,6 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     private int mCurrentCityId;
     private boolean mIsCurrentCityAvailable;
 
-    private String[] mTabTitles;
-
     @BindView(R.id.bg_image_view)
     PanoramaImageView mBackground;
 
@@ -62,6 +60,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
 
     @Inject
     MainActivityPresenter mPresenter;
+    
     private MainPagerAdapter mPagerAdapter;
     private GyroscopeObserver mGyroscopeObserver;
 
@@ -74,15 +73,10 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         getActivityComponent().inject(this);
         mPresenter.setView(this);
         setSupportActionBar(mToolbar);
-        initializeTabTitles();
         setSwipeRefreshListener();
         setViewPagerListener();
         setGyroscopeForPanoramaImageView();
         mPresenter.loadFirstCityFromDatabase();
-    }
-
-    private void initializeTabTitles() {
-        mTabTitles = getResources().getStringArray(R.array.tab_titles);
     }
 
     private void setSwipeRefreshListener() {
@@ -178,7 +172,8 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     }
 
     private void initializeViewPager(City city) {
-        mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), mTabTitles, city);
+        String[] tabTitles = getResources().getStringArray(R.array.tab_titles);
+        mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), tabTitles, city);
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
         mViewPager.setOffscreenPageLimit(2);

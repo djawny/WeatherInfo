@@ -1,12 +1,14 @@
 package com.example.daniel.weatherinfo.di.mudule;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.DataManagerImpl;
 import com.example.daniel.weatherinfo.data.database.Database;
 import com.example.daniel.weatherinfo.data.database.DatabaseImpl;
 import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
+import com.example.daniel.weatherinfo.di.ActivityContext;
 import com.example.daniel.weatherinfo.di.ApplicationContext;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
@@ -34,6 +36,12 @@ public class DataManagerModule {
     @Singleton
     public Database provideDatabase(@ApplicationContext Context context) {
         return OpenHelperManager.getHelper(context, DatabaseImpl.class);
+    }
+
+    @Provides
+    @Singleton
+    public SharedPreferences provideSharedPreferences(@ApplicationContext Context context) {
+        return context.getSharedPreferences("CityWeatherPref",Context.MODE_PRIVATE);
     }
 
     @Singleton
