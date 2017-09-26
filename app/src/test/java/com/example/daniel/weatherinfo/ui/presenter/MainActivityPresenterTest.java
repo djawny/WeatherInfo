@@ -70,7 +70,7 @@ public class MainActivityPresenterTest {
     public void loadFirstCityFromDatabaseShouldDisplayCityDataWhenNoEmptyList() {
         when(mDataManager.getCities()).thenReturn(Observable.just(MANY_CITIES));
 
-        mPresenter.loadFirstCityFromDatabase();
+        mPresenter.loadCitiesFromDatabase();
 
         verify(mMainActivityView).displayCityData(any(City.class));
     }
@@ -79,7 +79,7 @@ public class MainActivityPresenterTest {
     public void loadFirstCityFromDatabaseShouldShowNoDataWhenEmptyList() {
         when(mDataManager.getCities()).thenReturn(Observable.just(Collections.<City>emptyList()));
 
-        mPresenter.loadFirstCityFromDatabase();
+        mPresenter.loadCitiesFromDatabase();
 
         verify(mMainActivityView).showNoData();
     }
@@ -88,7 +88,7 @@ public class MainActivityPresenterTest {
     public void loadFirstCityFromDatabaseShouldShowDatabaseErrorInfoWhenException() {
         when(mDataManager.getCities()).thenReturn(Observable.<List<City>>error(new Throwable()));
 
-        mPresenter.loadFirstCityFromDatabase();
+        mPresenter.loadCitiesFromDatabase();
 
         verify(mMainActivityView).showDatabaseErrorInfo();
     }

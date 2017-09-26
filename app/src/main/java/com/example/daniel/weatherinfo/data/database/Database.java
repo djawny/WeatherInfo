@@ -10,6 +10,8 @@ public interface Database {
 
     City getCity(int cityId);
 
+    City getCity(String cityName);
+
 //    void saveCities(List<City> cities);
 
     void saveCity(City city);

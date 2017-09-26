@@ -15,6 +15,8 @@ public interface DataManager {
 
     Observable<City> getCity(int cityId);
 
+    Observable<City> getCity(String cityName);
+
 //    Completable saveCities(List<City> cities);
 
     Completable saveCity(City city);

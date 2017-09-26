@@ -14,12 +14,9 @@ import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.data.database.model.Forecast;
 import com.example.daniel.weatherinfo.util.AppConstants;
 import com.example.daniel.weatherinfo.util.DateUtils;
 import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,9 +24,6 @@ import butterknife.ButterKnife;
 public class CurrentFragment extends Fragment {
 
     private static final String ARG_CITY = "city";
-
-    @BindView(R.id.city_country)
-    TextView mCityCountry;
 
     @BindView(R.id.icon)
     ImageView mIcon;
@@ -102,7 +96,6 @@ public class CurrentFragment extends Fragment {
         Picasso.with(getActivity())
                 .load("http://openweathermap.org/img/w/" + icon + ".png")
                 .into(mIcon);
-        mCityCountry.setText(String.format("%s, %s", city.getName(), city.getCountry()));
         String date = DateUtils.getDateFromUTCTimestamp(city.getWeather().getDate(), AppConstants.DATE_NEW_LINE_TIME);
         mDate.setText(date);
         mDescription.setText(city.getWeather().getDescription());
@@ -114,6 +107,5 @@ public class CurrentFragment extends Fragment {
         mSunrise.setText(String.format("Sunrise: %s", sunrise));
         String sunset = DateUtils.getDateFromUTCTimestamp(city.getWeather().getSunset(), AppConstants.TIME);
         mSunset.setText(String.format("Sunset: %s", sunset));
-        List<Forecast> forecasts = city.getForecasts();
     }
 }

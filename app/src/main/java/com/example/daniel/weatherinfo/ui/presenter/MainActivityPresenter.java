@@ -29,7 +29,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
         mMapper = mapper;
     }
 
-    public void loadFirstCityFromDatabase() {
+    public void loadCitiesFromDatabase() {
         addDisposable(getDataManager()
                 .getCities()
                 .subscribeOn(getSubscribeScheduler())
@@ -38,7 +38,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                     @Override
                     public void onNext(List<City> cities) {
                         if (!cities.isEmpty()) {
-                            getView().displayCityData(cities.get(0));
+                            getView().displayCities(cities);
                         } else {
                             getView().showNoData();
                         }
@@ -60,6 +60,30 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
     public void loadCityFromDatabase(int cityId) {
         addDisposable(getDataManager()
                 .getCity(cityId)
+                .subscribeOn(getSubscribeScheduler())
+                .observeOn(getObserveScheduler())
+                .subscribeWith(new DisposableObserver<City>() {
+                    @Override
+                    public void onNext(City city) {
+                        getView().displayCityData(city);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        getView().showDatabaseErrorInfo();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        //ignore
+                    }
+                })
+        );
+    }
+
+    public void loadCityFromDatabase(String cityName) {
+        addDisposable(getDataManager()
+                .getCity(cityName)
                 .subscribeOn(getSubscribeScheduler())
                 .observeOn(getObserveScheduler())
                 .subscribeWith(new DisposableObserver<City>() {

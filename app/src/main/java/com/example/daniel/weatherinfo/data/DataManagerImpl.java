@@ -52,6 +52,16 @@ public class DataManagerImpl implements DataManager {
         });
     }
 
+    @Override
+    public Observable<City> getCity(final String cityName) {
+        return Observable.fromCallable(new Callable<City>() {
+            @Override
+            public City call() throws Exception {
+                return mDatabase.getCity(cityName);
+            }
+        });
+    }
+
 //    @Override
 //    public Completable saveCities(final List<City> cities) {
 //        return Completable.fromAction(new Action() {

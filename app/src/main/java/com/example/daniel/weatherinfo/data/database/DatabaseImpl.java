@@ -9,6 +9,7 @@ import com.example.daniel.weatherinfo.data.database.model.Weather;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
@@ -19,6 +20,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import static com.example.daniel.weatherinfo.data.database.model.City.NAME;
 import static com.example.daniel.weatherinfo.data.database.model.Forecast.CITY_ID;
 import static com.example.daniel.weatherinfo.util.AppConstants.DATABASE_NAME;
 import static com.example.daniel.weatherinfo.util.AppConstants.DATABASE_VERSION;
@@ -70,6 +72,19 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
     @Override
     public City getCity(int cityId) {
         return mCityDao.queryForId(cityId);
+    }
+
+    @Override
+    public City getCity(String cityName) {
+        City city;
+        QueryBuilder<City, Integer> queryBuilder = mCityDao.queryBuilder();
+        Where<City, Integer> where = queryBuilder.where();
+        try {
+            return where.eq(NAME, cityName).queryForFirst();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
 //    @Override
