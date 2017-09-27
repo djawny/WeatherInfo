@@ -54,7 +54,7 @@ dependencies {
     compile 'com.j256.ormlite:ormlite-android:4.48'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'com.gjiazhe:PanoramaImageView:1.0'
-    debugCompile 'im.dino:dbinspector:3.4.1@aar'
+//    debugCompile 'im.dino:dbinspector:3.4.1@aar'
 
     //Testing
     testCompile 'junit:junit:4.12'

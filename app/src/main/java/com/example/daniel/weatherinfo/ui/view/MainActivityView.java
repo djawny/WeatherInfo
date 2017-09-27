@@ -15,7 +15,9 @@ public interface MainActivityView extends BaseView {
 
     void showNetworkErrorInfo();
 
-    void reloadData();
+    void reloadData(int cityId);
 
-    void displayCities(List<City> cities);
+    void setSpinnerList(List<City> cities);
+
+    void setCurrentCityId(Integer cityId);
 }

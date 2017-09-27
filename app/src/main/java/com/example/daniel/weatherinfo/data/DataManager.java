@@ -32,4 +32,8 @@ public interface DataManager {
     Observable<CityForecastData> getCityForecastDataById(String apiKey, int cityId);
 
 //    Observable<CitiesWeatherData> getCitiesWeatherDataByIds(String apiKey, String cityIds);
+
+    Completable putIntSharedPreferences(String key, int data);
+
+    Observable<Integer> getIntSharedPreferences(String key);
 }

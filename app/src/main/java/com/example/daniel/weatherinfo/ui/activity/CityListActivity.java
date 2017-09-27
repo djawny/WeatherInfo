@@ -30,7 +30,8 @@ import butterknife.OnClick;
 public class CityListActivity extends BaseActivity implements CityListActivityView, HorizontalCityAdapter.OnRecycleViewItemClickListener {
 
     private static final int ADD_CITY_REQUEST_CODE = 2;
-    public static final String CITY_ID = "cityId";
+    public static final String CITY_ID = "city id";
+    public static final String CITY_LIST_HAS_BEEN_CHANGED_FLAG = "city list has been changed flag";
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -55,6 +56,15 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
         mPresenter.setView(this);
         setToolbar();
         mPresenter.loadCitiesFromDatabase();
+    }
+
+    private void setToolbar() {
+        setSupportActionBar(mToolbar);
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowTitleEnabled(false);
+        }
     }
 
     @Override
@@ -83,23 +93,21 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
         if (requestCode == ADD_CITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 mPresenter.loadCitiesFromDatabase();
+                setActivityResultCityListHasBeenChanged();
             }
         }
+    }
+
+    private void setActivityResultCityListHasBeenChanged() {
+        Intent intent = getIntent();
+        intent.putExtra(CITY_LIST_HAS_BEEN_CHANGED_FLAG, true);
+        setResult(RESULT_OK, intent);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.clearDisposable();
-    }
-
-    private void setToolbar() {
-        setSupportActionBar(mToolbar);
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setDisplayHomeAsUpEnabled(true);
-            supportActionBar.setDisplayShowTitleEnabled(false);
-        }
     }
 
     @Override
@@ -138,6 +146,7 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
     @Override
     public void reloadData() {
         mPresenter.loadCitiesFromDatabase();
+        setActivityResultCityListHasBeenChanged();
     }
 
     @Override
@@ -146,11 +155,15 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
     }
 
     @Override
-    public void showClickedItem(int position) {
-        Intent intent = getIntent();
-        intent.putExtra(CITY_ID, position);
-        setResult(RESULT_OK, intent);
+    public void showClickedItem(int cityId) {
+        setActivityResultCityToDisplay(cityId);
         onBackPressed();
+    }
+
+    private void setActivityResultCityToDisplay(int cityId) {
+        Intent intent = getIntent();
+        intent.putExtra(CITY_ID, cityId);
+        setResult(RESULT_OK, intent);
     }
 
     @Override

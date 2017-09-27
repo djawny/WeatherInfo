@@ -53,22 +53,6 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
         setAutoCompleteTextView();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mPresenter.clearDisposable();
-    }
-
     private void setToolbar() {
         setSupportActionBar(mToolbar);
         ActionBar supportActionBar = getSupportActionBar();
@@ -83,6 +67,22 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
         List<String> cityList = Arrays.asList(cities);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, cityList);
         mAutoCompleteTextView.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.clearDisposable();
     }
 
     @Override
@@ -103,7 +103,7 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
     public void onAddButtonClicked() {
         String cityName = mAutoCompleteTextView.getText().toString().trim();
         if (!TextUtils.isEmpty(cityName)) {
-            if (NetworkUtils.isNetAvailable(this)) {
+            if (NetworkUtils.isNetworkAvailable(this)) {
                 mProgressBar.setVisibility(View.VISIBLE);
                 mPresenter.addCityFromNetwork(getString(R.string.open_weather_map_api_key), cityName);
                 mAutoCompleteTextView.setText("");

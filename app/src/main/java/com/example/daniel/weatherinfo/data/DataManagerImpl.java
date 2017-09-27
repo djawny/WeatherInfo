@@ -122,6 +122,7 @@ public class DataManagerImpl implements DataManager {
 //        return mOpenWeatherMapService.getCitiesWeatherDataByIds(apiKey, cityIds);
 //    }
 
+    @Override
     public Completable putIntSharedPreferences(final String key, final int data) {
         return Completable.fromAction(new Action() {
             @Override
@@ -131,6 +132,7 @@ public class DataManagerImpl implements DataManager {
         });
     }
 
+    @Override
     public Observable<Integer> getIntSharedPreferences(final String key) {
         return Observable.fromCallable(new Callable<Integer>() {
             @Override

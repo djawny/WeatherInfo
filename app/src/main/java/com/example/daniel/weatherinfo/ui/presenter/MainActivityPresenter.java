@@ -22,6 +22,7 @@ import io.reactivex.observers.DisposableObserver;
 
 public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
+    public static final String CURRENT_CITY_ID = "currentCityId";
     private Mapper mMapper;
 
     public MainActivityPresenter(DataManager dataManager, SchedulerProvider schedulerProvider, Mapper mapper) {
@@ -29,7 +30,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
         mMapper = mapper;
     }
 
-    public void loadCitiesFromDatabase() {
+    public void loadCitiesFromDatabase(final int mCurrentCityId) {
         addDisposable(getDataManager()
                 .getCities()
                 .subscribeOn(getSubscribeScheduler())
@@ -38,7 +39,13 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                     @Override
                     public void onNext(List<City> cities) {
                         if (!cities.isEmpty()) {
-                            getView().displayCities(cities);
+                            getView().setSpinnerList(cities);
+                            City city = getCityById(cities, mCurrentCityId);
+                            if (city != null) {
+                                getView().displayCityData(city);
+                            } else {
+                                getView().displayCityData(cities.get(0));
+                            }
                         } else {
                             getView().showNoData();
                         }
@@ -55,6 +62,15 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                     }
                 })
         );
+    }
+
+    private City getCityById(List<City> cities, int mCurrentCityId) {
+        for (City city : cities) {
+            if (city.getId() == mCurrentCityId) {
+                return city;
+            }
+        }
+        return null;
     }
 
     public void loadCityFromDatabase(int cityId) {
@@ -105,7 +121,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
         );
     }
 
-    public void refreshCityFromNetwork(final String apiKey, int cityId) {
+    public void refreshCityFromNetwork(final String apiKey, final int cityId) {
         addDisposable(getDataManager()
                 .getCityWeatherDataById(apiKey, cityId)
                 .subscribeOn(getSubscribeScheduler())
@@ -137,12 +153,50 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
-                        getView().reloadData();
+                        getView().reloadData(cityId);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         getView().showNetworkErrorInfo();
+                    }
+                }));
+    }
+
+    public void initializeCurrentCityId() {
+        addDisposable(getDataManager()
+                .getIntSharedPreferences(CURRENT_CITY_ID)
+                .subscribeWith(new DisposableObserver<Integer>() {
+                    @Override
+                    public void onNext(Integer cityId) {
+                        getView().setCurrentCityId(cityId);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //ignore
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        //ignore
+                    }
+                })
+        );
+    }
+
+    public void saveCurrentCity(int cityId) {
+        addDisposable(getDataManager().putIntSharedPreferences(CURRENT_CITY_ID, cityId)
+                .subscribeOn(getSubscribeScheduler())
+                .subscribeWith(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        //ignore
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //ignore
                     }
                 }));
     }

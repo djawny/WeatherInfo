@@ -39,13 +39,15 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.daniel.weatherinfo.ui.activity.CityListActivity.CITY_ID;
+import static com.example.daniel.weatherinfo.ui.activity.CityListActivity.CITY_LIST_HAS_BEEN_CHANGED_FLAG;
+
 public class MainActivity extends BaseActivity implements MainActivityView, SwipeRefreshLayout.OnRefreshListener,
         ViewPager.OnPageChangeListener, AdapterView.OnItemSelectedListener {
 
     private static final int CITY_LIST_REQUEST_CODE = 1;
 
     private int mCurrentCityId;
-    private boolean mIsCurrentCityAvailable;
 
     @BindView(R.id.bg_image_view)
     PanoramaImageView mBackground;
@@ -87,7 +89,16 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         setSwipeRefreshListener();
         setViewPagerListener();
         setGyroscopeForPanoramaImageView();
-        mPresenter.loadCitiesFromDatabase();
+        mPresenter.initializeCurrentCityId();
+        mPresenter.loadCitiesFromDatabase(mCurrentCityId);
+    }
+
+    private void setToolbar() {
+        setSupportActionBar(mToolbar);
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayShowTitleEnabled(false);
+        }
     }
 
     private void setSwipeRefreshListener() {
@@ -147,11 +158,16 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         if (requestCode == CITY_LIST_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Bundle bundle = data.getExtras();
-                mCurrentCityId = bundle.getInt(CityListActivity.CITY_ID);
-            } else {
-                mIsCurrentCityAvailable = true;
+                int cityId = bundle.getInt(CITY_ID);
+                if (cityId != 0) {
+                    mCurrentCityId = cityId;
+                }
+                if (bundle.getBoolean(CITY_LIST_HAS_BEEN_CHANGED_FLAG)) {
+                    mPresenter.loadCitiesFromDatabase(mCurrentCityId);
+                } else {
+                    mPresenter.loadCityFromDatabase(mCurrentCityId);
+                }
             }
-            mPresenter.loadCityFromDatabase(mCurrentCityId);
         }
     }
 
@@ -164,25 +180,17 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mPresenter.saveCurrentCity(mCurrentCityId);
         mPresenter.clearDisposable();
     }
 
     @Override
-    public void displayCityData(City city) {
-        mSwipeRefreshLayout.setVisibility(View.VISIBLE);
-        mStatusInfo.setVisibility(View.GONE);
-        if (mPagerAdapter == null) {
-            initializeViewPager(city);
-        } else {
-            mPagerAdapter.swapData(city);
-        }
-        mCurrentCityId = city.getId();
-        mBackground.setImageResource(BackgroundProvider.getBackground(city.getWeather().getIcon()));
-        hideSwipeRefreshLayoutProgressSpinner();
+    public void setCurrentCityId(Integer cityId) {
+        mCurrentCityId = cityId;
     }
 
     @Override
-    public void displayCities(List<City> cities) {
+    public void setSpinnerList(List<City> cities) {
         List<String> citiesNameList = new ArrayList<>();
         for (City city : cities) {
             citiesNameList.add(city.getName());
@@ -192,7 +200,13 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         } else {
             updateSpinner(citiesNameList);
         }
-        mPresenter.loadCityFromDatabase(cities.get(0).getId());
+    }
+
+    private void initializeSpinner(List<String> citiesNameList) {
+        mSpinnerAdapter = new ArrayAdapter<>(this, R.layout.spinner_header, citiesNameList);
+        mSpinnerAdapter.setDropDownViewResource(R.layout.spinner_item);
+        mSpinner.setAdapter(mSpinnerAdapter);
+        mSpinner.setOnItemSelectedListener(this);
     }
 
     private void updateSpinner(List<String> citiesNameList) {
@@ -201,11 +215,23 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         mSpinnerAdapter.notifyDataSetChanged();
     }
 
-    private void initializeSpinner(List<String> citiesNameList) {
-        mSpinnerAdapter = new ArrayAdapter<>(this, R.layout.spinner_header, citiesNameList);
-        mSpinnerAdapter.setDropDownViewResource(R.layout.spinner_item);
-        mSpinner.setAdapter(mSpinnerAdapter);
-        mSpinner.setOnItemSelectedListener(this);
+    @Override
+    public void displayCityData(City city) {
+        if (mStatusInfo.getVisibility() == View.VISIBLE) {
+            mStatusInfo.setVisibility(View.GONE);
+            mSpinner.setVisibility(View.VISIBLE);
+            mTabLayout.setVisibility(View.VISIBLE);
+            mSwipeRefreshLayout.setVisibility(View.VISIBLE);
+        }
+        if (mPagerAdapter == null) {
+            initializeViewPager(city);
+        } else {
+            mPagerAdapter.swapData(city);
+        }
+        mCurrentCityId = city.getId();
+        mSpinner.setSelection(getSpinnerItemIndex(city.getName()));
+        mBackground.setImageResource(BackgroundProvider.getBackground(city.getWeather().getIcon()));
+        hideSwipeRefreshLayoutProgressSpinner();
     }
 
     private void initializeViewPager(City city) {
@@ -219,27 +245,26 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
 
     @Override
     public void showNoData() {
+        mSpinner.setVisibility(View.GONE);
+        mTabLayout.setVisibility(View.GONE);
         mSwipeRefreshLayout.setVisibility(View.GONE);
         mStatusInfo.setVisibility(View.VISIBLE);
-        mBackground.setImageResource(R.drawable.bg);
+        mBackground.setImageResource(R.drawable.default_bg);
     }
 
-    private void setToolbar() {
-        setSupportActionBar(mToolbar);
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setDisplayShowTitleEnabled(false);
+    private int getSpinnerItemIndex(String myString) {
+        int index = 0;
+        for (int i = 0; i < mSpinner.getCount(); i++) {
+            if (mSpinner.getItemAtPosition(i).equals(myString)) {
+                index = i;
+            }
         }
+        return index;
     }
 
     @Override
     public void showDatabaseErrorInfo() {
-        if (mIsCurrentCityAvailable) {
-            mIsCurrentCityAvailable = false;
-            mPresenter.loadCitiesFromDatabase();
-        } else {
-            showSnackBar(getString(R.string.message_error_loading_deleting_data), Snackbar.LENGTH_LONG);
-        }
+        showSnackBar(getString(R.string.message_error_loading_deleting_data), Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -250,7 +275,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
 
     @Override
     public void onRefresh() {
-        if (NetworkUtils.isNetAvailable(MainActivity.this)) {
+        if (NetworkUtils.isNetworkAvailable(MainActivity.this)) {
             mPresenter.refreshCityFromNetwork(getString(R.string.open_weather_map_api_key), mCurrentCityId);
         } else {
             hideSwipeRefreshLayoutProgressSpinner();
@@ -259,8 +284,8 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     }
 
     @Override
-    public void reloadData() {
-        mPresenter.loadCityFromDatabase(mCurrentCityId);
+    public void reloadData(int cityId) {
+        mPresenter.loadCityFromDatabase(cityId);
         hideSwipeRefreshLayoutProgressSpinner();
     }
 
