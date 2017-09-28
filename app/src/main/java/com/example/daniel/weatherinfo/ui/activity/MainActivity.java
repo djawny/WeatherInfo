@@ -24,10 +24,11 @@ import com.example.daniel.weatherinfo.ui.adapter.MainPagerAdapter;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
 import com.example.daniel.weatherinfo.ui.fragment.CurrentFragment;
 import com.example.daniel.weatherinfo.ui.fragment.ForecastFragment;
+import com.example.daniel.weatherinfo.ui.fragment.MapFragment;
 import com.example.daniel.weatherinfo.ui.presenter.MainActivityPresenter;
 import com.example.daniel.weatherinfo.ui.view.MainActivityView;
 import com.example.daniel.weatherinfo.util.BackgroundProvider;
-import com.example.daniel.weatherinfo.util.NetworkUtils;
+import com.example.daniel.weatherinfo.util.NetworkAvailabilityChecker;
 import com.gjiazhe.panoramaimageview.GyroscopeObserver;
 import com.gjiazhe.panoramaimageview.PanoramaImageView;
 
@@ -230,7 +231,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         }
         mCurrentCityId = city.getId();
         mSpinner.setSelection(getSpinnerItemIndex(city.getName()));
-        mBackground.setImageResource(BackgroundProvider.getBackground(city.getWeather().getIcon()));
+        mBackground.setImageResource(BackgroundProvider.apply(city.getWeather().getIcon()));
         hideSwipeRefreshLayoutProgressSpinner();
     }
 
@@ -275,11 +276,15 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
 
     @Override
     public void onRefresh() {
-        if (NetworkUtils.isNetworkAvailable(MainActivity.this)) {
-            mPresenter.refreshCityFromNetwork(getString(R.string.open_weather_map_api_key), mCurrentCityId);
-        } else {
-            hideSwipeRefreshLayoutProgressSpinner();
-            showSnackBar(getString(R.string.message_network_connection_error), Snackbar.LENGTH_LONG);
+        try {
+            if (NetworkAvailabilityChecker.apply(this)) {
+                mPresenter.refreshCityFromNetwork(getString(R.string.open_weather_map_api_key), mCurrentCityId);
+            } else {
+                hideSwipeRefreshLayoutProgressSpinner();
+                showSnackBar(getString(R.string.message_network_connection_error), Snackbar.LENGTH_LONG);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -311,6 +316,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
                 ((ForecastFragment) fragment).animateViews();
                 mSwipeRefreshLayout.setEnabled(true);
             } else {
+                ((MapFragment) fragment).animateMap();
                 mSwipeRefreshLayout.setEnabled(false);
             }
         }

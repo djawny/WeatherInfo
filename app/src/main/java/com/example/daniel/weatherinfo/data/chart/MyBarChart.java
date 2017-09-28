@@ -1,7 +1,7 @@
 package com.example.daniel.weatherinfo.data.chart;
 
 import com.example.daniel.weatherinfo.data.database.model.Forecast;
-import com.example.daniel.weatherinfo.util.DateUtils;
+import com.example.daniel.weatherinfo.util.TimestampToDateConverter;
 import com.github.mikephil.charting.data.BarEntry;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class MyBarChart extends BaseChart {
                 dayMaxTemp = temp;
             }
             if (dayPeriodIndex++ == dayPeriodSize) {
-                getXAxisLabels().add(DateUtils.getDateFromUTCTimestamp(forecasts.get(i).getDate(), DATE_DAY_MONTH));
+                getXAxisLabels().add(TimestampToDateConverter.apply(forecasts.get(i).getDate(), DATE_DAY_MONTH));
                 getEntries().add(new BarEntry(++barEntryX, dayMaxTemp));
                 dayPeriodIndex = 1;
                 dayMaxTemp = Float.MIN_VALUE;

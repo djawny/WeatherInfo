@@ -16,8 +16,8 @@ import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
 import com.example.daniel.weatherinfo.ui.presenter.AddCityActivityPresenter;
 import com.example.daniel.weatherinfo.ui.view.AddCityActivityView;
-import com.example.daniel.weatherinfo.util.KeyboardUtils;
-import com.example.daniel.weatherinfo.util.NetworkUtils;
+import com.example.daniel.weatherinfo.util.SoftKeyboardOffSwitcher;
+import com.example.daniel.weatherinfo.util.NetworkAvailabilityChecker;
 
 import java.util.Arrays;
 import java.util.List;
@@ -103,13 +103,13 @@ public class AddCityActivity extends BaseActivity implements AddCityActivityView
     public void onAddButtonClicked() {
         String cityName = mAutoCompleteTextView.getText().toString().trim();
         if (!TextUtils.isEmpty(cityName)) {
-            if (NetworkUtils.isNetworkAvailable(this)) {
+            if (NetworkAvailabilityChecker.apply(this)) {
                 mProgressBar.setVisibility(View.VISIBLE);
                 mPresenter.addCityFromNetwork(getString(R.string.open_weather_map_api_key), cityName);
                 mAutoCompleteTextView.setText("");
-                KeyboardUtils.hideSoftKeyboard(this);
+                SoftKeyboardOffSwitcher.apply(this);
             } else {
-                KeyboardUtils.hideSoftKeyboard(this);
+                SoftKeyboardOffSwitcher.apply(this);
                 showSnackBar(getString(R.string.message_network_connection_error), Snackbar.LENGTH_LONG);
             }
         }

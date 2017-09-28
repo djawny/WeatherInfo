@@ -4,7 +4,7 @@ import com.example.daniel.weatherinfo.R;
 
 public class BackgroundProvider {
 
-    public static int getBackground(String cityWeatherIcon) {
+    public static int apply(String cityWeatherIcon) {
         int imageResource;
         switch (cityWeatherIcon) {
             case "01d": //clear sky

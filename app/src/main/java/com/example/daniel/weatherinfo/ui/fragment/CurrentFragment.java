@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.util.AppConstants;
-import com.example.daniel.weatherinfo.util.DateUtils;
+import com.example.daniel.weatherinfo.util.TimestampToDateConverter;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -96,16 +96,16 @@ public class CurrentFragment extends Fragment {
         Picasso.with(getActivity())
                 .load("http://openweathermap.org/img/w/" + icon + ".png")
                 .into(mIcon);
-        String date = DateUtils.getDateFromUTCTimestamp(city.getWeather().getDate(), AppConstants.DATE_NEW_LINE_TIME);
+        String date = TimestampToDateConverter.apply(city.getWeather().getDate(), AppConstants.DATE_NEW_LINE_TIME);
         mDate.setText(date);
         mDescription.setText(city.getWeather().getDescription());
         mTemperature.setText(String.format("%s °C", String.valueOf(city.getWeather().getTemp())));
         mWind.setText(String.format("Wind: %s m/s", city.getWeather().getWindSpeed()));
         mCloudiness.setText(String.format("Cloudiness: %s %%", city.getWeather().getCloudiness()));
         mPressure.setText(String.format("Pressure: %s hpa", city.getWeather().getPressure()));
-        String sunrise = DateUtils.getDateFromUTCTimestamp(city.getWeather().getSunrise(), AppConstants.TIME);
+        String sunrise = TimestampToDateConverter.apply(city.getWeather().getSunrise(), AppConstants.TIME);
         mSunrise.setText(String.format("Sunrise: %s", sunrise));
-        String sunset = DateUtils.getDateFromUTCTimestamp(city.getWeather().getSunset(), AppConstants.TIME);
+        String sunset = TimestampToDateConverter.apply(city.getWeather().getSunset(), AppConstants.TIME);
         mSunset.setText(String.format("Sunset: %s", sunset));
     }
 }

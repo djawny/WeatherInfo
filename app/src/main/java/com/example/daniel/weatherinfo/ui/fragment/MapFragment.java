@@ -2,6 +2,7 @@ package com.example.daniel.weatherinfo.ui.fragment;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,6 +27,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private static final String ARG_CITY = "city";
 
     private City mCity;
+    private GoogleMap mGoogleMap;
 
     public MapFragment() {
     }
@@ -58,10 +60,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        googleMap.getUiSettings().setAllGesturesEnabled(false);
+        mGoogleMap = googleMap;
         LatLng currentCoordinates = new LatLng(mCity.getLatitude(), mCity.getLongitude());
-        googleMap.addMarker(new MarkerOptions().position(currentCoordinates).title(mCity.getName()));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCoordinates, AppConstants.MAP_ZOOM));
-//        googleMap.getUiSettings().setAllGesturesEnabled(false);
+        mGoogleMap.addMarker(new MarkerOptions().position(currentCoordinates).title(mCity.getName()));
     }
 
     private SupportMapFragment getMapFragment() {
@@ -72,5 +74,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             fm = getChildFragmentManager();
         }
         return (SupportMapFragment) fm.findFragmentById(R.id.map);
+    }
+
+    public void animateMap() {
+        LatLng currentCoordinates = new LatLng(mCity.getLatitude(), mCity.getLongitude());
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCoordinates, AppConstants.MAP_WORLD_ZOOM));
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(AppConstants.MAP_CITY_ZOOM), 2000, null);
+            }
+        }, 1000);
     }
 }

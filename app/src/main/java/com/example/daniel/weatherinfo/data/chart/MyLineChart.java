@@ -1,7 +1,7 @@
 package com.example.daniel.weatherinfo.data.chart;
 
 import com.example.daniel.weatherinfo.data.database.model.Forecast;
-import com.example.daniel.weatherinfo.util.DateUtils;
+import com.example.daniel.weatherinfo.util.TimestampToDateConverter;
 import com.github.mikephil.charting.data.Entry;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class MyLineChart extends BaseChart {
             temp = (float) forecasts.get(i).getTemp();
             setTempExtremeValues(temp);
             getEntries().add(new Entry(i, temp));
-            getXAxisLabels().add(DateUtils.getDateFromUTCTimestamp(forecasts.get(i).getDate(), TIME_HOURS));
+            getXAxisLabels().add(TimestampToDateConverter.apply(forecasts.get(i).getDate(), TIME_HOURS));
         }
         return this;
     }

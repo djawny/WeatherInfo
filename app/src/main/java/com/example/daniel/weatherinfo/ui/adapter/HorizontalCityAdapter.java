@@ -127,7 +127,7 @@ public class HorizontalCityAdapter extends BaseAdapter<City> {
                     .into(mIcon);
             mTemperature.setText(String.format("%s °C", String.valueOf(city.getWeather().getTemp())));
             mName.setText(city.getName());
-            mBackground.setImageResource(BackgroundProvider.getBackground(city.getWeather().getIcon()));
+            mBackground.setImageResource(BackgroundProvider.apply(city.getWeather().getIcon()));
         }
 
         public RelativeLayout getItemContentLayout() {
