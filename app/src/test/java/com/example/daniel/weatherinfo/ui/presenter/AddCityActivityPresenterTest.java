@@ -32,6 +32,8 @@ import static org.mockito.Mockito.when;
 
 public class AddCityActivityPresenterTest {
 
+    public static final String API_KEY = "123bla";
+    public static final String CITY_NAME = "London";
     private final List<Forecast> MANY_FORECASTS = Arrays.asList(new Forecast(), new Forecast(), new Forecast());
 
     @Rule
@@ -60,32 +62,32 @@ public class AddCityActivityPresenterTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setViewShouldThrowExceptionWhenNullView() {
+    public void testSetViewWhenNullView() {
         mPresenter.setView(null);
     }
 
     @Test
-    public void refreshCityFromNetworkShouldCloseScreen() {
-        when(mDataManager.getCityWeatherDataByName(anyString(),anyString())).thenReturn(Observable.just(new CityWeatherData()));
+    public void testRefreshCityFromNetworkWhenNoException() {
+        when(mDataManager.getCityWeatherDataByName(anyString(), anyString())).thenReturn(Observable.just(new CityWeatherData()));
         when(mMapper.mapCity(any(CityWeatherData.class))).thenReturn(new City());
-        when(mDataManager.getCityForecastDataById(anyString(),anyInt())).thenReturn(Observable.just(new CityForecastData()));
-        when(mMapper.mapForecast(any(CityForecastData.class),any(City.class))).thenReturn(MANY_FORECASTS);
+        when(mDataManager.getCityForecastDataById(anyString(), anyInt())).thenReturn(Observable.just(new CityForecastData()));
+        when(mMapper.mapForecast(any(CityForecastData.class), any(City.class))).thenReturn(MANY_FORECASTS);
         when(mDataManager.saveCity(any(City.class))).thenReturn(Completable.complete());
 
-        mPresenter.addCityFromNetwork(anyString(), anyString());
+        mPresenter.addCityFromNetwork(API_KEY, CITY_NAME);
 
         verify(mAddCityActivityView).closeScreen();
     }
 
     @Test
-    public void refreshCityFromNetworkShouldShowNetworkErrorInfo() {
-        when(mDataManager.getCityWeatherDataByName(anyString(),anyString())).thenReturn(Observable.just(new CityWeatherData()));
+    public void testRefreshCityFromNetworkWhenException() {
+        when(mDataManager.getCityWeatherDataByName(anyString(), anyString())).thenReturn(Observable.just(new CityWeatherData()));
         when(mMapper.mapCity(any(CityWeatherData.class))).thenReturn(new City());
-        when(mDataManager.getCityForecastDataById(anyString(),anyInt())).thenReturn(Observable.just(new CityForecastData()));
-        when(mMapper.mapForecast(any(CityForecastData.class),any(City.class))).thenReturn(MANY_FORECASTS);
+        when(mDataManager.getCityForecastDataById(anyString(), anyInt())).thenReturn(Observable.just(new CityForecastData()));
+        when(mMapper.mapForecast(any(CityForecastData.class), any(City.class))).thenReturn(MANY_FORECASTS);
         when(mDataManager.saveCity(any(City.class))).thenReturn(Completable.error(new Throwable()));
 
-        mPresenter.addCityFromNetwork(anyString(), anyString());
+        mPresenter.addCityFromNetwork(API_KEY, CITY_NAME);
 
         verify(mAddCityActivityView).showNetworkErrorInfo();
     }

@@ -28,7 +28,8 @@ import static org.mockito.Mockito.when;
 
 public class CityListActivityPresenterTest {
 
-    private final List<City> MANY_CITIES = Arrays.asList(new City(), new City(), new City());
+    public static final int CITY_ID = 123456;
+    private final List<City> MANY_CITIES = Arrays.asList(new City(), new City());
 
     @Rule
     public MockitoRule mockitoJUnit = MockitoJUnit.rule();
@@ -53,12 +54,12 @@ public class CityListActivityPresenterTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setViewShouldThrowExceptionWhenNullView() {
+    public void testSetViewWhenNullView() {
         mPresenter.setView(null);
     }
 
     @Test
-    public void loadCitiesFromDatabaseShouldDisplayCitiesWhenNoEmptyList() {
+    public void testLoadCitiesFromDatabaseWhenNoEmptyList() {
         when(mDataManager.getCities()).thenReturn(Observable.just(MANY_CITIES));
 
         mPresenter.loadCitiesFromDatabase();
@@ -67,7 +68,7 @@ public class CityListActivityPresenterTest {
     }
 
     @Test
-    public void loadCitiesFromDatabaseShouldShowNoDataWhenEmptyList() {
+    public void testLoadCitiesFromDatabaseWhenEmptyList() {
         when(mDataManager.getCities()).thenReturn(Observable.just(Collections.<City>emptyList()));
 
         mPresenter.loadCitiesFromDatabase();
@@ -76,7 +77,7 @@ public class CityListActivityPresenterTest {
     }
 
     @Test
-    public void loadCitiesFromDatabaseShouldShowLoadErrorInfoWhenException() {
+    public void testLoadCitiesFromDatabaseWhenException() {
         when(mDataManager.getCities()).thenReturn(Observable.<List<City>>error(new Throwable()));
 
         mPresenter.loadCitiesFromDatabase();
@@ -85,19 +86,19 @@ public class CityListActivityPresenterTest {
     }
 
     @Test
-    public void deleteCityFromDatabaseShouldReloadData() {
+    public void testDeleteCityFromDatabaseWhenNoException() {
         when(mDataManager.removeCity(anyInt())).thenReturn(Completable.complete());
 
-        mPresenter.deleteCityFromDatabase(anyInt());
+        mPresenter.deleteCityFromDatabase(CITY_ID);
 
         verify(mCityListActivityView).reloadData();
     }
 
     @Test
-    public void deleteCityFromDatabaseShouldShowDeleteErrorInfoWhenException() {
+    public void testDeleteCityFromDatabaseWhenException() {
         when(mDataManager.removeCity(anyInt())).thenReturn(Completable.error(new Throwable()));
 
-        mPresenter.deleteCityFromDatabase(anyInt());
+        mPresenter.deleteCityFromDatabase(CITY_ID);
 
         verify(mCityListActivityView).showDeleteErrorInfo();
     }

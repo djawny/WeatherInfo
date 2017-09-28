@@ -165,7 +165,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
                 if (bundle.getBoolean(CITY_LIST_HAS_BEEN_CHANGED_FLAG)) {
                     mPresenter.loadCitiesFromDatabase(mCurrentCityId);
                 } else {
-                    mPresenter.loadCityFromDatabase(mCurrentCityId);
+                    mPresenter.loadCityFromDatabaseByCityId(mCurrentCityId);
                 }
             }
         }
@@ -285,7 +285,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
 
     @Override
     public void reloadData(int cityId) {
-        mPresenter.loadCityFromDatabase(cityId);
+        mPresenter.loadCityFromDatabaseByCityId(cityId);
         hideSwipeRefreshLayoutProgressSpinner();
     }
 
@@ -324,7 +324,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String cityName = parent.getItemAtPosition(position).toString();
-        mPresenter.loadCityFromDatabase(cityName);
+        mPresenter.loadCityFromDatabaseByCityName(cityName);
     }
 
     @Override

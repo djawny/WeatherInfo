@@ -73,7 +73,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
         return null;
     }
 
-    public void loadCityFromDatabase(int cityId) {
+    public void loadCityFromDatabaseByCityId(int cityId) {
         addDisposable(getDataManager()
                 .getCity(cityId)
                 .subscribeOn(getSubscribeScheduler())
@@ -97,7 +97,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
         );
     }
 
-    public void loadCityFromDatabase(String cityName) {
+    public void loadCityFromDatabaseByCityName(String cityName) {
         addDisposable(getDataManager()
                 .getCity(cityName)
                 .subscribeOn(getSubscribeScheduler())
