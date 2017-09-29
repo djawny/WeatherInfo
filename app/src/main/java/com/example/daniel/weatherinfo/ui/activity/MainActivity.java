@@ -162,6 +162,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
                 int cityId = bundle.getInt(CITY_ID);
                 if (cityId != 0) {
                     mCurrentCityId = cityId;
+                    mPresenter.saveCurrentCity(mCurrentCityId);
                 }
                 if (bundle.getBoolean(CITY_LIST_HAS_BEEN_CHANGED_FLAG)) {
                     mPresenter.loadCitiesFromDatabase(mCurrentCityId);
@@ -181,7 +182,6 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mPresenter.saveCurrentCity(mCurrentCityId);
         mPresenter.clearDisposable();
     }
 
