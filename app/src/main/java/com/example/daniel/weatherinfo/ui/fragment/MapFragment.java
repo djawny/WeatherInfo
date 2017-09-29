@@ -79,11 +79,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     public void animateMap() {
         LatLng currentCoordinates = new LatLng(mCity.getLatitude(), mCity.getLongitude());
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCoordinates, AppConstants.MAP_WORLD_ZOOM));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCoordinates, AppConstants.MAP_LANDMASS_ZOOM));
         new Handler().postDelayed(new Runnable() {
             public void run() {
-                mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(AppConstants.MAP_CITY_ZOOM), 2000, null);
+                mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(AppConstants.MAP_CITY_ZOOM), AppConstants.MAP_ANIMATION_DURATION, null);
             }
-        }, 1000);
+        }, AppConstants.MAP_ANIMATION_DELAY);
     }
 }
