@@ -315,7 +315,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
             } else if (fragment instanceof ForecastFragment) {
                 ((ForecastFragment) fragment).animateViews();
                 mSwipeRefreshLayout.setEnabled(true);
-            } else {
+            } else if (fragment instanceof MapFragment) {
                 ((MapFragment) fragment).animateMap();
                 mSwipeRefreshLayout.setEnabled(false);
             }

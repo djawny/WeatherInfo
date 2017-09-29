@@ -58,14 +58,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        googleMap.getUiSettings().setAllGesturesEnabled(false);
-        mGoogleMap = googleMap;
-        LatLng currentCoordinates = new LatLng(mCity.getLatitude(), mCity.getLongitude());
-        mGoogleMap.addMarker(new MarkerOptions().position(currentCoordinates).title(mCity.getName()));
-    }
-
     private SupportMapFragment getMapFragment() {
         FragmentManager fm;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -74,6 +66,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             fm = getChildFragmentManager();
         }
         return (SupportMapFragment) fm.findFragmentById(R.id.map);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        googleMap.getUiSettings().setAllGesturesEnabled(false);
+        mGoogleMap = googleMap;
+        LatLng currentCoordinates = new LatLng(mCity.getLatitude(), mCity.getLongitude());
+        mGoogleMap.addMarker(new MarkerOptions().position(currentCoordinates).title(mCity.getName()));
+        animateMap();
     }
 
     public void animateMap() {
