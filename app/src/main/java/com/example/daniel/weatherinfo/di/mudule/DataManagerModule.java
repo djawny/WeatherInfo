@@ -10,6 +10,7 @@ import com.example.daniel.weatherinfo.data.database.DatabaseImpl;
 import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.di.ActivityContext;
 import com.example.daniel.weatherinfo.di.ApplicationContext;
+import com.example.daniel.weatherinfo.util.AppConstants;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.util.concurrent.TimeUnit;
@@ -48,8 +49,8 @@ public class DataManagerModule {
     @Provides
     OkHttpClient provideOkHttpClient() {
         return new OkHttpClient.Builder()
-                .connectTimeout(20, TimeUnit.SECONDS)
-                .readTimeout(20, TimeUnit.SECONDS)
+                .connectTimeout(AppConstants.OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
+                .readTimeout(AppConstants.OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
                 .build();
     }
 
