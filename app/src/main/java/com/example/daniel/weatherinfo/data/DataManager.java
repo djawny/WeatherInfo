@@ -29,6 +29,8 @@ public interface DataManager {
 
     Observable<CityWeatherData> getCityWeatherDataById(String apiKey, int cityId);
 
+    Observable<CityWeatherData> getCityWeatherDataByCoordinates(String apiKey, double lat, double lon);
+
     Observable<CityForecastData> getCityForecastDataById(String apiKey, int cityId);
 
 //    Observable<CitiesWeatherData> getCitiesWeatherDataByIds(String apiKey, String cityIds);

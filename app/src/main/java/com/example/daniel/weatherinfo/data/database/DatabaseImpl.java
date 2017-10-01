@@ -76,7 +76,6 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
 
     @Override
     public City getCity(String cityName) {
-        City city;
         QueryBuilder<City, Integer> queryBuilder = mCityDao.queryBuilder();
         Where<City, Integer> where = queryBuilder.where();
         try {
@@ -86,22 +85,6 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
             throw new RuntimeException(e);
         }
     }
-
-//    @Override
-//    public void saveCities(List<City> cities) {
-//        try {
-//            getWritableDatabase().beginTransaction();
-//            for (City city : cities) {
-//                Weather weather = city.getWeather();
-//                setWeatherIdIfCityExists(city, weather);
-//                mWeatherDao.createOrUpdate(weather);
-//                mCityDao.createOrUpdate(city);
-//            }
-//            getWritableDatabase().setTransactionSuccessful();
-//        } finally {
-//            getWritableDatabase().endTransaction();
-//        }
-//    }
 
     @Override
     public void saveCity(City city) {
@@ -145,15 +128,4 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
             }
         }
     }
-
-//    @Override
-//    public void removeAllCities() {
-//        try {
-//            TableUtils.clearTable(getConnectionSource(), City.class);
-//            TableUtils.clearTable(getConnectionSource(), Weather.class);
-//            TableUtils.clearTable(getConnectionSource(), Forecast.class);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
 }

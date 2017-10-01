@@ -100,12 +100,12 @@ public class CurrentFragment extends Fragment {
         mDate.setText(date);
         mDescription.setText(city.getWeather().getDescription());
         mTemperature.setText(String.format("%s °C", String.valueOf(city.getWeather().getTemp())));
-        mWind.setText(String.format("Wind: %s m/s", city.getWeather().getWindSpeed()));
-        mCloudiness.setText(String.format("Cloudiness: %s %%", city.getWeather().getCloudiness()));
-        mPressure.setText(String.format("Pressure: %s hpa", city.getWeather().getPressure()));
+        mWind.setText(String.format(getString(R.string.details_text_wind) + ": %s m/s", city.getWeather().getWindSpeed()));
+        mCloudiness.setText(String.format(getString(R.string.details_text_cloudiness) + ": %s %%", city.getWeather().getCloudiness()));
+        mPressure.setText(String.format(getString(R.string.details_text_pressure) + ": %s hpa", city.getWeather().getPressure()));
         String sunrise = TimestampToDateConverter.apply(city.getWeather().getSunrise(), AppConstants.TIME);
-        mSunrise.setText(String.format("Sunrise: %s", sunrise));
+        mSunrise.setText(String.format(getString(R.string.details_text_sunrise) + ": %s", sunrise));
         String sunset = TimestampToDateConverter.apply(city.getWeather().getSunset(), AppConstants.TIME);
-        mSunset.setText(String.format("Sunset: %s", sunset));
+        mSunset.setText(String.format(getString(R.string.details_text_sunset) + ": %s", sunset));
     }
 }

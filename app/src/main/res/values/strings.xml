@@ -1,19 +1,21 @@
 <resources>
     <string name="app_name">Weather Info</string>
-    <string name="menu_item_add">Add</string>
-    <string name="menu_item_city_list">Cities</string>
-    <string name="title_activity_add_city">AddCityActivity</string>
-    <string name="hint_city_name_edit_text">Enter location</string>
     <string name="header_hourly_forecast">Hourly</string>
     <string name="header_daily_forecast">Daily (max temp.)</string>
     <string name="header_details">Details</string>
-    <string name="message_error">Error</string>
     <string name="message_no_data">No data to display.Please add location.</string>
     <string name="message_network_connection_error">No available network. Please check your network status.</string>
-    <string name="message_error_loading_deleting_data">Application error. No access to data.</string>
+    <string name="message_error_loading_deleting_data">Application error. Please reinstall application.</string>
     <string name="message_error_loading_data_from_network">Network error. Please try again later.</string>
     <string name="locations">Locations</string>
     <string name="ready_button">Ready</string>
+    <string name="search_input_hint">Add location</string>
+    <string name="menu_item_city_list">Location list</string>
+    <string name="details_text_wind">Wind</string>
+    <string name="details_text_cloudiness">Cloudiness</string>
+    <string name="details_text_pressure">Pressure</string>
+    <string name="details_text_sunrise">Sunrise</string>
+    <string name="details_text_sunset">Sunset</string>
 
     <string-array name="tab_titles">
         <item>Current</item>

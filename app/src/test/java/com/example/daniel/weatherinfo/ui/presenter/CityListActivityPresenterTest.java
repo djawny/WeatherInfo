@@ -2,6 +2,10 @@ package com.example.daniel.weatherinfo.ui.presenter;
 
 import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.data.database.model.Forecast;
+import com.example.daniel.weatherinfo.data.mapper.Mapper;
+import com.example.daniel.weatherinfo.data.network.model.CityForecastData;
+import com.example.daniel.weatherinfo.data.network.model.CityWeatherData;
 import com.example.daniel.weatherinfo.ui.view.CityListActivityView;
 import com.example.daniel.weatherinfo.util.SchedulerProvider;
 
@@ -22,14 +26,21 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class CityListActivityPresenterTest {
 
     public static final int CITY_ID = 123456;
+    public static final String API_KEY = "123bla";
+    public static final double LATITUDE = 51.50;
+    public static final double LONGITUDE = 13.01;
     private final List<City> MANY_CITIES = Arrays.asList(new City(), new City());
+    private final List<Forecast> MANY_FORECASTS = Arrays.asList(new Forecast(), new Forecast(), new Forecast());
 
     @Rule
     public MockitoRule mockitoJUnit = MockitoJUnit.rule();
@@ -42,6 +53,9 @@ public class CityListActivityPresenterTest {
 
     @Mock
     CityListActivityView mCityListActivityView;
+
+    @Mock
+    Mapper mMapper;
 
     @InjectMocks
     private CityListActivityPresenter mPresenter;
@@ -101,5 +115,33 @@ public class CityListActivityPresenterTest {
         mPresenter.deleteCityFromDatabase(CITY_ID);
 
         verify(mCityListActivityView).showDeleteErrorInfo();
+    }
+
+    @Test
+    public void testAddCityFromNetworkWhenNoException() {
+        when(mDataManager.getCityWeatherDataByCoordinates(anyString(), anyDouble(), anyDouble())).thenReturn(Observable.just(new CityWeatherData()));
+        when(mMapper.mapCity(any(CityWeatherData.class))).thenReturn(new City());
+        when(mDataManager.getCityForecastDataById(anyString(), anyInt())).thenReturn(Observable.just(new CityForecastData()));
+        when(mMapper.mapForecast(any(CityForecastData.class), any(City.class))).thenReturn(MANY_FORECASTS);
+        when(mDataManager.saveCity(any(City.class))).thenReturn(Completable.complete());
+
+        mPresenter.addCityFromNetwork(API_KEY, LATITUDE, LONGITUDE);
+
+        verify(mCityListActivityView).hideProgress();
+        verify(mCityListActivityView).reloadData();
+    }
+
+    @Test
+    public void testAddCityFromNetworkWhenException() {
+        when(mDataManager.getCityWeatherDataByCoordinates(anyString(), anyDouble(), anyDouble())).thenReturn(Observable.just(new CityWeatherData()));
+        when(mMapper.mapCity(any(CityWeatherData.class))).thenReturn(new City());
+        when(mDataManager.getCityForecastDataById(anyString(), anyInt())).thenReturn(Observable.just(new CityForecastData()));
+        when(mMapper.mapForecast(any(CityForecastData.class), any(City.class))).thenReturn(MANY_FORECASTS);
+        when(mDataManager.saveCity(any(City.class))).thenReturn(Completable.error(new Throwable()));
+
+        mPresenter.addCityFromNetwork(API_KEY, LATITUDE, LONGITUDE);
+
+        verify(mCityListActivityView).hideProgress();
+        verify(mCityListActivityView).showNetworkErrorInfo();
     }
 }

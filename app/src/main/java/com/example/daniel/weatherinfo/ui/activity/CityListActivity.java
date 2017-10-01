@@ -7,9 +7,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
@@ -18,6 +18,12 @@ import com.example.daniel.weatherinfo.ui.adapter.HorizontalCityAdapter;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
 import com.example.daniel.weatherinfo.ui.presenter.CityListActivityPresenter;
 import com.example.daniel.weatherinfo.ui.view.CityListActivityView;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
@@ -29,9 +35,9 @@ import butterknife.OnClick;
 
 public class CityListActivity extends BaseActivity implements CityListActivityView, HorizontalCityAdapter.OnRecycleViewItemClickListener {
 
-    private static final int ADD_CITY_REQUEST_CODE = 2;
     public static final String CITY_ID = "city id";
     public static final String CITY_LIST_HAS_BEEN_CHANGED_FLAG = "city list has been changed flag";
+    private static final String TAG = "place";
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -41,6 +47,9 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
 
     @BindView(R.id.ready_button)
     TextView mReadyButton;
+
+    @BindView(R.id.add_location_progress_bar)
+    ProgressBar mProgressBar;
 
     @Inject
     CityListActivityPresenter mPresenter;
@@ -55,6 +64,7 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
         getActivityComponent().inject(this);
         mPresenter.setView(this);
         setToolbar();
+        setPlaceAutoCompleteFragment();
         mPresenter.loadCitiesFromDatabase();
     }
 
@@ -67,35 +77,33 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_city_list, menu);
-        return super.onCreateOptionsMenu(menu);
+    private void setPlaceAutoCompleteFragment() {
+        PlaceAutocompleteFragment placeAutocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        AutocompleteFilter onlyCitiesFilter = new AutocompleteFilter.Builder().setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES).build();
+        placeAutocompleteFragment.setFilter(onlyCitiesFilter);
+        placeAutocompleteFragment.setHint(getString(R.string.search_input_hint));
+        placeAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                LatLng latLng = place.getLatLng();
+                mPresenter.addCityFromNetwork(getString(R.string.open_weather_map_api_key), latLng.latitude, latLng.longitude);
+            }
+
+            @Override
+            public void onError(Status status) {
+                showNetworkErrorInfo();
+            }
+        });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.add_location:
-                Intent intent = new Intent(this, AddCityActivity.class);
-                startActivityForResult(intent, ADD_CITY_REQUEST_CODE);
-                break;
             case android.R.id.home:
                 onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADD_CITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                mPresenter.loadCitiesFromDatabase();
-                setActivityResultCityListHasBeenChanged();
-            }
-        }
     }
 
     private void setActivityResultCityListHasBeenChanged() {
@@ -144,9 +152,25 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
     }
 
     @Override
+    public void showNetworkErrorInfo() {
+        mProgressBar.setVisibility(View.INVISIBLE);
+        showSnackBar(getString(R.string.message_error_loading_data_from_network), Snackbar.LENGTH_LONG);
+    }
+
+    @Override
     public void reloadData() {
         mPresenter.loadCitiesFromDatabase();
         setActivityResultCityListHasBeenChanged();
+    }
+
+    @Override
+    public void hideProgress() {
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showProgress() {
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override

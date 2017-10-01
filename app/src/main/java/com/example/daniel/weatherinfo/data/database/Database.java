@@ -12,11 +12,7 @@ public interface Database {
 
     City getCity(String cityName);
 
-//    void saveCities(List<City> cities);
-
     void saveCity(City city);
 
     void removeCity(int cityId);
-
-//    void removeAllCities();
 }

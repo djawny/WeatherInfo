@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Inforamacje pogodowe</string>
+    <string name="header_hourly_forecast">Godzinowo</string>
+    <string name="header_daily_forecast">Dzienna (temp. maksymalna)</string>
+    <string name="header_details">Szczegóły</string>
+    <string name="message_no_data">Brak danych. Proszę dodać lokalizację.</string>
+    <string name="message_network_connection_error">Błąd sieci. Proszę sprawdzić swoje ustawienia sieciowe.</string>
+    <string name="message_error_loading_deleting_data">Błąd aplikacji. Proszę przeinstalować aplikację.</string>
+    <string name="message_error_loading_data_from_network">Błąd sieci. Proszę za chwile spróbować ponownie.</string>
+    <string name="locations">Lokalizacje</string>
+    <string name="ready_button">Gotowe</string>
+    <string name="search_input_hint">Dodaj lokalizację</string>
+    <string name="menu_item_city_list">Lista lokalizacji</string>
+    <string name="details_text_wind">Wiatr</string>
+    <string name="details_text_cloudiness">Zachmurzenie</string>
+    <string name="details_text_pressure">Ciśnienie</string>
+    <string name="details_text_sunrise">Zachód słońca</string>
+    <string name="details_text_sunset">Wschód słońca</string>
+
+    <string-array name="tab_titles">
+        <item>Bieżąca</item>
+        <item>Prognoza</item>
+        <item>Mapa</item>
+    </string-array>
+
+</resources>
