@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Inforamacje pogodowe</string>
+    <string name="app_name">Informacje pogodowe</string>
     <string name="header_hourly_forecast">Godzinowo</string>
     <string name="header_daily_forecast">Dzienna (temp. maksymalna)</string>
     <string name="header_details">Szczegóły</string>
