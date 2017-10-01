@@ -37,7 +37,6 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
 
     public static final String CITY_ID = "city id";
     public static final String CITY_LIST_HAS_BEEN_CHANGED_FLAG = "city list has been changed flag";
-    private static final String TAG = "place";
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
