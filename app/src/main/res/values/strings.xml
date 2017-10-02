@@ -18,6 +18,8 @@
     <string name="details_text_sunset">Sunset</string>
     <string name="text_actual_location">Actual location</string>
     <string name="text_find_actual_location">Locate</string>
+    <string name="text_locating">Locating…</string>
+    <string name="message_error_finding_location">Location error. Please check your location status and try again.</string>
 
     <string-array name="tab_titles">
         <item>Current</item>

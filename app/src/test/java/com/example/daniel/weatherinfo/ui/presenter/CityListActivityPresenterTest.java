@@ -128,7 +128,7 @@ public class CityListActivityPresenterTest {
 
         mPresenter.addCityFromNetwork(API_KEY, LATITUDE, LONGITUDE, LANGUAGE);
 
-        verify(mCityListActivityView).hideAddLocProgressBar();
+        verify(mCityListActivityView).hideAddLocationProgressBar();
         verify(mCityListActivityView).reloadData();
     }
 
@@ -142,7 +142,7 @@ public class CityListActivityPresenterTest {
 
         mPresenter.addCityFromNetwork(API_KEY, LATITUDE, LONGITUDE, LANGUAGE);
 
-        verify(mCityListActivityView).hideAddLocProgressBar();
+        verify(mCityListActivityView).hideAddLocationProgressBar();
         verify(mCityListActivityView).showNetworkErrorInfo();
     }
 }

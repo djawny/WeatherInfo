@@ -19,7 +19,13 @@ public interface CityListActivityView extends BaseView {
 
     void reloadData();
 
-    void hideAddLocProgressBar();
+    void hideAddLocationProgressBar();
 
-    void showAddLocProgressBar();
+    void showAddLocationProgressBar();
+
+    void showActualLocationProgressBar();
+
+    void hideActualLocationProgressBar();
+
+    void updateActualLocationText(City city);
 }

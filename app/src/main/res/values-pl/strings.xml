@@ -18,6 +18,8 @@
     <string name="details_text_sunset">Zachód słońca</string>
     <string name="text_actual_location">Bieżąca lokalizacja</string>
     <string name="text_find_actual_location">Zlokalizuj</string>
+    <string name="text_locating">Lokalizowanie…</string>
+    <string name="message_error_finding_location">Błąd lokalizacji. Proszę sprawdzić swoje ustawienia lokalizacji i spróbować ponownie.</string>
 
     <string-array name="tab_titles">
         <item>Bieżąca</item>
