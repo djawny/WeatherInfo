@@ -14,8 +14,8 @@
     <string name="details_text_wind">Wiatr</string>
     <string name="details_text_cloudiness">Zachmurzenie</string>
     <string name="details_text_pressure">Ciśnienie</string>
-    <string name="details_text_sunrise">Zachód słońca</string>
-    <string name="details_text_sunset">Wschód słońca</string>
+    <string name="details_text_sunrise">Wschód słońca</string>
+    <string name="details_text_sunset">Zachód słońca</string>
 
     <string-array name="tab_titles">
         <item>Bieżąca</item>
