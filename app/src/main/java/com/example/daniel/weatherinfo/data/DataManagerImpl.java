@@ -83,23 +83,18 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
-    public Observable<CityWeatherData> getCityWeatherDataByName(String apiKey, String cityName) {
-        return mOpenWeatherMapService.getCityWeatherDataByName(apiKey, cityName);
+    public Observable<CityWeatherData> getCityWeatherDataById(String apiKey, int cityId, String language) {
+        return mOpenWeatherMapService.getCityWeatherDataById(apiKey, cityId, language);
     }
 
     @Override
-    public Observable<CityWeatherData> getCityWeatherDataById(String apiKey, int cityId) {
-        return mOpenWeatherMapService.getCityWeatherDataById(apiKey, cityId);
+    public Observable<CityWeatherData> getCityWeatherDataByCoordinates(String apiKey, double lat, double lon, String language) {
+        return mOpenWeatherMapService.getCityWeatherDataByCoordinates(apiKey, lat, lon, language);
     }
 
     @Override
-    public Observable<CityWeatherData> getCityWeatherDataByCoordinates(String apiKey, double lat, double lon) {
-        return mOpenWeatherMapService.getCityWeatherDataByCoordinates(apiKey, lat, lon);
-    }
-
-    @Override
-    public Observable<CityForecastData> getCityForecastDataById(String apiKey, int cityId) {
-        return mOpenWeatherMapService.getCityForecastDataById(apiKey, cityId);
+    public Observable<CityForecastData> getCityForecastDataById(String apiKey, int cityId, String language) {
+        return mOpenWeatherMapService.getCityForecastDataById(apiKey, cityId, language);
     }
 
     @Override

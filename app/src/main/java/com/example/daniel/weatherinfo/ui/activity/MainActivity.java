@@ -28,6 +28,7 @@ import com.example.daniel.weatherinfo.ui.fragment.MapFragment;
 import com.example.daniel.weatherinfo.ui.presenter.MainActivityPresenter;
 import com.example.daniel.weatherinfo.ui.view.MainActivityView;
 import com.example.daniel.weatherinfo.util.BackgroundProvider;
+import com.example.daniel.weatherinfo.util.LanguageProvider;
 import com.example.daniel.weatherinfo.util.NetworkAvailabilityChecker;
 import com.gjiazhe.panoramaimageview.GyroscopeObserver;
 import com.gjiazhe.panoramaimageview.PanoramaImageView;
@@ -278,7 +279,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     public void onRefresh() {
         try {
             if (NetworkAvailabilityChecker.apply(this)) {
-                mPresenter.refreshCityFromNetwork(getString(R.string.open_weather_map_api_key), mCurrentCityId);
+                mPresenter.refreshCityFromNetwork(getString(R.string.open_weather_map_api_key), mCurrentCityId, LanguageProvider.apply());
             } else {
                 hideSwipeRefreshLayoutProgressSpinner();
                 showSnackBar(getString(R.string.message_network_connection_error), Snackbar.LENGTH_LONG);

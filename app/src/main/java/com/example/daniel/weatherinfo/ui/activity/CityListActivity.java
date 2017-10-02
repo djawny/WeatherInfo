@@ -18,6 +18,7 @@ import com.example.daniel.weatherinfo.ui.adapter.HorizontalCityAdapter;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
 import com.example.daniel.weatherinfo.ui.presenter.CityListActivityPresenter;
 import com.example.daniel.weatherinfo.ui.view.CityListActivityView;
+import com.example.daniel.weatherinfo.util.LanguageProvider;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
@@ -48,7 +49,7 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
     TextView mReadyButton;
 
     @BindView(R.id.add_location_progress_bar)
-    ProgressBar mProgressBar;
+    ProgressBar mAddLocProgressBar;
 
     @Inject
     CityListActivityPresenter mPresenter;
@@ -85,7 +86,7 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
             @Override
             public void onPlaceSelected(Place place) {
                 LatLng latLng = place.getLatLng();
-                mPresenter.addCityFromNetwork(getString(R.string.open_weather_map_api_key), latLng.latitude, latLng.longitude);
+                mPresenter.addCityFromNetwork(getString(R.string.open_weather_map_api_key), latLng.latitude, latLng.longitude, LanguageProvider.apply());
             }
 
             @Override
@@ -152,7 +153,6 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
 
     @Override
     public void showNetworkErrorInfo() {
-        mProgressBar.setVisibility(View.INVISIBLE);
         showSnackBar(getString(R.string.message_error_loading_data_from_network), Snackbar.LENGTH_LONG);
     }
 
@@ -163,13 +163,13 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
     }
 
     @Override
-    public void hideProgress() {
-        mProgressBar.setVisibility(View.GONE);
+    public void hideAddLocProgressBar() {
+        mAddLocProgressBar.setVisibility(View.GONE);
     }
 
     @Override
-    public void showProgress() {
-        mProgressBar.setVisibility(View.VISIBLE);
+    public void showAddLocProgressBar() {
+        mAddLocProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override

@@ -7,7 +7,7 @@
     <string name="message_network_connection_error">Błąd sieci. Proszę sprawdzić swoje ustawienia sieciowe.</string>
     <string name="message_error_loading_deleting_data">Błąd aplikacji. Proszę przeinstalować aplikację.</string>
     <string name="message_error_loading_data_from_network">Błąd sieci. Proszę za chwile spróbować ponownie.</string>
-    <string name="locations">Lokalizacje</string>
+    <string name="text_locations">Lokalizacje</string>
     <string name="ready_button">Gotowe</string>
     <string name="search_input_hint">Dodaj lokalizację</string>
     <string name="menu_item_city_list">Lista lokalizacji</string>
@@ -16,6 +16,8 @@
     <string name="details_text_pressure">Ciśnienie</string>
     <string name="details_text_sunrise">Zachód słońca</string>
     <string name="details_text_sunset">Wschód słońca</string>
+    <string name="text_actual_location">Bieżąca lokalizacja</string>
+    <string name="text_find_actual_location">Zlokalizuj</string>
 
     <string-array name="tab_titles">
         <item>Bieżąca</item>

@@ -74,10 +74,10 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
                 }));
     }
 
-    public void addCityFromNetwork(final String apiKey, double lat, double lon) {
-        getView().showProgress();
+    public void addCityFromNetwork(final String apiKey, double lat, double lon, final String language) {
+        getView().showAddLocProgressBar();
         addDisposable(getDataManager()
-                .getCityWeatherDataByCoordinates(apiKey, lat, lon)
+                .getCityWeatherDataByCoordinates(apiKey, lat, lon, language)
                 .subscribeOn(getSubscribeScheduler())
                 .map(new Function<CityWeatherData, City>() {
                     @Override
@@ -88,7 +88,7 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
                 .flatMap(new Function<City, ObservableSource<City>>() {
                     @Override
                     public ObservableSource<City> apply(City city) throws Exception {
-                        return Observable.zip(getDataManager().getCityForecastDataById(apiKey, city.getId()), Observable.just(city), new BiFunction<CityForecastData, City, City>() {
+                        return Observable.zip(getDataManager().getCityForecastDataById(apiKey, city.getId(), language), Observable.just(city), new BiFunction<CityForecastData, City, City>() {
                             @Override
                             public City apply(CityForecastData cityForecastData, City city) throws Exception {
                                 List<Forecast> forecasts = mMapper.mapForecast(cityForecastData, city);
@@ -107,13 +107,13 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
-                        getView().hideProgress();
+                        getView().hideAddLocProgressBar();
                         getView().reloadData();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        getView().hideProgress();
+                        getView().hideAddLocProgressBar();
                         getView().showNetworkErrorInfo();
                     }
                 }));

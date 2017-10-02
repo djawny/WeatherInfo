@@ -7,7 +7,7 @@
     <string name="message_network_connection_error">No available network. Please check your network status.</string>
     <string name="message_error_loading_deleting_data">Application error. Please reinstall application.</string>
     <string name="message_error_loading_data_from_network">Network error. Please try again later.</string>
-    <string name="locations">Locations</string>
+    <string name="text_locations">Locations</string>
     <string name="ready_button">Ready</string>
     <string name="search_input_hint">Add location</string>
     <string name="menu_item_city_list">Location list</string>
@@ -16,6 +16,8 @@
     <string name="details_text_pressure">Pressure</string>
     <string name="details_text_sunrise">Sunrise</string>
     <string name="details_text_sunset">Sunset</string>
+    <string name="text_actual_location">Actual location</string>
+    <string name="text_find_actual_location">Locate</string>
 
     <string-array name="tab_titles">
         <item>Current</item>

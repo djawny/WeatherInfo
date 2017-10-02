@@ -17,23 +17,15 @@ public interface DataManager {
 
     Observable<City> getCity(String cityName);
 
-//    Completable saveCities(List<City> cities);
-
     Completable saveCity(City city);
 
     Completable removeCity(int cityId);
 
-//    Completable removeCities();
+    Observable<CityWeatherData> getCityWeatherDataById(String apiKey, int cityId, String language);
 
-    Observable<CityWeatherData> getCityWeatherDataByName(String apiKey, String cityName);
+    Observable<CityWeatherData> getCityWeatherDataByCoordinates(String apiKey, double lat, double lon, String language);
 
-    Observable<CityWeatherData> getCityWeatherDataById(String apiKey, int cityId);
-
-    Observable<CityWeatherData> getCityWeatherDataByCoordinates(String apiKey, double lat, double lon);
-
-    Observable<CityForecastData> getCityForecastDataById(String apiKey, int cityId);
-
-//    Observable<CitiesWeatherData> getCitiesWeatherDataByIds(String apiKey, String cityIds);
+    Observable<CityForecastData> getCityForecastDataById(String apiKey, int cityId, String language);
 
     Completable putIntSharedPreferences(String key, int data);
 

@@ -39,6 +39,7 @@ public class CityListActivityPresenterTest {
     public static final String API_KEY = "123bla";
     public static final double LATITUDE = 51.50;
     public static final double LONGITUDE = 13.01;
+    public static final String LANGUAGE = "pl";
     private final List<City> MANY_CITIES = Arrays.asList(new City(), new City());
     private final List<Forecast> MANY_FORECASTS = Arrays.asList(new Forecast(), new Forecast(), new Forecast());
 
@@ -119,29 +120,29 @@ public class CityListActivityPresenterTest {
 
     @Test
     public void testAddCityFromNetworkWhenNoException() {
-        when(mDataManager.getCityWeatherDataByCoordinates(anyString(), anyDouble(), anyDouble())).thenReturn(Observable.just(new CityWeatherData()));
+        when(mDataManager.getCityWeatherDataByCoordinates(anyString(), anyDouble(), anyDouble(), anyString())).thenReturn(Observable.just(new CityWeatherData()));
         when(mMapper.mapCity(any(CityWeatherData.class))).thenReturn(new City());
-        when(mDataManager.getCityForecastDataById(anyString(), anyInt())).thenReturn(Observable.just(new CityForecastData()));
+        when(mDataManager.getCityForecastDataById(anyString(), anyInt(), anyString())).thenReturn(Observable.just(new CityForecastData()));
         when(mMapper.mapForecast(any(CityForecastData.class), any(City.class))).thenReturn(MANY_FORECASTS);
         when(mDataManager.saveCity(any(City.class))).thenReturn(Completable.complete());
 
-        mPresenter.addCityFromNetwork(API_KEY, LATITUDE, LONGITUDE);
+        mPresenter.addCityFromNetwork(API_KEY, LATITUDE, LONGITUDE, LANGUAGE);
 
-        verify(mCityListActivityView).hideProgress();
+        verify(mCityListActivityView).hideAddLocProgressBar();
         verify(mCityListActivityView).reloadData();
     }
 
     @Test
     public void testAddCityFromNetworkWhenException() {
-        when(mDataManager.getCityWeatherDataByCoordinates(anyString(), anyDouble(), anyDouble())).thenReturn(Observable.just(new CityWeatherData()));
+        when(mDataManager.getCityWeatherDataByCoordinates(anyString(), anyDouble(), anyDouble(), anyString())).thenReturn(Observable.just(new CityWeatherData()));
         when(mMapper.mapCity(any(CityWeatherData.class))).thenReturn(new City());
-        when(mDataManager.getCityForecastDataById(anyString(), anyInt())).thenReturn(Observable.just(new CityForecastData()));
+        when(mDataManager.getCityForecastDataById(anyString(), anyInt(), anyString())).thenReturn(Observable.just(new CityForecastData()));
         when(mMapper.mapForecast(any(CityForecastData.class), any(City.class))).thenReturn(MANY_FORECASTS);
         when(mDataManager.saveCity(any(City.class))).thenReturn(Completable.error(new Throwable()));
 
-        mPresenter.addCityFromNetwork(API_KEY, LATITUDE, LONGITUDE);
+        mPresenter.addCityFromNetwork(API_KEY, LATITUDE, LONGITUDE, LANGUAGE);
 
-        verify(mCityListActivityView).hideProgress();
+        verify(mCityListActivityView).hideAddLocProgressBar();
         verify(mCityListActivityView).showNetworkErrorInfo();
     }
 }
