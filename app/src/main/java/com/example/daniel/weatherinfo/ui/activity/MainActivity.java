@@ -266,7 +266,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
 
     @Override
     public void showDatabaseErrorInfo() {
-        showSnackBar(getString(R.string.message_error_loading_deleting_data), Snackbar.LENGTH_LONG);
+        showSnackBar(getString(R.string.message_error_loading_deleting_saving_data), Snackbar.LENGTH_LONG);
     }
 
     @Override

@@ -15,6 +15,8 @@ public interface CityListActivityView extends BaseView {
 
     void showDeleteErrorInfo();
 
+    void showSaveErrorInfo();
+
     void showNetworkErrorInfo();
 
     void reloadData();

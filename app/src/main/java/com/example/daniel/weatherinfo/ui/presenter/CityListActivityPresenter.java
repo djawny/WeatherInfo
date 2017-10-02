@@ -142,7 +142,9 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
                             }
                         });
                     }
-                }).subscribeWith(new DisposableObserver<City>() {
+                })
+                .observeOn(getObserveScheduler())
+                .subscribeWith(new DisposableObserver<City>() {
                     @Override
                     public void onNext(City city) {
                         getView().hideActualLocationProgressBar();
@@ -161,5 +163,25 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
                     }
                 })
         );
+    }
+
+    public void addCity(City city) {
+        getView().showAddLocationProgressBar();
+        addDisposable(getDataManager().saveCity(city)
+                .subscribeOn(getSubscribeScheduler())
+                .observeOn(getObserveScheduler())
+                .subscribeWith(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        getView().hideAddLocationProgressBar();
+                        getView().reloadData();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        getView().hideAddLocationProgressBar();
+                        getView().showSaveErrorInfo();
+                    }
+                }));
     }
 }

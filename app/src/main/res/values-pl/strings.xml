@@ -5,7 +5,7 @@
     <string name="header_details">Szczegóły</string>
     <string name="message_no_data">Brak danych. Proszę dodać lokalizację.</string>
     <string name="message_network_connection_error">Błąd sieci. Proszę sprawdzić swoje ustawienia sieciowe.</string>
-    <string name="message_error_loading_deleting_data">Błąd aplikacji. Proszę przeinstalować aplikację.</string>
+    <string name="message_error_loading_deleting_saving_data">Błąd aplikacji. Proszę przeinstalować aplikację.</string>
     <string name="message_error_loading_data_from_network">Błąd sieci. Proszę za chwile spróbować ponownie.</string>
     <string name="text_locations">Lokalizacje</string>
     <string name="ready_button">Gotowe</string>

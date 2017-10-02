@@ -80,6 +80,7 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
     private LocationRequest mLocationRequest;
     private LocationCallback mLocationCallback;
     private boolean mLocationPermissionGranted;
+    private City mActualCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,12 +173,17 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
 
     @Override
     public void showLoadErrorInfo() {
-        showSnackBar(getString(R.string.message_error_loading_deleting_data), Snackbar.LENGTH_LONG);
+        showSnackBar(getString(R.string.message_error_loading_deleting_saving_data), Snackbar.LENGTH_LONG);
     }
 
     @Override
     public void showDeleteErrorInfo() {
-        showSnackBar(getString(R.string.message_error_loading_deleting_data), Snackbar.LENGTH_LONG);
+        showSnackBar(getString(R.string.message_error_loading_deleting_saving_data), Snackbar.LENGTH_LONG);
+    }
+
+    @Override
+    public void showSaveErrorInfo() {
+        showSnackBar(getString(R.string.message_error_loading_deleting_saving_data), Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -221,7 +227,8 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
 
     @Override
     public void updateActualLocationText(City city) {
-        mActualLocationText.setText(city.getName());
+        mActualLocationText.setText(String.format("%s, %s", city.getName(), city.getCountry()));
+        mActualCity = city;
     }
 
     @Override
@@ -256,7 +263,13 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
 
     @OnClick(R.id.actual_location_text)
     public void onActualLocationTextClicked(View view) {
-        getDeviceLocation();
+        if (mActualCity == null) {
+            getDeviceLocation();
+        } else {
+            mPresenter.addCity(mActualCity);
+            mActualLocationText.setText(getString(R.string.text_find_actual_location));
+            mActualCity = null;
+        }
     }
 
     private void getLocationPermission() {
