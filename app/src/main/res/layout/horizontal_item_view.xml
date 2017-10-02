@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="140dp"
     android:layout_height="200dp"
-    android:layout_margin="8dp"
+    android:layout_margin="@dimen/margin_small"
     card_view:cardBackgroundColor="@color/transparent_black"
     card_view:cardCornerRadius="@dimen/cardview_default_radius"
     card_view:cardElevation="@dimen/cardview_default_elevation">
@@ -50,8 +50,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="14dp"
-            android:layout_marginStart="14dp"
+            android:layout_marginLeft="@dimen/margin_medium"
+            android:layout_marginStart="@dimen/margin_medium"
             android:layout_marginTop="12dp"
             android:contentDescription="@null" />
 

@@ -15,11 +15,19 @@ public interface CityListActivityView extends BaseView {
 
     void showDeleteErrorInfo();
 
+    void showSaveErrorInfo();
+
     void showNetworkErrorInfo();
 
     void reloadData();
 
-    void hideProgress();
+    void hideAddLocationProgressBar();
 
-    void showProgress();
+    void showAddLocationProgressBar();
+
+    void showActualLocationProgressBar();
+
+    void hideActualLocationProgressBar();
+
+    void updateActualLocationText(City city);
 }

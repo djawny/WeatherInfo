@@ -74,10 +74,10 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
                 }));
     }
 
-    public void addCityFromNetwork(final String apiKey, double lat, double lon) {
-        getView().showProgress();
+    public void addCityFromNetwork(final String apiKey, double lat, double lon, final String language) {
+        getView().showAddLocationProgressBar();
         addDisposable(getDataManager()
-                .getCityWeatherDataByCoordinates(apiKey, lat, lon)
+                .getCityWeatherDataByCoordinates(apiKey, lat, lon, language)
                 .subscribeOn(getSubscribeScheduler())
                 .map(new Function<CityWeatherData, City>() {
                     @Override
@@ -88,7 +88,7 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
                 .flatMap(new Function<City, ObservableSource<City>>() {
                     @Override
                     public ObservableSource<City> apply(City city) throws Exception {
-                        return Observable.zip(getDataManager().getCityForecastDataById(apiKey, city.getId()), Observable.just(city), new BiFunction<CityForecastData, City, City>() {
+                        return Observable.zip(getDataManager().getCityForecastDataById(apiKey, city.getId(), language), Observable.just(city), new BiFunction<CityForecastData, City, City>() {
                             @Override
                             public City apply(CityForecastData cityForecastData, City city) throws Exception {
                                 List<Forecast> forecasts = mMapper.mapForecast(cityForecastData, city);
@@ -107,14 +107,80 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
-                        getView().hideProgress();
+                        getView().hideAddLocationProgressBar();
                         getView().reloadData();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        getView().hideProgress();
+                        getView().hideAddLocationProgressBar();
                         getView().showNetworkErrorInfo();
+                    }
+                }));
+    }
+
+    public void loadCityFromNetwork(final String apiKey, double lat, double lon, final String language) {
+        getView().showActualLocationProgressBar();
+        addDisposable(getDataManager()
+                .getCityWeatherDataByCoordinates(apiKey, lat, lon, language)
+                .subscribeOn(getSubscribeScheduler())
+                .map(new Function<CityWeatherData, City>() {
+                    @Override
+                    public City apply(CityWeatherData cityWeatherData) throws Exception {
+                        return mMapper.mapCity(cityWeatherData);
+                    }
+                })
+                .flatMap(new Function<City, ObservableSource<City>>() {
+                    @Override
+                    public ObservableSource<City> apply(City city) throws Exception {
+                        return Observable.zip(getDataManager().getCityForecastDataById(apiKey, city.getId(), language), Observable.just(city), new BiFunction<CityForecastData, City, City>() {
+                            @Override
+                            public City apply(CityForecastData cityForecastData, City city) throws Exception {
+                                List<Forecast> forecasts = mMapper.mapForecast(cityForecastData, city);
+                                city.setForecastCollection(forecasts);
+                                return city;
+                            }
+                        });
+                    }
+                })
+                .observeOn(getObserveScheduler())
+                .subscribeWith(new DisposableObserver<City>() {
+                    @Override
+                    public void onNext(City city) {
+                        getView().hideActualLocationProgressBar();
+                        getView().updateActualLocationText(city);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        getView().hideActualLocationProgressBar();
+                        getView().showNetworkErrorInfo();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                })
+        );
+    }
+
+    public void addCity(City city) {
+        getView().showAddLocationProgressBar();
+        addDisposable(getDataManager().saveCity(city)
+                .subscribeOn(getSubscribeScheduler())
+                .observeOn(getObserveScheduler())
+                .subscribeWith(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        getView().hideAddLocationProgressBar();
+                        getView().reloadData();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        getView().hideAddLocationProgressBar();
+                        getView().showSaveErrorInfo();
                     }
                 }));
     }

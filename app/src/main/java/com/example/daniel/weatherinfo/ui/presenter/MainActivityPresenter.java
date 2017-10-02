@@ -121,9 +121,9 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
         );
     }
 
-    public void refreshCityFromNetwork(final String apiKey, final int cityId) {
+    public void refreshCityFromNetwork(final String apiKey, final int cityId, final String language) {
         addDisposable(getDataManager()
-                .getCityWeatherDataById(apiKey, cityId)
+                .getCityWeatherDataById(apiKey, cityId, language)
                 .subscribeOn(getSubscribeScheduler())
                 .map(new Function<CityWeatherData, City>() {
                     @Override
@@ -134,7 +134,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                 .flatMap(new Function<City, ObservableSource<City>>() {
                     @Override
                     public ObservableSource<City> apply(City city) throws Exception {
-                        return Observable.zip(getDataManager().getCityForecastDataById(apiKey, city.getId()), Observable.just(city), new BiFunction<CityForecastData, City, City>() {
+                        return Observable.zip(getDataManager().getCityForecastDataById(apiKey, city.getId(), language), Observable.just(city), new BiFunction<CityForecastData, City, City>() {
                             @Override
                             public City apply(CityForecastData cityForecastData, City city) throws Exception {
                                 List<Forecast> forecasts = mMapper.mapForecast(cityForecastData, city);

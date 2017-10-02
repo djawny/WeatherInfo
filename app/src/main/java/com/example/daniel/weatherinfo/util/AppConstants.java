@@ -21,6 +21,9 @@ public final class AppConstants {
     public static final float MAP_WORLD_ZOOM = 1;
     public static final float MAP_LANDMASS_ZOOM = 5;
     public static final float MAP_CITY_ZOOM = 10;
-    public static final int MAP_ANIMATION_DURATION = 2000;  //milliseconds
-    public static final int MAP_ANIMATION_DELAY = 1000;     //milliseconds
+    public static final int MAP_ANIMATION_DURATION = 2000;
+    public static final int MAP_ANIMATION_DELAY = 1000;
+
+    public static final int UPDATE_INTERVAL = 5000;
+    public static final int FASTEST_INTERVAL = 1000;
 }

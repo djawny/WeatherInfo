@@ -37,6 +37,7 @@ public class MainActivityPresenterTest {
     public static final int CITY_ID = 123456;
     public static final String CITY_NAME = "London";
     public static final String API_KEY = "123bla";
+    public static final String LANGUAGE = "pl";
     private final List<City> MANY_CITIES = Arrays.asList(new City(), new City());
     private final List<Forecast> MANY_FORECASTS = Arrays.asList(new Forecast(), new Forecast());
 
@@ -153,26 +154,26 @@ public class MainActivityPresenterTest {
 
     @Test
     public void testRefreshCityFromNetworkWhenNoException() {
-        when(mDataManager.getCityWeatherDataById(anyString(), anyInt())).thenReturn(Observable.just(new CityWeatherData()));
+        when(mDataManager.getCityWeatherDataById(anyString(), anyInt(), anyString())).thenReturn(Observable.just(new CityWeatherData()));
         when(mMapper.mapCity(any(CityWeatherData.class))).thenReturn(new City());
-        when(mDataManager.getCityForecastDataById(anyString(), anyInt())).thenReturn(Observable.just(new CityForecastData()));
+        when(mDataManager.getCityForecastDataById(anyString(), anyInt(), anyString())).thenReturn(Observable.just(new CityForecastData()));
         when(mMapper.mapForecast(any(CityForecastData.class), any(City.class))).thenReturn(MANY_FORECASTS);
         when(mDataManager.saveCity(any(City.class))).thenReturn(Completable.complete());
 
-        mPresenter.refreshCityFromNetwork(API_KEY, CITY_ID);
+        mPresenter.refreshCityFromNetwork(API_KEY, CITY_ID, LANGUAGE);
 
         verify(mMainActivityView).reloadData(anyInt());
     }
 
     @Test
     public void testRefreshCityFromNetworkWhenException() {
-        when(mDataManager.getCityWeatherDataById(anyString(), anyInt())).thenReturn(Observable.just(new CityWeatherData()));
+        when(mDataManager.getCityWeatherDataById(anyString(), anyInt(), anyString())).thenReturn(Observable.just(new CityWeatherData()));
         when(mMapper.mapCity(any(CityWeatherData.class))).thenReturn(new City());
-        when(mDataManager.getCityForecastDataById(anyString(), anyInt())).thenReturn(Observable.just(new CityForecastData()));
+        when(mDataManager.getCityForecastDataById(anyString(), anyInt(), anyString())).thenReturn(Observable.just(new CityForecastData()));
         when(mMapper.mapForecast(any(CityForecastData.class), any(City.class))).thenReturn(MANY_FORECASTS);
         when(mDataManager.saveCity(any(City.class))).thenReturn(Completable.error(new Throwable()));
 
-        mPresenter.refreshCityFromNetwork(API_KEY, CITY_ID);
+        mPresenter.refreshCityFromNetwork(API_KEY, CITY_ID, LANGUAGE);
 
         verify(mMainActivityView).showNetworkErrorInfo();
     }
