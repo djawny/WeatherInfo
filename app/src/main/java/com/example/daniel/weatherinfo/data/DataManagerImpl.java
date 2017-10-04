@@ -96,7 +96,7 @@ public class DataManagerImpl implements DataManager {
                 .map(new Function<CityWeatherData, City>() {
                     @Override
                     public City apply(CityWeatherData cityWeatherData) throws Exception {
-                        return mMapper.mapCity(cityWeatherData);
+                        return mMapper.mapToCity(cityWeatherData);
                     }
                 });
     }
@@ -108,7 +108,7 @@ public class DataManagerImpl implements DataManager {
                 .map(new Function<CityWeatherData, City>() {
                     @Override
                     public City apply(CityWeatherData cityWeatherData) throws Exception {
-                        return mMapper.mapCity(cityWeatherData);
+                        return mMapper.mapToCity(cityWeatherData);
                     }
                 });
     }
@@ -120,7 +120,7 @@ public class DataManagerImpl implements DataManager {
                 .map(new Function<CityForecastData, List<Forecast>>() {
                     @Override
                     public List<Forecast> apply(CityForecastData cityForecastData) throws Exception {
-                        return mMapper.mapForecasts(cityForecastData);
+                        return mMapper.mapToForecasts(cityForecastData);
                     }
                 });
     }

@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Mapper {
 
-    public City mapCity(CityWeatherData cityWeatherData) {
+    public City mapToCity(CityWeatherData cityWeatherData) {
         City city = new City();
         if (cityWeatherData != null) {
             city.setId(cityWeatherData.getId());
@@ -39,7 +39,7 @@ public class Mapper {
         return city;
     }
 
-    public List<Forecast> mapForecasts(CityForecastData cityForecastData) {
+    public List<Forecast> mapToForecasts(CityForecastData cityForecastData) {
         List<Forecast> forecasts = new ArrayList<>();
         if (cityForecastData != null) {
             List<CityForecast> cityForecasts = cityForecastData.getList();
