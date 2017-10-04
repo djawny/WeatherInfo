@@ -20,10 +20,13 @@ import org.mockito.junit.MockitoRule;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.android.plugins.RxAndroidPlugins;
+import io.reactivex.functions.Function;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 
@@ -53,16 +56,23 @@ public class CityListActivityPresenterTest {
     @Mock
     CityListActivityView mCityListActivityView;
 
-    @Mock
-    Mapper mMapper;
-
     private CityListActivityPresenter mPresenter;
 
     @Before
     public void setUp() throws Exception {
-        RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler(schedulerCallable -> Schedulers.trampoline());
-        mPresenter = new CityListActivityPresenter(mDataManager, new SchedulerProviderImpl(), mMapper);
+        RxJavaPlugins.setIoSchedulerHandler(new Function<Scheduler, Scheduler>() {
+            @Override
+            public Scheduler apply(Scheduler scheduler) throws Exception {
+                return Schedulers.trampoline();
+            }
+        });
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler(new Function<Callable<Scheduler>, Scheduler>() {
+            @Override
+            public Scheduler apply(Callable<Scheduler> schedulerCallable) throws Exception {
+                return Schedulers.trampoline();
+            }
+        });
+        mPresenter = new CityListActivityPresenter(mDataManager, new SchedulerProviderImpl());
         mPresenter.setView(mCityListActivityView);
     }
 
@@ -73,7 +83,7 @@ public class CityListActivityPresenterTest {
 
     @Test
     public void testLoadCitiesFromDatabaseWhenNoEmptyList() {
-        when(mDataManager.getCities()).thenReturn(Observable.just(MANY_CITIES));
+        when(mDataManager.getCitiesFromDatabase()).thenReturn(Observable.just(MANY_CITIES));
 
         mPresenter.loadCitiesFromDatabase();
 
@@ -82,7 +92,7 @@ public class CityListActivityPresenterTest {
 
     @Test
     public void testLoadCitiesFromDatabaseWhenEmptyList() {
-        when(mDataManager.getCities()).thenReturn(Observable.just(Collections.<City>emptyList()));
+        when(mDataManager.getCitiesFromDatabase()).thenReturn(Observable.just(Collections.<City>emptyList()));
 
         mPresenter.loadCitiesFromDatabase();
 
@@ -91,7 +101,7 @@ public class CityListActivityPresenterTest {
 
     @Test
     public void testLoadCitiesFromDatabaseWhenException() {
-        when(mDataManager.getCities()).thenReturn(Observable.<List<City>>error(new Throwable()));
+        when(mDataManager.getCitiesFromDatabase()).thenReturn(Observable.<List<City>>error(new Throwable()));
 
         mPresenter.loadCitiesFromDatabase();
 
@@ -100,7 +110,7 @@ public class CityListActivityPresenterTest {
 
     @Test
     public void testDeleteCityFromDatabaseWhenNoException() {
-        when(mDataManager.removeCity(anyInt())).thenReturn(Completable.complete());
+        when(mDataManager.removeCityFromDatabase(anyInt())).thenReturn(Completable.complete());
 
         mPresenter.deleteCityFromDatabase(CITY_ID);
 
@@ -109,7 +119,7 @@ public class CityListActivityPresenterTest {
 
     @Test
     public void testDeleteCityFromDatabaseWhenException() {
-        when(mDataManager.removeCity(anyInt())).thenReturn(Completable.error(new Throwable()));
+        when(mDataManager.removeCityFromDatabase(anyInt())).thenReturn(Completable.error(new Throwable()));
 
         mPresenter.deleteCityFromDatabase(CITY_ID);
 
@@ -118,11 +128,9 @@ public class CityListActivityPresenterTest {
 
     @Test
     public void testAddCityFromNetworkWhenNoException() {
-        when(mDataManager.getCityWeatherDataByCoordinates(anyString(), anyDouble(), anyDouble(), anyString())).thenReturn(Observable.just(new CityWeatherData()));
-        when(mMapper.mapCity(any(CityWeatherData.class))).thenReturn(new City());
-        when(mDataManager.getCityForecastDataById(anyString(), anyInt(), anyString())).thenReturn(Observable.just(new CityForecastData()));
-        when(mMapper.mapForecast(any(CityForecastData.class), any(City.class))).thenReturn(MANY_FORECASTS);
-        when(mDataManager.saveCity(any(City.class))).thenReturn(Completable.complete());
+        when(mDataManager.getCityFromNetwork(anyString(), anyDouble(), anyDouble(), anyString())).thenReturn(Observable.just(new City()));
+        when(mDataManager.getForecastsFromNetwork(anyString(), anyInt(), anyString())).thenReturn(Observable.just(MANY_FORECASTS));
+        when(mDataManager.saveCityToDatabase(any(City.class))).thenReturn(Completable.complete());
 
         mPresenter.addCityFromNetwork(API_KEY, LATITUDE, LONGITUDE, LANGUAGE);
 
@@ -132,11 +140,9 @@ public class CityListActivityPresenterTest {
 
     @Test
     public void testAddCityFromNetworkWhenException() {
-        when(mDataManager.getCityWeatherDataByCoordinates(anyString(), anyDouble(), anyDouble(), anyString())).thenReturn(Observable.just(new CityWeatherData()));
-        when(mMapper.mapCity(any(CityWeatherData.class))).thenReturn(new City());
-        when(mDataManager.getCityForecastDataById(anyString(), anyInt(), anyString())).thenReturn(Observable.just(new CityForecastData()));
-        when(mMapper.mapForecast(any(CityForecastData.class), any(City.class))).thenReturn(MANY_FORECASTS);
-        when(mDataManager.saveCity(any(City.class))).thenReturn(Completable.error(new Throwable()));
+        when(mDataManager.getCityFromNetwork(anyString(), anyDouble(), anyDouble(), anyString())).thenReturn(Observable.just(new City()));
+        when(mDataManager.getForecastsFromNetwork(anyString(), anyInt(), anyString())).thenReturn(Observable.just(MANY_FORECASTS));
+        when(mDataManager.saveCityToDatabase(any(City.class))).thenReturn(Completable.error(new Throwable()));
 
         mPresenter.addCityFromNetwork(API_KEY, LATITUDE, LONGITUDE, LANGUAGE);
 
@@ -146,10 +152,8 @@ public class CityListActivityPresenterTest {
 
     @Test
     public void testLoadCityFromNetworkWhenNoException() {
-        when(mDataManager.getCityWeatherDataByCoordinates(anyString(), anyDouble(), anyDouble(), anyString())).thenReturn(Observable.just(new CityWeatherData()));
-        when(mMapper.mapCity(any(CityWeatherData.class))).thenReturn(new City());
-        when(mDataManager.getCityForecastDataById(anyString(), anyInt(), anyString())).thenReturn(Observable.just(new CityForecastData()));
-        when(mMapper.mapForecast(any(CityForecastData.class), any(City.class))).thenReturn(MANY_FORECASTS);
+        when(mDataManager.getCityFromNetwork(anyString(), anyDouble(), anyDouble(), anyString())).thenReturn(Observable.just(new City()));
+        when(mDataManager.getForecastsFromNetwork(anyString(), anyInt(), anyString())).thenReturn(Observable.just(MANY_FORECASTS));
 
         mPresenter.loadCityFromNetwork(API_KEY, LATITUDE, LONGITUDE, LANGUAGE);
 
@@ -159,7 +163,7 @@ public class CityListActivityPresenterTest {
 
     @Test
     public void testLoadCityFromNetworkWhenException() {
-        when(mDataManager.getCityWeatherDataByCoordinates(anyString(), anyDouble(), anyDouble(), anyString())).thenReturn(Observable.error(new Throwable()));
+        when(mDataManager.getCityFromNetwork(anyString(), anyDouble(), anyDouble(), anyString())).thenReturn(Observable.<City>error(new Throwable()));
 
         mPresenter.loadCityFromNetwork(API_KEY, LATITUDE, LONGITUDE, LANGUAGE);
 
@@ -169,7 +173,7 @@ public class CityListActivityPresenterTest {
 
     @Test
     public void testSaveCityToDatabaseCityWhenNoException() {
-        when(mDataManager.saveCity(any(City.class))).thenReturn(Completable.complete());
+        when(mDataManager.saveCityToDatabase(any(City.class))).thenReturn(Completable.complete());
 
         mPresenter.saveCityToDatabase(new City());
 
@@ -179,7 +183,7 @@ public class CityListActivityPresenterTest {
 
     @Test
     public void testSaveCityToDatabaseCityWhenException() {
-        when(mDataManager.saveCity(any(City.class))).thenReturn(Completable.error(new Throwable()));
+        when(mDataManager.saveCityToDatabase(any(City.class))).thenReturn(Completable.error(new Throwable()));
 
         mPresenter.saveCityToDatabase(new City());
 

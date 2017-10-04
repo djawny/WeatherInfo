@@ -1,7 +1,6 @@
 package com.example.daniel.weatherinfo.ui.base;
 
 import com.example.daniel.weatherinfo.data.DataManager;
-import com.example.daniel.weatherinfo.data.mapper.Mapper;
 import com.example.daniel.weatherinfo.util.SchedulerProvider;
 
 import io.reactivex.Scheduler;
@@ -12,34 +11,27 @@ public abstract class BasePresenter<V extends BaseView> {
 
     private V mView;
     private DataManager mDataManager;
-    private Mapper mMapper;
     private SchedulerProvider mSchedulerProvider;
-
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
-    public BasePresenter(DataManager dataManager, SchedulerProvider schedulerProvider, Mapper mapper) {
+    public BasePresenter(DataManager dataManager, SchedulerProvider schedulerProvider) {
         mDataManager = dataManager;
         mSchedulerProvider = schedulerProvider;
-        mMapper = mapper;
     }
 
     public V getView() {
         return mView;
     }
 
-    public DataManager getDataManager() {
+    protected DataManager getDataManager() {
         return mDataManager;
     }
 
-    public Mapper getMapper() {
-        return mMapper;
-    }
-
-    public Scheduler getSubscribeScheduler() {
+    protected Scheduler getSubscribeScheduler() {
         return mSchedulerProvider.io();
     }
 
-    public Scheduler getObserveScheduler() {
+    protected Scheduler getObserveScheduler() {
         return mSchedulerProvider.ui();
     }
 
@@ -50,7 +42,7 @@ public abstract class BasePresenter<V extends BaseView> {
         mView = view;
     }
 
-    public void addDisposable(Disposable disposable) {
+    protected void addDisposable(Disposable disposable) {
         mCompositeDisposable.add(disposable);
     }
 

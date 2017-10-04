@@ -272,6 +272,28 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
         }
     }
 
+    private void getDeviceLocation() {
+        try {
+            if (mLocationPermissionGranted) {
+                mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) throws SecurityException {
+                        if (location != null) {
+                            mPresenter.loadCityFromNetwork(getString(R.string.open_weather_map_api_key), location.getLatitude(), location.getLongitude(), LanguageProvider.apply());
+                        } else {
+                            showSnackBar(getString(R.string.message_error_finding_location), Snackbar.LENGTH_LONG);
+                            mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
+                        }
+                    }
+                });
+            } else {
+                getLocationPermission();
+            }
+        } catch (SecurityException e) {
+            Log.e("Exception: %s", e.getMessage());
+        }
+    }
+
     private void getLocationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -294,28 +316,6 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
                     getDeviceLocation();
                 }
             }
-        }
-    }
-
-    private void getDeviceLocation() {
-        try {
-            if (mLocationPermissionGranted) {
-                mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-                            mPresenter.loadCityFromNetwork(getString(R.string.open_weather_map_api_key), location.getLatitude(), location.getLongitude(), LanguageProvider.apply());
-                        } else {
-                            showSnackBar(getString(R.string.message_error_finding_location), Snackbar.LENGTH_LONG);
-                        }
-                    }
-                });
-            } else {
-                mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
-                getLocationPermission();
-            }
-        } catch (SecurityException e) {
-            Log.e("Exception: %s", e.getMessage());
         }
     }
 

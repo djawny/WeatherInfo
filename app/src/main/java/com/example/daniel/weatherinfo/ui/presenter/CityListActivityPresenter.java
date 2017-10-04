@@ -3,7 +3,6 @@ package com.example.daniel.weatherinfo.ui.presenter;
 import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.database.model.Forecast;
-import com.example.daniel.weatherinfo.data.mapper.Mapper;
 import com.example.daniel.weatherinfo.ui.base.BasePresenter;
 import com.example.daniel.weatherinfo.ui.view.CityListActivityView;
 import com.example.daniel.weatherinfo.util.SchedulerProvider;
@@ -13,19 +12,20 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableObserver;
 
 public class CityListActivityPresenter extends BasePresenter<CityListActivityView> {
 
-    public CityListActivityPresenter(DataManager dataManager, SchedulerProvider schedulerProvider, Mapper mapper) {
-        super(dataManager, schedulerProvider, mapper);
+    public CityListActivityPresenter(DataManager dataManager, SchedulerProvider schedulerProvider) {
+        super(dataManager, schedulerProvider);
     }
 
     public void loadCitiesFromDatabase() {
         addDisposable(getDataManager()
-                .getCities()
+                .getCitiesFromDatabase()
                 .subscribeOn(getSubscribeScheduler())
                 .observeOn(getObserveScheduler())
                 .subscribeWith(new DisposableObserver<List<City>>() {
@@ -52,7 +52,7 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
 
     public void deleteCityFromDatabase(int cityId) {
         addDisposable(getDataManager()
-                .removeCity(cityId)
+                .removeCityFromDatabase(cityId)
                 .subscribeOn(getSubscribeScheduler())
                 .observeOn(getObserveScheduler())
                 .subscribeWith(new DisposableCompletableObserver() {
@@ -71,22 +71,23 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
     public void addCityFromNetwork(final String apiKey, double lat, double lon, final String language) {
         getView().showAddLocationProgressBar();
         addDisposable(getDataManager()
-                .getCityWeatherDataByCoordinates(apiKey, lat, lon, language)
+                .getCityFromNetwork(apiKey, lat, lon, language)
                 .subscribeOn(getSubscribeScheduler())
-                .map(cityWeatherData -> getMapper().mapCity(cityWeatherData))
                 .flatMap(new Function<City, ObservableSource<City>>() {
                     @Override
                     public ObservableSource<City> apply(City city) throws Exception {
-                        return Observable.zip(getDataManager().getCityForecastDataById(apiKey, city.getId(), language), Observable.just(city), (cityForecastData, city1) -> {
-                            List<Forecast> forecasts = getMapper().mapForecast(cityForecastData, city1);
-                            city1.setForecastCollection(forecasts);
-                            return city1;
+                        return Observable.zip(getDataManager().getForecastsFromNetwork(apiKey, city.getId(), language), Observable.just(city), new BiFunction<List<Forecast>, City, City>() {
+                            @Override
+                            public City apply(List<Forecast> forecasts, City city) throws Exception {
+                                city.setForecastCollection(forecasts);
+                                return city;
+                            }
                         });
                     }
                 }).flatMapCompletable(new Function<City, Completable>() {
                     @Override
                     public Completable apply(City city) throws Exception {
-                        return getDataManager().saveCity(city);
+                        return getDataManager().saveCityToDatabase(city);
                     }
                 })
                 .observeOn(getObserveScheduler())
@@ -108,16 +109,17 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
     public void loadCityFromNetwork(final String apiKey, double lat, double lon, final String language) {
         getView().showActualLocationProgressBar();
         addDisposable(getDataManager()
-                .getCityWeatherDataByCoordinates(apiKey, lat, lon, language)
+                .getCityFromNetwork(apiKey, lat, lon, language)
                 .subscribeOn(getSubscribeScheduler())
-                .map(cityWeatherData -> getMapper().mapCity(cityWeatherData))
                 .flatMap(new Function<City, ObservableSource<City>>() {
                     @Override
                     public ObservableSource<City> apply(City city) throws Exception {
-                        return Observable.zip(getDataManager().getCityForecastDataById(apiKey, city.getId(), language), Observable.just(city), (cityForecastData, city1) -> {
-                            List<Forecast> forecasts = getMapper().mapForecast(cityForecastData, city1);
-                            city1.setForecastCollection(forecasts);
-                            return city1;
+                        return Observable.zip(getDataManager().getForecastsFromNetwork(apiKey, city.getId(), language), Observable.just(city), new BiFunction<List<Forecast>, City, City>() {
+                            @Override
+                            public City apply(List<Forecast> forecasts, City city) throws Exception {
+                                city.setForecastCollection(forecasts);
+                                return city;
+                            }
                         });
                     }
                 })
@@ -145,7 +147,7 @@ public class CityListActivityPresenter extends BasePresenter<CityListActivityVie
 
     public void saveCityToDatabase(City city) {
         getView().showAddLocationProgressBar();
-        addDisposable(getDataManager().saveCity(city)
+        addDisposable(getDataManager().saveCityToDatabase(city)
                 .subscribeOn(getSubscribeScheduler())
                 .observeOn(getObserveScheduler())
                 .subscribeWith(new DisposableCompletableObserver() {

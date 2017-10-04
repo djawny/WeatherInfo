@@ -1,8 +1,7 @@
 package com.example.daniel.weatherinfo.data;
 
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.data.network.model.CityForecastData;
-import com.example.daniel.weatherinfo.data.network.model.CityWeatherData;
+import com.example.daniel.weatherinfo.data.database.model.Forecast;
 
 import java.util.List;
 
@@ -11,23 +10,23 @@ import io.reactivex.Observable;
 
 public interface DataManager {
 
-    Observable<List<City>> getCities();
+    Observable<List<City>> getCitiesFromDatabase();
 
-    Observable<City> getCity(int cityId);
+    Observable<City> getCityFromDatabase(int cityId);
 
-    Observable<City> getCity(String cityName);
+    Observable<City> getCityFromDatabase(String cityName);
 
-    Completable saveCity(City city);
+    Completable saveCityToDatabase(City city);
 
-    Completable removeCity(int cityId);
+    Completable removeCityFromDatabase(int cityId);
 
-    Observable<CityWeatherData> getCityWeatherDataById(String apiKey, int cityId, String language);
+    Observable<City> getCityFromNetwork(String apiKey, int cityId, String language);
 
-    Observable<CityWeatherData> getCityWeatherDataByCoordinates(String apiKey, double lat, double lon, String language);
+    Observable<City> getCityFromNetwork(String apiKey, double lat, double lon, String language);
 
-    Observable<CityForecastData> getCityForecastDataById(String apiKey, int cityId, String language);
+    Observable<List<Forecast>> getForecastsFromNetwork(String apiKey, int cityId, String language);
 
-    Completable putIntSharedPreferences(String key, int data);
+    Observable<Integer> getCurrentCityId();
 
-    Observable<Integer> getIntSharedPreferences(String key);
+    Completable saveCurrentCityId(int data);
 }

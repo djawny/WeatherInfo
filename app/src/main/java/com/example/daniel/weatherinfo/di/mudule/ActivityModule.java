@@ -40,20 +40,15 @@ public class ActivityModule {
         return new SchedulerProviderImpl();
     }
 
+    @PerActivity
     @Provides
-    Mapper provideMapper() {
-        return new Mapper();
+    MainActivityPresenter provideMainActivityPresenter(DataManager dataManager, SchedulerProvider schedulerProvider) {
+        return new MainActivityPresenter(dataManager, schedulerProvider);
     }
 
     @PerActivity
     @Provides
-    MainActivityPresenter provideMainActivityPresenter(DataManager dataManager, SchedulerProvider schedulerProvider, Mapper mapper) {
-        return new MainActivityPresenter(dataManager, schedulerProvider, mapper);
-    }
-
-    @PerActivity
-    @Provides
-    CityListActivityPresenter provideCityListActivityPresenter(DataManager dataManager, SchedulerProvider schedulerProvider, Mapper mapper) {
-        return new CityListActivityPresenter(dataManager, schedulerProvider, mapper);
+    CityListActivityPresenter provideCityListActivityPresenter(DataManager dataManager, SchedulerProvider schedulerProvider) {
+        return new CityListActivityPresenter(dataManager, schedulerProvider);
     }
 }

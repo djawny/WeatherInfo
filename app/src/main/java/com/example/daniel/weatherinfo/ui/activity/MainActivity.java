@@ -91,7 +91,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         setSwipeRefreshListener();
         setViewPagerListener();
         setGyroscopeForPanoramaImageView();
-        mPresenter.initializeCurrentCityId();
+        mPresenter.loadCurrentCityId();
         mPresenter.loadCitiesFromDatabase(mCurrentCityId);
     }
 

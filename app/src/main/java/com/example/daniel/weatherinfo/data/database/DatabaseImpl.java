@@ -95,8 +95,9 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
             setWeatherIdIfCityExists(city, weather);
             mWeatherDao.createOrUpdate(weather);
             mCityDao.createOrUpdate(city);
-            List<Forecast> forecasts = city.getForecasts();
+            List<Forecast> forecasts = city.getForecasts();//ToDo
             for (Forecast forecast : forecasts) {
+                forecast.setCity(city);
                 mForecastDao.createOrUpdate(forecast);
             }
             getWritableDatabase().setTransactionSuccessful();

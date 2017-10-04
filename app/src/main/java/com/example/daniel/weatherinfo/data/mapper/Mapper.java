@@ -39,25 +39,12 @@ public class Mapper {
         return city;
     }
 
-//    public List<City> mapCities(CitiesWeatherData citiesWeatherData) {
-//        List<City> cities = new ArrayList<>();
-//        if (citiesWeatherData != null) {
-//            List<CityWeatherData> dataList = citiesWeatherData.getList();
-//            for (CityWeatherData cityWeatherData : dataList) {
-//                City city = mapCity(cityWeatherData);
-//                cities.add(city);
-//            }
-//        }
-//        return cities;
-//    }
-
-    public List<Forecast> mapForecast(CityForecastData cityForecastData, City city) {
+    public List<Forecast> mapForecast(CityForecastData cityForecastData) {
         List<Forecast> forecasts = new ArrayList<>();
         if (cityForecastData != null) {
             List<CityForecast> cityForecasts = cityForecastData.getList();
             for (CityForecast cityForecast : cityForecasts) {
                 Forecast forecast = new Forecast();
-                forecast.setCity(city);
                 forecast.setDate(cityForecast.getDate());
                 forecast.setDateTxt(cityForecast.getDateTxt());
                 forecast.setTemp(cityForecast.getMain().getTemp());
