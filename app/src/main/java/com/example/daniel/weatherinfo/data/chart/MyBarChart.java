@@ -27,7 +27,7 @@ public class MyBarChart extends BaseChart {
 
         float todayMaxTemp = (float) forecasts.get(0).getCity().getWeather().getTempMax();
         getEntries().add(new BarEntry(barEntryX, todayMaxTemp));
-        getXAxisLabels().add("Today");
+        getXAxisLabels().add(TimestampToDateConverter.apply(forecasts.get(0).getDate(), DATE_DAY_MONTH));
         setTempExtremeValues(todayMaxTemp);
 
         int nextDayStartIndex = getNextDayStartIndex(forecasts);
@@ -57,14 +57,6 @@ public class MyBarChart extends BaseChart {
             }
         }
         return startIndex;
-    }
-
-    private void setTempExtremeValues(float temp) {
-        if (temp > getMaxTemp()) {
-            setMaxTemp(temp);
-        } else if (temp < getMinTemp()) {
-            setMinTemp(temp);
-        }
     }
 
     public List<BarEntry> getEntries() {

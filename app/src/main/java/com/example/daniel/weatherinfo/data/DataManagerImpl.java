@@ -13,7 +13,6 @@ import com.example.daniel.weatherinfo.data.network.model.CityWeatherData;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Completable;
@@ -31,12 +30,11 @@ public class DataManagerImpl implements DataManager {
     private final SharedPreferences mSharedPreferences;
     private final Mapper mMapper;
 
-    @Inject
-    public DataManagerImpl(Database database, OpenWeatherMapService openWeatherMapService, SharedPreferences sharedPreferences, Mapper mapper) {
+    public DataManagerImpl(Database database, OpenWeatherMapService openWeatherMapService, SharedPreferences sharedPreferences) {
         mDatabase = database;
         mOpenWeatherMapService = openWeatherMapService;
         mSharedPreferences = sharedPreferences;
-        mMapper = mapper;
+        mMapper = new Mapper();
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.example.daniel.weatherinfo.data.database.model.Forecast;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseChart{
+public abstract class BaseChart {
     private float mMaxTemp;
     private float mMinTemp;
     private List<String> mXAxisLabels;
@@ -18,20 +18,20 @@ public abstract class BaseChart{
 
     public abstract BaseChart setData(List<Forecast> forecasts);
 
+    protected void setTempExtremeValues(float temp) {
+        if (temp > mMaxTemp) {
+            mMaxTemp = temp;
+        } else if (temp < mMinTemp) {
+            mMinTemp = temp;
+        }
+    }
+
     public float getMaxTemp() {
         return mMaxTemp;
     }
 
-    public void setMaxTemp(float yAxisMax) {
-        mMaxTemp = yAxisMax;
-    }
-
     public float getMinTemp() {
         return mMinTemp;
-    }
-
-    public void setMinTemp(float yAxisMin) {
-        mMinTemp = yAxisMin;
     }
 
     public List<String> getXAxisLabels() {

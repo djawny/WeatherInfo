@@ -7,7 +7,6 @@ import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.DataManagerImpl;
 import com.example.daniel.weatherinfo.data.database.Database;
 import com.example.daniel.weatherinfo.data.database.DatabaseImpl;
-import com.example.daniel.weatherinfo.data.mapper.Mapper;
 import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.di.ApplicationContext;
 import com.example.daniel.weatherinfo.util.AppConstants;
@@ -45,8 +44,8 @@ public class DataManagerModule {
         return context.getSharedPreferences("CityWeatherPref", Context.MODE_PRIVATE);
     }
 
-    @Singleton
     @Provides
+    @Singleton
     OkHttpClient provideOkHttpClient() {
         return new OkHttpClient.Builder()
                 .connectTimeout(AppConstants.OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
@@ -54,20 +53,20 @@ public class DataManagerModule {
                 .build();
     }
 
-    @Singleton
     @Provides
+    @Singleton
     RxJava2CallAdapterFactory provideRxJavaCallAdapterFactory() {
         return RxJava2CallAdapterFactory.create();
     }
 
-    @Singleton
     @Provides
+    @Singleton
     GsonConverterFactory provideGsonConverterFactory() {
         return GsonConverterFactory.create();
     }
 
-    @Singleton
     @Provides
+    @Singleton
     Retrofit provideRetrofit(OkHttpClient client, GsonConverterFactory converterFactory, RxJava2CallAdapterFactory adapterFactory) {
         return new Retrofit.Builder()
                 .baseUrl(mBaseUrl)
@@ -77,21 +76,15 @@ public class DataManagerModule {
                 .build();
     }
 
-    @Singleton
     @Provides
+    @Singleton
     OpenWeatherMapService provideOpenWeatherMapService(Retrofit retrofit) {
         return retrofit.create(OpenWeatherMapService.class);
     }
 
-    @Singleton
     @Provides
-    Mapper provideMapper() {
-        return new Mapper();
-    }
-
     @Singleton
-    @Provides
-    DataManager provideDataManager(DataManagerImpl dataManager) {
-        return dataManager;
+    DataManager provideDataManager(Database database, OpenWeatherMapService openWeatherMapService, SharedPreferences sharedPreferences) {
+        return new DataManagerImpl(database, openWeatherMapService, sharedPreferences);
     }
 }

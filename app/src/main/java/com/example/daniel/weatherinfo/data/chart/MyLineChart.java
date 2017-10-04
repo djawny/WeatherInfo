@@ -30,14 +30,6 @@ public class MyLineChart extends BaseChart {
         return this;
     }
 
-    private void setTempExtremeValues(float temp) {
-        if (temp > getMaxTemp()) {
-            setMaxTemp(temp);
-        } else if (temp < getMinTemp()) {
-            setMinTemp(temp);
-        }
-    }
-
     public List<Entry> getEntries() {
         return mEntries;
     }

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.example.daniel.weatherinfo.data.DataManager;
-import com.example.daniel.weatherinfo.data.mapper.Mapper;
 import com.example.daniel.weatherinfo.di.ActivityContext;
 import com.example.daniel.weatherinfo.di.PerActivity;
 import com.example.daniel.weatherinfo.ui.presenter.CityListActivityPresenter;
@@ -40,14 +39,14 @@ public class ActivityModule {
         return new SchedulerProviderImpl();
     }
 
-    @PerActivity
     @Provides
+    @PerActivity
     MainActivityPresenter provideMainActivityPresenter(DataManager dataManager, SchedulerProvider schedulerProvider) {
         return new MainActivityPresenter(dataManager, schedulerProvider);
     }
 
-    @PerActivity
     @Provides
+    @PerActivity
     CityListActivityPresenter provideCityListActivityPresenter(DataManager dataManager, SchedulerProvider schedulerProvider) {
         return new CityListActivityPresenter(dataManager, schedulerProvider);
     }
