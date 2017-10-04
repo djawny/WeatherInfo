@@ -120,7 +120,7 @@ public class DataManagerImpl implements DataManager {
                 .map(new Function<CityForecastData, List<Forecast>>() {
                     @Override
                     public List<Forecast> apply(CityForecastData cityForecastData) throws Exception {
-                        return mMapper.mapForecast(cityForecastData);
+                        return mMapper.mapForecasts(cityForecastData);
                     }
                 });
     }

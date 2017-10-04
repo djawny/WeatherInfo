@@ -39,7 +39,7 @@ public class Mapper {
         return city;
     }
 
-    public List<Forecast> mapForecast(CityForecastData cityForecastData) {
+    public List<Forecast> mapForecasts(CityForecastData cityForecastData) {
         List<Forecast> forecasts = new ArrayList<>();
         if (cityForecastData != null) {
             List<CityForecast> cityForecasts = cityForecastData.getList();
