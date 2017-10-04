@@ -7,13 +7,12 @@ import com.example.daniel.weatherinfo.data.mapper.Mapper;
 import com.example.daniel.weatherinfo.data.network.model.CityForecastData;
 import com.example.daniel.weatherinfo.data.network.model.CityWeatherData;
 import com.example.daniel.weatherinfo.ui.view.CityListActivityView;
-import com.example.daniel.weatherinfo.util.SchedulerProvider;
+import com.example.daniel.weatherinfo.util.SchedulerProviderImpl;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -24,6 +23,8 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.android.plugins.RxAndroidPlugins;
+import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -35,11 +36,11 @@ import static org.mockito.Mockito.when;
 
 public class CityListActivityPresenterTest {
 
-    public static final int CITY_ID = 123456;
-    public static final String API_KEY = "123bla";
-    public static final double LATITUDE = 51.50;
-    public static final double LONGITUDE = 13.01;
-    public static final String LANGUAGE = "pl";
+    private static final int CITY_ID = 123456;
+    private static final String API_KEY = "123bla";
+    private static final double LATITUDE = 51.50;
+    private static final double LONGITUDE = 13.01;
+    private static final String LANGUAGE = "pl";
     private final List<City> MANY_CITIES = Arrays.asList(new City(), new City());
     private final List<Forecast> MANY_FORECASTS = Arrays.asList(new Forecast(), new Forecast(), new Forecast());
 
@@ -50,21 +51,18 @@ public class CityListActivityPresenterTest {
     DataManager mDataManager;
 
     @Mock
-    SchedulerProvider mSchedulerProvider;
-
-    @Mock
     CityListActivityView mCityListActivityView;
 
     @Mock
     Mapper mMapper;
 
-    @InjectMocks
     private CityListActivityPresenter mPresenter;
 
     @Before
     public void setUp() throws Exception {
-        mPresenter.setSubscribeScheduler(Schedulers.trampoline());
-        mPresenter.setObserveScheduler(Schedulers.trampoline());
+        RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler(schedulerCallable -> Schedulers.trampoline());
+        mPresenter = new CityListActivityPresenter(mDataManager, new SchedulerProviderImpl(), mMapper);
         mPresenter.setView(mCityListActivityView);
     }
 
@@ -144,5 +142,48 @@ public class CityListActivityPresenterTest {
 
         verify(mCityListActivityView).hideAddLocationProgressBar();
         verify(mCityListActivityView).showNetworkErrorInfo();
+    }
+
+    @Test
+    public void testLoadCityFromNetworkWhenNoException() {
+        when(mDataManager.getCityWeatherDataByCoordinates(anyString(), anyDouble(), anyDouble(), anyString())).thenReturn(Observable.just(new CityWeatherData()));
+        when(mMapper.mapCity(any(CityWeatherData.class))).thenReturn(new City());
+        when(mDataManager.getCityForecastDataById(anyString(), anyInt(), anyString())).thenReturn(Observable.just(new CityForecastData()));
+        when(mMapper.mapForecast(any(CityForecastData.class), any(City.class))).thenReturn(MANY_FORECASTS);
+
+        mPresenter.loadCityFromNetwork(API_KEY, LATITUDE, LONGITUDE, LANGUAGE);
+
+        verify(mCityListActivityView).hideActualLocationProgressBar();
+        verify(mCityListActivityView).updateActualLocationText(any(City.class));
+    }
+
+    @Test
+    public void testLoadCityFromNetworkWhenException() {
+        when(mDataManager.getCityWeatherDataByCoordinates(anyString(), anyDouble(), anyDouble(), anyString())).thenReturn(Observable.error(new Throwable()));
+
+        mPresenter.loadCityFromNetwork(API_KEY, LATITUDE, LONGITUDE, LANGUAGE);
+
+        verify(mCityListActivityView).hideActualLocationProgressBar();
+        verify(mCityListActivityView).showNetworkErrorInfo();
+    }
+
+    @Test
+    public void testSaveCityToDatabaseCityWhenNoException() {
+        when(mDataManager.saveCity(any(City.class))).thenReturn(Completable.complete());
+
+        mPresenter.saveCityToDatabase(new City());
+
+        verify(mCityListActivityView).hideAddLocationProgressBar();
+        verify(mCityListActivityView).reloadData();
+    }
+
+    @Test
+    public void testSaveCityToDatabaseCityWhenException() {
+        when(mDataManager.saveCity(any(City.class))).thenReturn(Completable.error(new Throwable()));
+
+        mPresenter.saveCityToDatabase(new City());
+
+        verify(mCityListActivityView).hideAddLocationProgressBar();
+        verify(mCityListActivityView).showSaveErrorInfo();
     }
 }

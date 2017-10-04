@@ -7,13 +7,12 @@ import com.example.daniel.weatherinfo.data.mapper.Mapper;
 import com.example.daniel.weatherinfo.data.network.model.CityForecastData;
 import com.example.daniel.weatherinfo.data.network.model.CityWeatherData;
 import com.example.daniel.weatherinfo.ui.view.MainActivityView;
-import com.example.daniel.weatherinfo.util.SchedulerProvider;
+import com.example.daniel.weatherinfo.util.SchedulerProviderImpl;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -24,6 +23,8 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.android.plugins.RxAndroidPlugins;
+import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -34,12 +35,12 @@ import static org.mockito.Mockito.when;
 
 public class MainActivityPresenterTest {
 
-    public static final int CITY_ID = 123456;
-    public static final String CITY_NAME = "London";
-    public static final String API_KEY = "123bla";
-    public static final String LANGUAGE = "pl";
-    private final List<City> MANY_CITIES = Arrays.asList(new City(), new City());
-    private final List<Forecast> MANY_FORECASTS = Arrays.asList(new Forecast(), new Forecast());
+    private static final int CITY_ID = 123456;
+    private static final String CITY_NAME = "London";
+    private static final String API_KEY = "123bla";
+    private static final String LANGUAGE = "pl";
+    private static final List<City> MANY_CITIES = Arrays.asList(new City(), new City());
+    private static final List<Forecast> MANY_FORECASTS = Arrays.asList(new Forecast(), new Forecast());
 
     @Rule
     public MockitoRule mockitoJUnit = MockitoJUnit.rule();
@@ -48,21 +49,18 @@ public class MainActivityPresenterTest {
     DataManager mDataManager;
 
     @Mock
-    SchedulerProvider mSchedulerProvider;
-
-    @Mock
     MainActivityView mMainActivityView;
 
     @Mock
     Mapper mMapper;
 
-    @InjectMocks
     private MainActivityPresenter mPresenter;
 
     @Before
     public void setUp() throws Exception {
-        mPresenter.setSubscribeScheduler(Schedulers.trampoline());
-        mPresenter.setObserveScheduler(Schedulers.trampoline());
+        RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler(schedulerCallable -> Schedulers.trampoline());
+        mPresenter = new MainActivityPresenter(mDataManager, new SchedulerProviderImpl(), mMapper);
         mPresenter.setView(mMainActivityView);
     }
 
@@ -77,7 +75,6 @@ public class MainActivityPresenterTest {
 
         mPresenter.loadCitiesFromDatabase(CITY_ID);
 
-
         verify(mMainActivityView).setSpinnerList(ArgumentMatchers.<City>anyList());
         verify(mMainActivityView).displayCityData(any(City.class));
     }
@@ -91,7 +88,6 @@ public class MainActivityPresenterTest {
         when(mDataManager.getCities()).thenReturn(Observable.just(cities));
 
         mPresenter.loadCitiesFromDatabase(CITY_ID);
-
 
         verify(mMainActivityView).setSpinnerList(ArgumentMatchers.<City>anyList());
         verify(mMainActivityView).displayCityData(any(City.class));

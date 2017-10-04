@@ -1,6 +1,8 @@
 package com.example.daniel.weatherinfo.ui.base;
 
 import com.example.daniel.weatherinfo.data.DataManager;
+import com.example.daniel.weatherinfo.data.mapper.Mapper;
+import com.example.daniel.weatherinfo.util.SchedulerProvider;
 
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.CompositeDisposable;
@@ -10,43 +12,40 @@ public abstract class BasePresenter<V extends BaseView> {
 
     private V mView;
     private DataManager mDataManager;
-    private Scheduler mSubscribeScheduler;
-    private Scheduler mObserveScheduler;
+    private Mapper mMapper;
+    private SchedulerProvider mSchedulerProvider;
+
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
-    public BasePresenter(DataManager dataManager, Scheduler subscriber, Scheduler observer) {
+    public BasePresenter(DataManager dataManager, SchedulerProvider schedulerProvider, Mapper mapper) {
         mDataManager = dataManager;
-        mSubscribeScheduler = subscriber;
-        mObserveScheduler = observer;
+        mSchedulerProvider = schedulerProvider;
+        mMapper = mapper;
     }
 
     public V getView() {
         return mView;
     }
 
-    public void setSubscribeScheduler(Scheduler subscribeScheduler) {
-        mSubscribeScheduler = subscribeScheduler;
-    }
-
-    public void setObserveScheduler(Scheduler observeScheduler) {
-        mObserveScheduler = observeScheduler;
-    }
-
     public DataManager getDataManager() {
         return mDataManager;
     }
 
+    public Mapper getMapper() {
+        return mMapper;
+    }
+
     public Scheduler getSubscribeScheduler() {
-        return mSubscribeScheduler;
+        return mSchedulerProvider.io();
     }
 
     public Scheduler getObserveScheduler() {
-        return mObserveScheduler;
+        return mSchedulerProvider.ui();
     }
 
     public void setView(V view) {
         if (view == null) {
-            throw new IllegalArgumentException("Null view in PageFragmentPresenter");
+            throw new IllegalArgumentException("Null view in Presenter");
         }
         mView = view;
     }

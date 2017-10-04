@@ -266,7 +266,7 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
         if (mActualCity == null) {
             getDeviceLocation();
         } else {
-            mPresenter.addCity(mActualCity);
+            mPresenter.saveCityToDatabase(mActualCity);
             mActualLocationText.setText(getString(R.string.text_find_actual_location));
             mActualCity = null;
         }
