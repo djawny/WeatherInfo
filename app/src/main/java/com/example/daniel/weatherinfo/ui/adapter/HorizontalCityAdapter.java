@@ -125,7 +125,7 @@ public class HorizontalCityAdapter extends BaseAdapter<City> {
             Picasso.with(context)
                     .load("http://openweathermap.org/img/w/" + city.getWeather().getIcon() + ".png")
                     .into(mIcon);
-            mTemperature.setText(String.format("%s °C", String.valueOf(city.getWeather().getTemp())));
+            mTemperature.setText(String.format("%.1f °C", city.getWeather().getTemp()));
             mName.setText(city.getName());
             mBackground.setImageResource(BackgroundProvider.apply(city.getWeather().getIcon()));
         }

@@ -57,6 +57,9 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
+    @BindView(R.id.recycler_view_header)
+    TextView mRecyclerViewHeader;
+
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
@@ -151,6 +154,7 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
     @Override
     public void displayCities(List<City> cities) {
         mRecyclerView.setVisibility(View.VISIBLE);
+        mRecyclerViewHeader.setVisibility(View.VISIBLE);
         if (mHorizontalCityAdapter == null) {
             initializeRecycleView(cities);
         } else {
@@ -168,7 +172,9 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
 
     @Override
     public void showNoData() {
-        mRecyclerView.setVisibility(View.INVISIBLE);
+        mRecyclerViewHeader.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.GONE);
+        mReadyButton.setVisibility(View.GONE);
     }
 
     @Override

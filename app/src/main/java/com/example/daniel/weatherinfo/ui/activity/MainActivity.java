@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -25,6 +26,7 @@ import com.example.daniel.weatherinfo.ui.base.BaseActivity;
 import com.example.daniel.weatherinfo.ui.fragment.CurrentFragment;
 import com.example.daniel.weatherinfo.ui.fragment.ForecastFragment;
 import com.example.daniel.weatherinfo.ui.fragment.MapFragment;
+import com.example.daniel.weatherinfo.ui.fragment.SplashDialog;
 import com.example.daniel.weatherinfo.ui.presenter.MainActivityPresenter;
 import com.example.daniel.weatherinfo.ui.view.MainActivityView;
 import com.example.daniel.weatherinfo.util.BackgroundProvider;
@@ -48,8 +50,10 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         ViewPager.OnPageChangeListener, AdapterView.OnItemSelectedListener {
 
     private static final int CITY_LIST_REQUEST_CODE = 1;
+    public static final String DIALOG = "dialog";
 
     private int mCurrentCityId;
+    private boolean mFirstStartFlag = true;
 
     @BindView(R.id.bg_image_view)
     PanoramaImageView mBackground;
@@ -78,7 +82,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     private MainPagerAdapter mPagerAdapter;
     private ArrayAdapter<String> mSpinnerAdapter;
     private GyroscopeObserver mGyroscopeObserver;
-
+    private DialogFragment mSplashDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +95,11 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         setSwipeRefreshListener();
         setViewPagerListener();
         setGyroscopeForPanoramaImageView();
+        if (mFirstStartFlag) {
+            mFirstStartFlag = false;
+            mSplashDialog = SplashDialog.newInstance();
+            mSplashDialog.show(getSupportFragmentManager(), DIALOG);
+        }
         mPresenter.loadCurrentCityId();
         mPresenter.loadCitiesFromDatabase(mCurrentCityId);
     }
@@ -234,6 +243,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         mBackground.setImageResource(BackgroundProvider.apply(city.getWeather().getIcon()));
         mPresenter.saveCurrentCity(mCurrentCityId);
         hideSwipeRefreshLayoutProgressSpinner();
+        dismissSplashDialog();
     }
 
     private void initializeViewPager(City city) {
@@ -252,6 +262,13 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         mSwipeRefreshLayout.setVisibility(View.GONE);
         mStatusInfo.setVisibility(View.VISIBLE);
         mBackground.setImageResource(R.drawable.default_bg);
+        dismissSplashDialog();
+    }
+
+    private void dismissSplashDialog() {
+        if (mSplashDialog != null) {
+            mSplashDialog.dismiss();
+        }
     }
 
     private int getSpinnerItemIndex(String myString) {

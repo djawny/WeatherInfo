@@ -99,7 +99,7 @@ public class CurrentFragment extends Fragment {
         String date = TimestampToDateConverter.apply(city.getWeather().getDate(), AppConstants.DATE_NEW_LINE_TIME);
         mDate.setText(date);
         mDescription.setText(city.getWeather().getDescription());
-        mTemperature.setText(String.format("%s °C", String.valueOf(city.getWeather().getTemp())));
+        mTemperature.setText(String.format("%.1f °C", city.getWeather().getTemp()));
         mWind.setText(String.format(getString(R.string.details_text_wind) + ": %s m/s", city.getWeather().getWindSpeed()));
         mCloudiness.setText(String.format(getString(R.string.details_text_cloudiness) + ": %s %%", city.getWeather().getCloudiness()));
         mPressure.setText(String.format(getString(R.string.details_text_pressure) + ": %s hpa", city.getWeather().getPressure()));
