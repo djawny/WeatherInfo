@@ -2,7 +2,7 @@ package com.example.daniel.weatherinfo.util;
 
 import com.example.daniel.weatherinfo.R;
 
-public class BackgroundProvider {
+public final class BackgroundProvider {
 
     public static int apply(String cityWeatherIcon) {
         int imageResource;

@@ -5,7 +5,7 @@ import android.text.format.DateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-public class TimestampToDateConverter {
+public final class TimestampToDateConverter {
 
     public static String apply(long timeStamp, String format) {
         String date = null;

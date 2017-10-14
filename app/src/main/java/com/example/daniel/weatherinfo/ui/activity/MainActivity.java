@@ -117,20 +117,17 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     }
 
     private void setViewPagerListener() {
-        mViewPager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_MOVE:
-                        mSwipeRefreshLayout.setEnabled(false);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                    case MotionEvent.ACTION_CANCEL:
-                        mSwipeRefreshLayout.setEnabled(true);
-                        break;
-                }
-                return false;
+        mViewPager.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_MOVE:
+                    mSwipeRefreshLayout.setEnabled(false);
+                    break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    mSwipeRefreshLayout.setEnabled(true);
+                    break;
             }
+            return false;
         });
     }
 

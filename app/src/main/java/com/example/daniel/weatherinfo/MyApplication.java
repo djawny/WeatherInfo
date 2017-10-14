@@ -8,6 +8,8 @@ import com.example.daniel.weatherinfo.di.component.DaggerApplicationComponent;
 import com.example.daniel.weatherinfo.di.mudule.ApplicationModule;
 import com.example.daniel.weatherinfo.di.mudule.DataManagerModule;
 
+import timber.log.Timber;
+
 import static com.example.daniel.weatherinfo.util.AppConstants.BASE_URL;
 
 public class MyApplication extends Application {
@@ -17,12 +19,20 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        initializeTimber();
         initializeApplicationComponent();
         mApplicationComponent.inject(this);
     }
 
-    public ApplicationComponent getApplicationComponent() {
-        return mApplicationComponent;
+    private void initializeTimber() {
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree() {
+                @Override
+                protected String createStackElementTag(StackTraceElement element) {
+                    return super.createStackElementTag(element) + ":" + element.getLineNumber();
+                }
+            });
+        }
     }
 
     public static ApplicationComponent getComponent(Context context) {

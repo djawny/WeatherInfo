@@ -2,7 +2,6 @@ package com.example.daniel.weatherinfo.ui.presenter;
 
 import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.data.database.model.Forecast;
 import com.example.daniel.weatherinfo.ui.base.BasePresenter;
 import com.example.daniel.weatherinfo.ui.view.MainActivityView;
 import com.example.daniel.weatherinfo.util.SchedulerProvider;
@@ -12,10 +11,10 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
-import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableObserver;
+import timber.log.Timber;
 
 public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
@@ -121,12 +120,9 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                 .flatMap(new Function<City, ObservableSource<City>>() {
                     @Override
                     public ObservableSource<City> apply(City city) throws Exception {
-                        return Observable.zip(getDataManager().getForecastsFromNetwork(apiKey, city.getId(), language), Observable.just(city), new BiFunction<List<Forecast>, City, City>() {
-                            @Override
-                            public City apply(List<Forecast> forecasts, City city) throws Exception {
-                                city.setForecastCollection(forecasts);
-                                return city;
-                            }
+                        return Observable.zip(getDataManager().getForecastsFromNetwork(apiKey, city.getId(), language), Observable.just(city), (forecasts, city1) -> {
+                            city1.setForecastCollection(forecasts);
+                            return city1;
                         });
                     }
                 }).flatMapCompletable(new Function<City, Completable>() {
@@ -160,12 +156,12 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
                     @Override
                     public void onError(Throwable e) {
-                        //ignore
+                        Timber.e(e, e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
-                        //ignore
+                        Timber.i("Current city id load complete");
                     }
                 })
         );
@@ -177,12 +173,12 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
-                        //ignore
+                        Timber.i("Current city id save complete");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        //ignore
+                        Timber.e(e, e.getMessage());
                     }
                 }));
     }

@@ -118,12 +118,7 @@ public class ForecastFragment extends Fragment {
         axisLeft.setTextSize(16);
         axisLeft.setTextColor(Color.WHITE);
         axisLeft.setDrawGridLines(false);
-        axisLeft.setValueFormatter(new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                return (int) value + "°C";
-            }
-        });
+        axisLeft.setValueFormatter((value, axis) -> (int) value + "°C");
 
         XAxis xAxis = mLineChart.getXAxis();
         xAxis.setLabelCount(9);
@@ -147,12 +142,7 @@ public class ForecastFragment extends Fragment {
         barData.setHighlightEnabled(false);
         barData.setValueTextColor(Color.WHITE);
         barData.setBarWidth(0.5f);
-        barData.setValueFormatter(new IValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                return (int) value + "°C";
-            }
-        });
+        barData.setValueFormatter((value, entry, dataSetIndex, viewPortHandler) -> (int) value + "°C");
 
         mBarChart.setDrawGridBackground(false);
         mBarChart.setFitBars(true);

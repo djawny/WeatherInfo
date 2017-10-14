@@ -60,30 +60,21 @@ public class HorizontalCityAdapter extends BaseAdapter<City> {
         CityViewHolder cityViewHolder = (CityViewHolder) holder;
         cityViewHolder.bind(city, getContext());
 
-        cityViewHolder.getDeleteButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListener != null) {
-                    mListener.deleteClickedItem(city.getId());
-                }
+        cityViewHolder.getDeleteButton().setOnClickListener(v -> {
+            if (mListener != null) {
+                mListener.deleteClickedItem(city.getId());
             }
         });
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                setIsButtonVisibleFlag(true);
-                mListener.updateView();
-                return false;
-            }
+        holder.itemView.setOnLongClickListener(v -> {
+            setIsButtonVisibleFlag(true);
+            mListener.updateView();
+            return false;
         });
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!getIsButtonVisibleFlag()) {
-                    mListener.showClickedItem(city.getId());
-                }
+        holder.itemView.setOnClickListener(v -> {
+            if (!getIsButtonVisibleFlag()) {
+                mListener.showClickedItem(city.getId());
             }
         });
 

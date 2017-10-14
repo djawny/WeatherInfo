@@ -2,7 +2,7 @@ package com.example.daniel.weatherinfo.util;
 
 import java.util.Locale;
 
-public class LanguageProvider {
+public final class LanguageProvider {
 
     public static String apply() {
         String language = Locale.getDefault().getLanguage();

@@ -281,15 +281,12 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
     private void getDeviceLocation() {
         try {
             if (mLocationPermissionGranted) {
-                mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) throws SecurityException {
-                        if (location != null) {
-                            mPresenter.loadCityFromNetwork(getString(R.string.open_weather_map_api_key), location.getLatitude(), location.getLongitude(), LanguageProvider.apply());
-                        } else {
-                            showSnackBar(getString(R.string.message_error_finding_location), Snackbar.LENGTH_LONG);
-                            mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
-                        }
+                mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, location -> {
+                    if (location != null) {
+                        mPresenter.loadCityFromNetwork(getString(R.string.open_weather_map_api_key), location.getLatitude(), location.getLongitude(), LanguageProvider.apply());
+                    } else {
+                        showSnackBar(getString(R.string.message_error_finding_location), Snackbar.LENGTH_LONG);
+                        mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
                     }
                 });
             } else {

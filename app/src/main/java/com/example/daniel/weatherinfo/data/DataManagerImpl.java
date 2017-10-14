@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import com.example.daniel.weatherinfo.data.database.Database;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.database.model.Forecast;
+import com.example.daniel.weatherinfo.data.mapper.CityMapper;
 import com.example.daniel.weatherinfo.data.mapper.Mapper;
 import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
 import com.example.daniel.weatherinfo.data.network.model.CityForecastData;
@@ -39,107 +40,64 @@ public class DataManagerImpl implements DataManager {
 
     @Override
     public Observable<List<City>> getCitiesFromDatabase() {
-        return Observable.fromCallable(new Callable<List<City>>() {
-            @Override
-            public List<City> call() throws Exception {
-                return mDatabase.getCities();
-            }
-        });
+        return Observable.fromCallable(mDatabase::getCities);
     }
 
     @Override
     public Observable<City> getCityFromDatabase(final int cityId) {
-        return Observable.fromCallable(new Callable<City>() {
-            @Override
-            public City call() throws Exception {
-                return mDatabase.getCity(cityId);
-            }
-        });
+        return Observable.fromCallable(() -> mDatabase.getCity(cityId));
     }
 
     @Override
     public Observable<City> getCityFromDatabase(final String cityName) {
-        return Observable.fromCallable(new Callable<City>() {
-            @Override
-            public City call() throws Exception {
-                return mDatabase.getCity(cityName);
-            }
-        });
+        return Observable.fromCallable(() -> mDatabase.getCity(cityName));
     }
 
     @Override
     public Completable saveCityToDatabase(final City city) {
-        return Completable.fromAction(new Action() {
-            @Override
-            public void run() throws Exception {
-                mDatabase.saveCity(city);
-            }
-        });
+        return Completable.fromAction(() -> mDatabase.saveCity(city));
     }
 
     @Override
     public Completable removeCityFromDatabase(final int cityId) {
-        return Completable.fromAction(new Action() {
-            @Override
-            public void run() throws Exception {
-                mDatabase.removeCity(cityId);
-            }
-        });
+        return Completable.fromAction(() -> mDatabase.removeCity(cityId));
     }
+
+//    @Override
+//    public Observable<City> getCityFromNetwork(String apiKey, int cityId, String language) {
+//        return mOpenWeatherMapService
+//                .getCityWeatherDataById(apiKey, cityId, language)
+//                .map((cityWeatherData) -> mMapper.mapToCity(cityWeatherData));
+//    }
 
     @Override
     public Observable<City> getCityFromNetwork(String apiKey, int cityId, String language) {
         return mOpenWeatherMapService
                 .getCityWeatherDataById(apiKey, cityId, language)
-                .map(new Function<CityWeatherData, City>() {
-                    @Override
-                    public City apply(CityWeatherData cityWeatherData) throws Exception {
-                        return mMapper.mapToCity(cityWeatherData);
-                    }
-                });
+                .map(CityMapper::map);
     }
 
     @Override
     public Observable<City> getCityFromNetwork(String apiKey, double lat, double lon, String language) {
         return mOpenWeatherMapService
                 .getCityWeatherDataByCoordinates(apiKey, lat, lon, language)
-                .map(new Function<CityWeatherData, City>() {
-                    @Override
-                    public City apply(CityWeatherData cityWeatherData) throws Exception {
-                        return mMapper.mapToCity(cityWeatherData);
-                    }
-                });
+                .map((cityWeatherData) -> mMapper.mapToCity(cityWeatherData));
     }
 
     @Override
     public Observable<List<Forecast>> getForecastsFromNetwork(String apiKey, int cityId, String language) {
         return mOpenWeatherMapService
                 .getCityForecastDataById(apiKey, cityId, language)
-                .map(new Function<CityForecastData, List<Forecast>>() {
-                    @Override
-                    public List<Forecast> apply(CityForecastData cityForecastData) throws Exception {
-                        return mMapper.mapToForecasts(cityForecastData);
-                    }
-                });
+                .map((cityForecastData) -> mMapper.mapToForecasts(cityForecastData));
     }
 
     @Override
     public Observable<Integer> getCurrentCityId() {
-        return Observable.fromCallable(new Callable<Integer>() {
-            @Override
-            public Integer call() throws Exception {
-                return mSharedPreferences.getInt(CURRENT_CITY_ID, 0);
-            }
-        });
+        return Observable.fromCallable(() -> mSharedPreferences.getInt(CURRENT_CITY_ID, 0));
     }
 
     @Override
     public Completable saveCurrentCityId(final int data) {
-        return Completable.fromAction(new Action() {
-            @Override
-            public void run() throws Exception {
-                mSharedPreferences.edit().putInt(CURRENT_CITY_ID, data).apply();
-            }
-        });
+        return Completable.fromAction(() -> mSharedPreferences.edit().putInt(CURRENT_CITY_ID, data).apply());
     }
 }
