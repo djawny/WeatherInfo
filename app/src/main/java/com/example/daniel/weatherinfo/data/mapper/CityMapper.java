@@ -2,33 +2,31 @@ package com.example.daniel.weatherinfo.data.mapper;
 
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.database.model.Weather;
-import com.example.daniel.weatherinfo.data.network.model.CityWeatherData;
+import com.example.daniel.weatherinfo.data.network.model.CityWeatherResponse;
 
 public class CityMapper {
-    public static City map(CityWeatherData cityWeatherData) {
+    public static City map(CityWeatherResponse cityWeatherResponse) {
         City city = new City();
-        if (cityWeatherData != null) {
-            city.setId(cityWeatherData.getId());
-            city.setName(cityWeatherData.getName());
-            city.setLongitude(cityWeatherData.getCoordinates().getLon());
-            city.setLatitude(cityWeatherData.getCoordinates().getLat());
-            city.setCountry(cityWeatherData.getSys().getCountry());
-            Weather weather = new Weather();
-            weather.setTemp(cityWeatherData.getMain().getTemp());
-            weather.setTempMin(cityWeatherData.getMain().getTempMin());
-            weather.setTempMax(cityWeatherData.getMain().getTempMax());
-            weather.setHumidity(cityWeatherData.getMain().getHumidity());
-            weather.setCloudiness(cityWeatherData.getClouds().getCloudiness());
-            weather.setWindSpeed(cityWeatherData.getWind().getSpeed());
-            weather.setWindDegree(cityWeatherData.getWind().getDegree());
-            weather.setPressure(cityWeatherData.getMain().getPressure());
-            weather.setDescription(cityWeatherData.getWeather().get(0).getDescription());
-            weather.setIcon(cityWeatherData.getWeather().get(0).getIcon());
-            weather.setDate(cityWeatherData.getDate());
-            weather.setSunrise(cityWeatherData.getSys().getSunrise());
-            weather.setSunset(cityWeatherData.getSys().getSunset());
-            city.setWeather(weather);
-        }
+        city.setId(cityWeatherResponse.getId());
+        city.setName(cityWeatherResponse.getName());
+        city.setLongitude(cityWeatherResponse.getCoordinates().getLon());
+        city.setLatitude(cityWeatherResponse.getCoordinates().getLat());
+        city.setCountry(cityWeatherResponse.getSys().getCountry());
+        Weather weather = new Weather();
+        weather.setTemp(cityWeatherResponse.getMain().getTemp());
+        weather.setTempMin(cityWeatherResponse.getMain().getTempMin());
+        weather.setTempMax(cityWeatherResponse.getMain().getTempMax());
+        weather.setHumidity(cityWeatherResponse.getMain().getHumidity());
+        weather.setCloudiness(cityWeatherResponse.getClouds().getCloudiness());
+        weather.setWindSpeed(cityWeatherResponse.getWind().getSpeed());
+        weather.setWindDegree(cityWeatherResponse.getWind().getDegree());
+        weather.setPressure(cityWeatherResponse.getMain().getPressure());
+        weather.setDescription(cityWeatherResponse.getWeather().get(0).getDescription());
+        weather.setIcon(cityWeatherResponse.getWeather().get(0).getIcon());
+        weather.setDate(cityWeatherResponse.getDate());
+        weather.setSunrise(cityWeatherResponse.getSys().getSunrise());
+        weather.setSunset(cityWeatherResponse.getSys().getSunset());
+        city.setWeather(weather);
         return city;
     }
 }

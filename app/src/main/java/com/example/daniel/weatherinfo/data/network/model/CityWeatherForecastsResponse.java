@@ -4,27 +4,27 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class CityForecastData {
+public class CityWeatherForecastsResponse {
 
     @SerializedName("city")
-    private City city;
+    private CityEntity city;
 
     @SerializedName("list")
-    private List<CityForecast> list;
+    private List<ForecastEntity> list;
 
-    public City getCity() {
+    public CityEntity getCity() {
         return city;
     }
 
-    public void setCity(City city) {
+    public void setCity(CityEntity city) {
         this.city = city;
     }
 
-    public List<CityForecast> getList() {
+    public List<ForecastEntity> getList() {
         return list;
     }
 
-    public void setList(List<CityForecast> list) {
+    public void setList(List<ForecastEntity> list) {
         this.list = list;
     }
 }

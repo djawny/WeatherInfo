@@ -6,20 +6,15 @@ import com.example.daniel.weatherinfo.data.database.Database;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.database.model.Forecast;
 import com.example.daniel.weatherinfo.data.mapper.CityMapper;
-import com.example.daniel.weatherinfo.data.mapper.Mapper;
+import com.example.daniel.weatherinfo.data.mapper.ForecastsMapper;
 import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
-import com.example.daniel.weatherinfo.data.network.model.CityForecastData;
-import com.example.daniel.weatherinfo.data.network.model.CityWeatherData;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import javax.inject.Singleton;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Function;
 
 @Singleton
 public class DataManagerImpl implements DataManager {
@@ -29,13 +24,11 @@ public class DataManagerImpl implements DataManager {
     private final Database mDatabase;
     private final OpenWeatherMapService mOpenWeatherMapService;
     private final SharedPreferences mSharedPreferences;
-    private final Mapper mMapper;
 
     public DataManagerImpl(Database database, OpenWeatherMapService openWeatherMapService, SharedPreferences sharedPreferences) {
         mDatabase = database;
         mOpenWeatherMapService = openWeatherMapService;
         mSharedPreferences = sharedPreferences;
-        mMapper = new Mapper();
     }
 
     @Override
@@ -63,32 +56,25 @@ public class DataManagerImpl implements DataManager {
         return Completable.fromAction(() -> mDatabase.removeCity(cityId));
     }
 
-//    @Override
-//    public Observable<City> getCityFromNetwork(String apiKey, int cityId, String language) {
-//        return mOpenWeatherMapService
-//                .getCityWeatherDataById(apiKey, cityId, language)
-//                .map((cityWeatherData) -> mMapper.mapToCity(cityWeatherData));
-//    }
-
     @Override
     public Observable<City> getCityFromNetwork(String apiKey, int cityId, String language) {
         return mOpenWeatherMapService
-                .getCityWeatherDataById(apiKey, cityId, language)
+                .getCityWeatherById(apiKey, cityId, language)
                 .map(CityMapper::map);
     }
 
     @Override
     public Observable<City> getCityFromNetwork(String apiKey, double lat, double lon, String language) {
         return mOpenWeatherMapService
-                .getCityWeatherDataByCoordinates(apiKey, lat, lon, language)
-                .map((cityWeatherData) -> mMapper.mapToCity(cityWeatherData));
+                .getCityWeatherByCoordinates(apiKey, lat, lon, language)
+                .map(CityMapper::map);
     }
 
     @Override
     public Observable<List<Forecast>> getForecastsFromNetwork(String apiKey, int cityId, String language) {
         return mOpenWeatherMapService
-                .getCityForecastDataById(apiKey, cityId, language)
-                .map((cityForecastData) -> mMapper.mapToForecasts(cityForecastData));
+                .getCityWeatherForecastsById(apiKey, cityId, language)
+                .map(ForecastsMapper::map);
     }
 
     @Override

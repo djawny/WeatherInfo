@@ -3,9 +3,6 @@ package com.example.daniel.weatherinfo.ui.presenter;
 import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.database.model.Forecast;
-import com.example.daniel.weatherinfo.data.mapper.Mapper;
-import com.example.daniel.weatherinfo.data.network.model.CityForecastData;
-import com.example.daniel.weatherinfo.data.network.model.CityWeatherData;
 import com.example.daniel.weatherinfo.ui.view.CityListActivityView;
 import com.example.daniel.weatherinfo.util.SchedulerProviderImpl;
 
@@ -60,18 +57,8 @@ public class CityListActivityPresenterTest {
 
     @Before
     public void setUp() throws Exception {
-        RxJavaPlugins.setIoSchedulerHandler(new Function<Scheduler, Scheduler>() {
-            @Override
-            public Scheduler apply(Scheduler scheduler) throws Exception {
-                return Schedulers.trampoline();
-            }
-        });
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler(new Function<Callable<Scheduler>, Scheduler>() {
-            @Override
-            public Scheduler apply(Callable<Scheduler> schedulerCallable) throws Exception {
-                return Schedulers.trampoline();
-            }
-        });
+        RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler(schedulerCallable -> Schedulers.trampoline());
         mPresenter = new CityListActivityPresenter(mDataManager, new SchedulerProviderImpl());
         mPresenter.setView(mCityListActivityView);
     }
@@ -87,12 +74,12 @@ public class CityListActivityPresenterTest {
 
         mPresenter.loadCitiesFromDatabase();
 
-        verify(mCityListActivityView).displayCities(ArgumentMatchers.<City>anyList());
+        verify(mCityListActivityView).displayCities(ArgumentMatchers.anyList());
     }
 
     @Test
     public void testLoadCitiesFromDatabaseWhenEmptyList() {
-        when(mDataManager.getCitiesFromDatabase()).thenReturn(Observable.just(Collections.<City>emptyList()));
+        when(mDataManager.getCitiesFromDatabase()).thenReturn(Observable.just(Collections.emptyList()));
 
         mPresenter.loadCitiesFromDatabase();
 
@@ -101,7 +88,7 @@ public class CityListActivityPresenterTest {
 
     @Test
     public void testLoadCitiesFromDatabaseWhenException() {
-        when(mDataManager.getCitiesFromDatabase()).thenReturn(Observable.<List<City>>error(new Throwable()));
+        when(mDataManager.getCitiesFromDatabase()).thenReturn(Observable.error(new Throwable()));
 
         mPresenter.loadCitiesFromDatabase();
 
@@ -163,7 +150,7 @@ public class CityListActivityPresenterTest {
 
     @Test
     public void testLoadCityFromNetworkWhenException() {
-        when(mDataManager.getCityFromNetwork(anyString(), anyDouble(), anyDouble(), anyString())).thenReturn(Observable.<City>error(new Throwable()));
+        when(mDataManager.getCityFromNetwork(anyString(), anyDouble(), anyDouble(), anyString())).thenReturn(Observable.error(new Throwable()));
 
         mPresenter.loadCityFromNetwork(API_KEY, LATITUDE, LONGITUDE, LANGUAGE);
 

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class CityForecast {
+public class ForecastEntity {
 
     @SerializedName("dt")
     private long date;

@@ -2,7 +2,7 @@ package com.example.daniel.weatherinfo.data.network.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class City {
+public class CityEntity {
 
     @SerializedName("id")
     private int id;

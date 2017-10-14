@@ -136,7 +136,7 @@ public class ForecastFragment extends Fragment {
         MyBarChart chart = new MyBarChart();
         chart.setData(forecasts);
 
-        BarDataSet barDataSet = new BarDataSet(chart.getEntries(), "Forecast");
+        BarDataSet barDataSet = new BarDataSet(chart.getEntries(), "ForecastEntity");
         BarData barData = new BarData(barDataSet);
         barData.setValueTextSize(16);
         barData.setHighlightEnabled(false);
