@@ -2,10 +2,13 @@ package com.example.daniel.weatherinfo.ui.locations;
 
 import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.di.PerActivity;
 import com.example.daniel.weatherinfo.ui.base.BasePresenter;
 import com.example.daniel.weatherinfo.util.SchedulerProvider;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -14,8 +17,10 @@ import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableObserver;
 
+@PerActivity
 public class LocationsPresenter extends BasePresenter<LocationsView> {
 
+    @Inject
     public LocationsPresenter(DataManager dataManager, SchedulerProvider schedulerProvider) {
         super(dataManager, schedulerProvider);
     }
