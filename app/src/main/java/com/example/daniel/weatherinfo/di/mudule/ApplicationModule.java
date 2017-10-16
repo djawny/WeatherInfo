@@ -53,6 +53,12 @@ public class ApplicationModule {
     }
 
     @Provides
+    @Named("preferencesName")
+    String providePreferencesName() {
+        return AppConstants.PREFERENCES_NAME;
+    }
+
+    @Provides
     @Singleton
     Preferences provideSharedPreferences(PreferencesImpl preferencesImpl) {
         return preferencesImpl;

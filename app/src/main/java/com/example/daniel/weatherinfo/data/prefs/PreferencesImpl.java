@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.example.daniel.weatherinfo.di.ApplicationContext;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 @Singleton
@@ -14,8 +15,8 @@ public class PreferencesImpl implements Preferences {
     private final SharedPreferences mSharedPreferences;
 
     @Inject
-    public PreferencesImpl(@ApplicationContext Context context) {
-        mSharedPreferences = context.getSharedPreferences("CityWeatherPref", Context.MODE_PRIVATE);
+    public PreferencesImpl(@ApplicationContext Context context, @Named("preferencesName") String preferencesName) {
+        mSharedPreferences = context.getSharedPreferences(preferencesName, Context.MODE_PRIVATE);
     }
 
     @Override
