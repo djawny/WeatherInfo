@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.database.model.Forecast;
 import com.example.daniel.weatherinfo.data.database.model.Weather;
+import com.example.daniel.weatherinfo.di.ApplicationContext;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.stmt.DeleteBuilder;
@@ -33,7 +34,7 @@ public class DatabaseImpl extends OrmLiteSqliteOpenHelper implements Database {
     private final RuntimeExceptionDao<Forecast, Integer> mForecastDao;
 
     @Inject
-    public DatabaseImpl(final Context context) {
+    public DatabaseImpl(@ApplicationContext Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
         mCityDao = getRuntimeExceptionDao(City.class);
