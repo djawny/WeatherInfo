@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.ui.activity;
+package com.example.daniel.weatherinfo.ui.locations;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,12 +20,9 @@ import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.ui.adapter.HorizontalCityAdapter;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
-import com.example.daniel.weatherinfo.ui.presenter.CityListActivityPresenter;
-import com.example.daniel.weatherinfo.ui.view.CityListActivityView;
 import com.example.daniel.weatherinfo.util.AppConstants;
-import com.example.daniel.weatherinfo.util.LanguageProvider;
+import com.example.daniel.weatherinfo.util.LocalLanguageProvider;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -37,7 +34,6 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.List;
 
@@ -47,8 +43,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CityListActivity extends BaseActivity implements CityListActivityView,
-        HorizontalCityAdapter.OnRecycleViewItemClickListener, LocationListener {
+public class LocationsActivity extends BaseActivity implements LocationsView,
+        LocationsAdapter.OnRecycleViewItemClickListener, LocationListener {
 
     public static final String CITY_ID = "city id";
     public static final String CITY_LIST_HAS_BEEN_CHANGED_FLAG = "city list has been changed flag";
@@ -76,9 +72,9 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
     ProgressBar mActualLocationProgressBar;
 
     @Inject
-    CityListActivityPresenter mPresenter;
+    LocationsPresenter mPresenter;
 
-    private HorizontalCityAdapter mHorizontalCityAdapter;
+    private LocationsAdapter mLocationsAdapter;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private LocationRequest mLocationRequest;
     private LocationCallback mLocationCallback;
@@ -88,10 +84,10 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_city_list);
+        setContentView(R.layout.activity_locations);
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
-        mPresenter.setView(this);
+        mPresenter.onAttach(this);
         setToolbar();
         setLocation();
         setPlaceAutoCompleteFragment();
@@ -125,7 +121,7 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
             @Override
             public void onPlaceSelected(Place place) {
                 LatLng latLng = place.getLatLng();
-                mPresenter.addCityFromNetwork(getString(R.string.open_weather_map_api_key), latLng.latitude, latLng.longitude, LanguageProvider.apply());
+                mPresenter.addCityFromNetwork(getString(R.string.open_weather_map_api_key), latLng.latitude, latLng.longitude, LocalLanguageProvider.apply());
             }
 
             @Override
@@ -148,17 +144,17 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPresenter.clearDisposable();
+        mPresenter.onDetach();
     }
 
     @Override
     public void displayCities(List<City> cities) {
         mRecyclerView.setVisibility(View.VISIBLE);
         mRecyclerViewHeader.setVisibility(View.VISIBLE);
-        if (mHorizontalCityAdapter == null) {
+        if (mLocationsAdapter == null) {
             initializeRecycleView(cities);
         } else {
-            mHorizontalCityAdapter.swapData(cities);
+            mLocationsAdapter.swapData(cities);
         }
     }
 
@@ -166,8 +162,8 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        mHorizontalCityAdapter = new HorizontalCityAdapter(this, cities, this);
-        mRecyclerView.setAdapter(mHorizontalCityAdapter);
+        mLocationsAdapter = new LocationsAdapter(this, cities, this);
+        mRecyclerView.setAdapter(mLocationsAdapter);
     }
 
     @Override
@@ -175,6 +171,7 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
         mRecyclerViewHeader.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.GONE);
         mReadyButton.setVisibility(View.GONE);
+        hideAdapterDeleteButton();
     }
 
     @Override
@@ -262,8 +259,12 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
     @OnClick(R.id.ready_button)
     public void onReadyButtonClicked(View view) {
         mReadyButton.setVisibility(View.GONE);
-        if (mHorizontalCityAdapter != null && mHorizontalCityAdapter.getIsButtonVisibleFlag()) {
-            mHorizontalCityAdapter.setIsButtonVisibleFlag(false);
+        hideAdapterDeleteButton();
+    }
+
+    private void hideAdapterDeleteButton() {
+        if (mLocationsAdapter != null && mLocationsAdapter.getDeleteButtonVisibleFlag()) {
+            mLocationsAdapter.setDeleteButtonVisibleFlag(false);
         }
     }
 
@@ -283,7 +284,7 @@ public class CityListActivity extends BaseActivity implements CityListActivityVi
             if (mLocationPermissionGranted) {
                 mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, location -> {
                     if (location != null) {
-                        mPresenter.loadCityFromNetwork(getString(R.string.open_weather_map_api_key), location.getLatitude(), location.getLongitude(), LanguageProvider.apply());
+                        mPresenter.loadCityFromNetwork(getString(R.string.open_weather_map_api_key), location.getLatitude(), location.getLongitude(), LocalLanguageProvider.apply());
                     } else {
                         showSnackBar(getString(R.string.message_error_finding_location), Snackbar.LENGTH_LONG);
                         mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);

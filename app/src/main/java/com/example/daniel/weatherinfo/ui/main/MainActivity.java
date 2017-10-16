@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.ui.activity;
+package com.example.daniel.weatherinfo.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,16 +21,13 @@ import android.widget.TextView;
 
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.ui.adapter.MainPagerAdapter;
+import com.example.daniel.weatherinfo.ui.locations.LocationsActivity;
 import com.example.daniel.weatherinfo.ui.base.BaseActivity;
-import com.example.daniel.weatherinfo.ui.fragment.CurrentFragment;
-import com.example.daniel.weatherinfo.ui.fragment.ForecastFragment;
-import com.example.daniel.weatherinfo.ui.fragment.MapFragment;
-import com.example.daniel.weatherinfo.ui.fragment.SplashDialog;
-import com.example.daniel.weatherinfo.ui.presenter.MainActivityPresenter;
-import com.example.daniel.weatherinfo.ui.view.MainActivityView;
+import com.example.daniel.weatherinfo.ui.main.pager.CurrentFragment;
+import com.example.daniel.weatherinfo.ui.main.pager.ForecastFragment;
+import com.example.daniel.weatherinfo.ui.main.pager.MapFragment;
 import com.example.daniel.weatherinfo.util.BackgroundProvider;
-import com.example.daniel.weatherinfo.util.LanguageProvider;
+import com.example.daniel.weatherinfo.util.LocalLanguageProvider;
 import com.example.daniel.weatherinfo.util.NetworkAvailabilityChecker;
 import com.gjiazhe.panoramaimageview.GyroscopeObserver;
 import com.gjiazhe.panoramaimageview.PanoramaImageView;
@@ -43,10 +40,10 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.daniel.weatherinfo.ui.activity.CityListActivity.CITY_ID;
-import static com.example.daniel.weatherinfo.ui.activity.CityListActivity.CITY_LIST_HAS_BEEN_CHANGED_FLAG;
+import static com.example.daniel.weatherinfo.ui.locations.LocationsActivity.CITY_ID;
+import static com.example.daniel.weatherinfo.ui.locations.LocationsActivity.CITY_LIST_HAS_BEEN_CHANGED_FLAG;
 
-public class MainActivity extends BaseActivity implements MainActivityView, SwipeRefreshLayout.OnRefreshListener,
+public class MainActivity extends BaseActivity implements MainView, SwipeRefreshLayout.OnRefreshListener,
         ViewPager.OnPageChangeListener, AdapterView.OnItemSelectedListener {
 
     private static final int CITY_LIST_REQUEST_CODE = 1;
@@ -77,7 +74,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     Spinner mSpinner;
 
     @Inject
-    MainActivityPresenter mPresenter;
+    MainPresenter mPresenter;
 
     private MainPagerAdapter mPagerAdapter;
     private ArrayAdapter<String> mSpinnerAdapter;
@@ -90,14 +87,14 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
-        mPresenter.setView(this);
+        mPresenter.onAttach(this);
         setToolbar();
         setSwipeRefreshListener();
         setViewPagerListener();
         setGyroscopeForPanoramaImageView();
         if (mFirstStartFlag) {
             mFirstStartFlag = false;
-            mSplashDialog = SplashDialog.newInstance();
+            mSplashDialog = MainSplashDialog.newInstance();
             mSplashDialog.show(getSupportFragmentManager(), DIALOG);
         }
         mPresenter.loadCurrentCityId();
@@ -146,8 +143,8 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_show_city_list:
-                Intent intent = new Intent(this, CityListActivity.class);
+            case R.id.action_show_locations:
+                Intent intent = new Intent(this, LocationsActivity.class);
                 startActivityForResult(intent, CITY_LIST_REQUEST_CODE);
                 break;
         }
@@ -188,7 +185,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mPresenter.clearDisposable();
+        mPresenter.onDetach();
     }
 
     @Override
@@ -293,7 +290,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, Swip
     public void onRefresh() {
         try {
             if (NetworkAvailabilityChecker.apply(this)) {
-                mPresenter.refreshCityFromNetwork(getString(R.string.open_weather_map_api_key), mCurrentCityId, LanguageProvider.apply());
+                mPresenter.refreshCityFromNetwork(getString(R.string.open_weather_map_api_key), mCurrentCityId, LocalLanguageProvider.apply());
             } else {
                 hideSwipeRefreshLayoutProgressSpinner();
                 showSnackBar(getString(R.string.message_network_connection_error), Snackbar.LENGTH_LONG);

@@ -1,11 +1,11 @@
-package com.example.daniel.weatherinfo.ui.view;
+package com.example.daniel.weatherinfo.ui.main;
 
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.ui.base.BaseView;
 
 import java.util.List;
 
-public interface MainActivityView extends BaseView {
+public interface MainView extends BaseView {
 
     void displayCityData(City city);
 

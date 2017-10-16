@@ -10,7 +10,7 @@
     <string name="text_locations">Lokalizacje</string>
     <string name="ready_button">Gotowe</string>
     <string name="search_input_hint">Dodaj lokalizację</string>
-    <string name="menu_item_city_list">Lista lokalizacji</string>
+    <string name="menu_item_locations">Lista lokalizacji</string>
     <string name="details_text_wind">Wiatr</string>
     <string name="details_text_cloudiness">Zachmurzenie</string>
     <string name="details_text_pressure">Ciśnienie</string>

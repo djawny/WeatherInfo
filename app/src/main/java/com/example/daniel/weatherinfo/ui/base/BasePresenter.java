@@ -35,7 +35,7 @@ public abstract class BasePresenter<V extends BaseView> {
         return mSchedulerProvider.ui();
     }
 
-    public void setView(V view) {
+    public void onAttach(V view) {
         if (view == null) {
             throw new IllegalArgumentException("Null view in Presenter");
         }
@@ -46,7 +46,8 @@ public abstract class BasePresenter<V extends BaseView> {
         mCompositeDisposable.add(disposable);
     }
 
-    public void clearDisposable() {
-        mCompositeDisposable.clear();
+    public void onDetach() {
+        mCompositeDisposable.dispose();
+        mView = null;
     }
 }

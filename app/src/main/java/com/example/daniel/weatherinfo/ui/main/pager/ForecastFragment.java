@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.ui.fragment;
+package com.example.daniel.weatherinfo.ui.main.pager;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,17 +19,12 @@ import com.example.daniel.weatherinfo.data.chart.MyLineChart;
 import com.example.daniel.weatherinfo.data.chart.CustomXAxisValueFormatter;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.formatter.IValueFormatter;
-import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.List;
 
@@ -77,6 +72,7 @@ public class ForecastFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         City city = (City) getArguments().getSerializable(ARG_CITY);
+        assert city != null;
         List<Forecast> forecasts = city.getForecasts();
         drawLineChart(forecasts);
         drawBarChart(forecasts);

@@ -8,11 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.daniel.weatherinfo.MyApplication;
 import com.example.daniel.weatherinfo.R;
 import com.example.daniel.weatherinfo.di.component.ActivityComponent;
-import com.example.daniel.weatherinfo.di.component.DaggerActivityComponent;
-import com.example.daniel.weatherinfo.di.mudule.ActivityModule;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -25,10 +22,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void initializeActivityComponent() {
-        mActivityComponent = DaggerActivityComponent.builder()
-                .applicationComponent(MyApplication.getComponent(this))
-                .activityModule(new ActivityModule(this))
-                .build();
+        mActivityComponent = ActivityComponent.Initializer.init(this);
     }
 
     public ActivityComponent getActivityComponent() {

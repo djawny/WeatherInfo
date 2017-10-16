@@ -1,16 +1,16 @@
 package com.example.daniel.weatherinfo.data;
 
-import android.content.SharedPreferences;
-
 import com.example.daniel.weatherinfo.data.database.Database;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.database.model.Forecast;
 import com.example.daniel.weatherinfo.data.mapper.CityMapper;
 import com.example.daniel.weatherinfo.data.mapper.ForecastsMapper;
 import com.example.daniel.weatherinfo.data.network.OpenWeatherMapService;
+import com.example.daniel.weatherinfo.data.prefs.Preferences;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Completable;
@@ -23,12 +23,13 @@ public class DataManagerImpl implements DataManager {
 
     private final Database mDatabase;
     private final OpenWeatherMapService mOpenWeatherMapService;
-    private final SharedPreferences mSharedPreferences;
+    private final Preferences mPreferences;
 
-    public DataManagerImpl(Database database, OpenWeatherMapService openWeatherMapService, SharedPreferences sharedPreferences) {
+    @Inject
+    public DataManagerImpl(Database database, OpenWeatherMapService openWeatherMapService, Preferences preferences) {
         mDatabase = database;
         mOpenWeatherMapService = openWeatherMapService;
-        mSharedPreferences = sharedPreferences;
+        mPreferences = preferences;
     }
 
     @Override
@@ -79,11 +80,11 @@ public class DataManagerImpl implements DataManager {
 
     @Override
     public Observable<Integer> getCurrentCityId() {
-        return Observable.fromCallable(() -> mSharedPreferences.getInt(CURRENT_CITY_ID, 0));
+        return Observable.fromCallable(() -> mPreferences.get(CURRENT_CITY_ID, 0));
     }
 
     @Override
     public Completable saveCurrentCityId(final int data) {
-        return Completable.fromAction(() -> mSharedPreferences.edit().putInt(CURRENT_CITY_ID, data).apply());
+        return Completable.fromAction(() -> mPreferences.put(CURRENT_CITY_ID, data));
     }
 }

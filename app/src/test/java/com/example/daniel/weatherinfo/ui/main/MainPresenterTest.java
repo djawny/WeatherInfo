@@ -1,9 +1,8 @@
-package com.example.daniel.weatherinfo.ui.presenter;
+package com.example.daniel.weatherinfo.ui.main;
 
 import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.database.model.Forecast;
-import com.example.daniel.weatherinfo.ui.view.MainActivityView;
 import com.example.daniel.weatherinfo.util.SchedulerProviderImpl;
 
 import org.junit.Before;
@@ -17,13 +16,10 @@ import org.mockito.junit.MockitoRule;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 import io.reactivex.android.plugins.RxAndroidPlugins;
-import io.reactivex.functions.Function;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 
@@ -33,7 +29,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class MainActivityPresenterTest {
+public class MainPresenterTest {
 
     private static final int CITY_ID = 123456;
     private static final String CITY_NAME = "London";
@@ -49,31 +45,21 @@ public class MainActivityPresenterTest {
     DataManager mDataManager;
 
     @Mock
-    MainActivityView mMainActivityView;
+    MainView mMainView;
 
-    private MainActivityPresenter mPresenter;
+    private MainPresenter mPresenter;
 
     @Before
     public void setUp() throws Exception {
-        RxJavaPlugins.setIoSchedulerHandler(new Function<Scheduler, Scheduler>() {
-            @Override
-            public Scheduler apply(Scheduler scheduler) throws Exception {
-                return Schedulers.trampoline();
-            }
-        });
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler(new Function<Callable<Scheduler>, Scheduler>() {
-            @Override
-            public Scheduler apply(Callable<Scheduler> schedulerCallable) throws Exception {
-                return Schedulers.trampoline();
-            }
-        });
-        mPresenter = new MainActivityPresenter(mDataManager, new SchedulerProviderImpl());
-        mPresenter.setView(mMainActivityView);
+        RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler(schedulerCallable -> Schedulers.trampoline());
+        mPresenter = new MainPresenter(mDataManager, new SchedulerProviderImpl());
+        mPresenter.onAttach(mMainView);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testSetViewWhenNullView() {
-        mPresenter.setView(null);
+    public void testOnAttachWhenNullView() {
+        mPresenter.onAttach(null);
     }
 
     @Test
@@ -82,8 +68,8 @@ public class MainActivityPresenterTest {
 
         mPresenter.loadCitiesFromDatabase(CITY_ID);
 
-        verify(mMainActivityView).setSpinnerList(ArgumentMatchers.<City>anyList());
-        verify(mMainActivityView).displayCityData(any(City.class));
+        verify(mMainView).setSpinnerList(ArgumentMatchers.anyList());
+        verify(mMainView).displayCityData(any(City.class));
     }
 
     @Test
@@ -96,27 +82,27 @@ public class MainActivityPresenterTest {
 
         mPresenter.loadCitiesFromDatabase(CITY_ID);
 
-        verify(mMainActivityView).setSpinnerList(ArgumentMatchers.<City>anyList());
-        verify(mMainActivityView).displayCityData(any(City.class));
+        verify(mMainView).setSpinnerList(ArgumentMatchers.anyList());
+        verify(mMainView).displayCityData(any(City.class));
     }
 
 
     @Test
     public void testLoadCitiesFromDatabaseWhenEmptyList() {
-        when(mDataManager.getCitiesFromDatabase()).thenReturn(Observable.just(Collections.<City>emptyList()));
+        when(mDataManager.getCitiesFromDatabase()).thenReturn(Observable.just(Collections.emptyList()));
 
         mPresenter.loadCitiesFromDatabase(CITY_ID);
 
-        verify(mMainActivityView).showNoData();
+        verify(mMainView).showNoData();
     }
 
     @Test
     public void testLoadCitiesFromDatabaseWhenException() {
-        when(mDataManager.getCitiesFromDatabase()).thenReturn(Observable.<List<City>>error(new Throwable()));
+        when(mDataManager.getCitiesFromDatabase()).thenReturn(Observable.error(new Throwable()));
 
         mPresenter.loadCitiesFromDatabase(CITY_ID);
 
-        verify(mMainActivityView).showDatabaseErrorInfo();
+        verify(mMainView).showDatabaseErrorInfo();
     }
 
     @Test
@@ -125,16 +111,16 @@ public class MainActivityPresenterTest {
 
         mPresenter.loadCityFromDatabaseByCityId(CITY_ID);
 
-        verify(mMainActivityView).displayCityData(any(City.class));
+        verify(mMainView).displayCityData(any(City.class));
     }
 
     @Test
     public void testLoadCityFromDatabaseByCityIdWhenException() {
-        when(mDataManager.getCityFromDatabase(anyInt())).thenReturn(Observable.<City>error(new Throwable()));
+        when(mDataManager.getCityFromDatabase(anyInt())).thenReturn(Observable.error(new Throwable()));
 
         mPresenter.loadCityFromDatabaseByCityId(CITY_ID);
 
-        verify(mMainActivityView).showDatabaseErrorInfo();
+        verify(mMainView).showDatabaseErrorInfo();
     }
 
     @Test
@@ -143,16 +129,16 @@ public class MainActivityPresenterTest {
 
         mPresenter.loadCityFromDatabaseByCityName(CITY_NAME);
 
-        verify(mMainActivityView).displayCityData(any(City.class));
+        verify(mMainView).displayCityData(any(City.class));
     }
 
     @Test
     public void testLoadCityFromDatabaseByCityNameWhenException() {
-        when(mDataManager.getCityFromDatabase(anyString())).thenReturn(Observable.<City>error(new Throwable()));
+        when(mDataManager.getCityFromDatabase(anyString())).thenReturn(Observable.error(new Throwable()));
 
         mPresenter.loadCityFromDatabaseByCityName(CITY_NAME);
 
-        verify(mMainActivityView).showDatabaseErrorInfo();
+        verify(mMainView).showDatabaseErrorInfo();
     }
 
     @Test
@@ -163,7 +149,7 @@ public class MainActivityPresenterTest {
 
         mPresenter.refreshCityFromNetwork(API_KEY, CITY_ID, LANGUAGE);
 
-        verify(mMainActivityView).reloadData(anyInt());
+        verify(mMainView).reloadData(anyInt());
     }
 
     @Test
@@ -174,7 +160,7 @@ public class MainActivityPresenterTest {
 
         mPresenter.refreshCityFromNetwork(API_KEY, CITY_ID, LANGUAGE);
 
-        verify(mMainActivityView).showNetworkErrorInfo();
+        verify(mMainView).showNetworkErrorInfo();
     }
 
     @Test
@@ -183,6 +169,6 @@ public class MainActivityPresenterTest {
 
         mPresenter.loadCurrentCityId();
 
-        verify(mMainActivityView).setCurrentCityId(anyInt());
+        verify(mMainView).setCurrentCityId(anyInt());
     }
 }

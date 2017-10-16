@@ -10,7 +10,7 @@
     <string name="text_locations">Locations</string>
     <string name="ready_button">Ready</string>
     <string name="search_input_hint">Add location</string>
-    <string name="menu_item_city_list">Location list</string>
+    <string name="menu_item_locations">Location list</string>
     <string name="details_text_wind">Wind</string>
     <string name="details_text_cloudiness">Cloudiness</string>
     <string name="details_text_pressure">Pressure</string>

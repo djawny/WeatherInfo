@@ -4,13 +4,8 @@ import android.app.Application;
 import android.content.Context;
 
 import com.example.daniel.weatherinfo.di.component.ApplicationComponent;
-import com.example.daniel.weatherinfo.di.component.DaggerApplicationComponent;
-import com.example.daniel.weatherinfo.di.mudule.ApplicationModule;
-import com.example.daniel.weatherinfo.di.mudule.DataManagerModule;
 
 import timber.log.Timber;
-
-import static com.example.daniel.weatherinfo.util.AppConstants.BASE_URL;
 
 public class MyApplication extends Application {
 
@@ -20,8 +15,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         initializeTimber();
-        initializeApplicationComponent();
-        mApplicationComponent.inject(this);
+        createApplicationComponent();
     }
 
     private void initializeTimber() {
@@ -39,10 +33,8 @@ public class MyApplication extends Application {
         return ((MyApplication) context.getApplicationContext()).mApplicationComponent;
     }
 
-    private void initializeApplicationComponent() {
-        mApplicationComponent = DaggerApplicationComponent.builder()
-                .applicationModule(new ApplicationModule(this))
-                .dataManagerModule(new DataManagerModule(BASE_URL))
-                .build();
+    private void createApplicationComponent() {
+        mApplicationComponent = ApplicationComponent.Initializer.init(this);
+        mApplicationComponent.inject(this);
     }
 }

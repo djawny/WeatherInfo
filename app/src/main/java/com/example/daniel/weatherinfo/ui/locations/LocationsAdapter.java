@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.ui.adapter;
+package com.example.daniel.weatherinfo.ui.locations;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -15,13 +15,14 @@ import com.example.daniel.weatherinfo.util.BackgroundProvider;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HorizontalCityAdapter extends BaseAdapter<City> {
+public class LocationsAdapter extends BaseAdapter<City> {
 
-    private Boolean mIsButtonVisibleFlag;
+    private Boolean mDeleteButtonVisibleFlag;
 
     public interface OnRecycleViewItemClickListener {
 
@@ -34,19 +35,19 @@ public class HorizontalCityAdapter extends BaseAdapter<City> {
 
     private OnRecycleViewItemClickListener mListener;
 
-    public HorizontalCityAdapter(Context context, List<City> cities, OnRecycleViewItemClickListener onRecycleViewItemClickListener) {
+    public LocationsAdapter(Context context, List<City> cities, OnRecycleViewItemClickListener onRecycleViewItemClickListener) {
         super(context, cities);
         mListener = onRecycleViewItemClickListener;
-        mIsButtonVisibleFlag = false;
+        mDeleteButtonVisibleFlag = false;
     }
 
-    public void setIsButtonVisibleFlag(Boolean isButtonVisibleFlag) {
-        mIsButtonVisibleFlag = isButtonVisibleFlag;
+    public void setDeleteButtonVisibleFlag(Boolean isButtonVisibleFlag) {
+        mDeleteButtonVisibleFlag = isButtonVisibleFlag;
         notifyDataSetChanged();
     }
 
-    public Boolean getIsButtonVisibleFlag() {
-        return mIsButtonVisibleFlag;
+    public Boolean getDeleteButtonVisibleFlag() {
+        return mDeleteButtonVisibleFlag;
     }
 
     @Override
@@ -67,18 +68,18 @@ public class HorizontalCityAdapter extends BaseAdapter<City> {
         });
 
         holder.itemView.setOnLongClickListener(v -> {
-            setIsButtonVisibleFlag(true);
+            setDeleteButtonVisibleFlag(true);
             mListener.updateView();
             return false;
         });
 
         holder.itemView.setOnClickListener(v -> {
-            if (!getIsButtonVisibleFlag()) {
+            if (!getDeleteButtonVisibleFlag()) {
                 mListener.showClickedItem(city.getId());
             }
         });
 
-        if (mIsButtonVisibleFlag) {
+        if (mDeleteButtonVisibleFlag) {
             cityViewHolder.getDeleteButton().setVisibility(View.VISIBLE);
             cityViewHolder.getItemContentLayout().setBackgroundResource(R.color.transparent_black);
         } else {
@@ -116,7 +117,7 @@ public class HorizontalCityAdapter extends BaseAdapter<City> {
             Picasso.with(context)
                     .load("http://openweathermap.org/img/w/" + city.getWeather().getIcon() + ".png")
                     .into(mIcon);
-            mTemperature.setText(String.format("%.1f °C", city.getWeather().getTemp()));
+            mTemperature.setText(String.format(Locale.getDefault(), "%.1f °C", city.getWeather().getTemp()));
             mName.setText(city.getName());
             mBackground.setImageResource(BackgroundProvider.apply(city.getWeather().getIcon()));
         }

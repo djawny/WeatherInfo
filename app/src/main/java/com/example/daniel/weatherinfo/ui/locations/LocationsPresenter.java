@@ -1,9 +1,8 @@
-package com.example.daniel.weatherinfo.ui.presenter;
+package com.example.daniel.weatherinfo.ui.locations;
 
 import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.ui.base.BasePresenter;
-import com.example.daniel.weatherinfo.ui.view.MainActivityView;
 import com.example.daniel.weatherinfo.util.SchedulerProvider;
 
 import java.util.List;
@@ -14,15 +13,14 @@ import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableObserver;
-import timber.log.Timber;
 
-public class MainActivityPresenter extends BasePresenter<MainActivityView> {
+public class LocationsPresenter extends BasePresenter<LocationsView> {
 
-    public MainActivityPresenter(DataManager dataManager, SchedulerProvider schedulerProvider) {
+    public LocationsPresenter(DataManager dataManager, SchedulerProvider schedulerProvider) {
         super(dataManager, schedulerProvider);
     }
 
-    public void loadCitiesFromDatabase(final int mCurrentCityId) {
+    public void loadCitiesFromDatabase() {
         addDisposable(getDataManager()
                 .getCitiesFromDatabase()
                 .subscribeOn(getSubscribeScheduler())
@@ -31,13 +29,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                     @Override
                     public void onNext(List<City> cities) {
                         if (!cities.isEmpty()) {
-                            getView().setSpinnerList(cities);
-                            City city = getCityById(cities, mCurrentCityId);
-                            if (city != null) {
-                                getView().displayCityData(city);
-                            } else {
-                                getView().displayCityData(cities.get(0));
-                            }
+                            getView().displayCities(cities);
                         } else {
                             getView().showNoData();
                         }
@@ -45,77 +37,38 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
 
                     @Override
                     public void onError(Throwable e) {
-                        getView().showDatabaseErrorInfo();
+                        getView().showLoadErrorInfo();
                     }
 
                     @Override
                     public void onComplete() {
                         //ignore
                     }
-                })
-        );
+                }));
     }
 
-    private City getCityById(List<City> cities, int mCurrentCityId) {
-        for (City city : cities) {
-            if (city.getId() == mCurrentCityId) {
-                return city;
-            }
-        }
-        return null;
-    }
-
-    public void loadCityFromDatabaseByCityId(int cityId) {
+    public void deleteCityFromDatabase(int cityId) {
         addDisposable(getDataManager()
-                .getCityFromDatabase(cityId)
+                .removeCityFromDatabase(cityId)
                 .subscribeOn(getSubscribeScheduler())
                 .observeOn(getObserveScheduler())
-                .subscribeWith(new DisposableObserver<City>() {
+                .subscribeWith(new DisposableCompletableObserver() {
                     @Override
-                    public void onNext(City city) {
-                        getView().displayCityData(city);
+                    public void onComplete() {
+                        getView().reloadData();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        getView().showDatabaseErrorInfo();
+                        getView().showDeleteErrorInfo();
                     }
-
-                    @Override
-                    public void onComplete() {
-                        //ignore
-                    }
-                })
-        );
+                }));
     }
 
-    public void loadCityFromDatabaseByCityName(String cityName) {
+    public void addCityFromNetwork(final String apiKey, double lat, double lon, final String language) {
+        getView().showAddLocationProgressBar();
         addDisposable(getDataManager()
-                .getCityFromDatabase(cityName)
-                .subscribeOn(getSubscribeScheduler())
-                .observeOn(getObserveScheduler())
-                .subscribeWith(new DisposableObserver<City>() {
-                    @Override
-                    public void onNext(City city) {
-                        getView().displayCityData(city);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        getView().showDatabaseErrorInfo();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        //ignore
-                    }
-                })
-        );
-    }
-
-    public void refreshCityFromNetwork(final String apiKey, final int cityId, final String language) {
-        addDisposable(getDataManager()
-                .getCityFromNetwork(apiKey, cityId, language)
+                .getCityFromNetwork(apiKey, lat, lon, language)
                 .subscribeOn(getSubscribeScheduler())
                 .flatMap(new Function<City, ObservableSource<City>>() {
                     @Override
@@ -135,50 +88,70 @@ public class MainActivityPresenter extends BasePresenter<MainActivityView> {
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
-                        getView().reloadData(cityId);
+                        getView().hideAddLocationProgressBar();
+                        getView().reloadData();
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        getView().hideAddLocationProgressBar();
                         getView().showNetworkErrorInfo();
                     }
                 }));
     }
 
-    public void loadCurrentCityId() {
+    public void loadCityFromNetwork(final String apiKey, double lat, double lon, final String language) {
+        getView().showActualLocationProgressBar();
         addDisposable(getDataManager()
-                .getCurrentCityId()
-                .subscribeWith(new DisposableObserver<Integer>() {
+                .getCityFromNetwork(apiKey, lat, lon, language)
+                .subscribeOn(getSubscribeScheduler())
+                .flatMap(new Function<City, ObservableSource<City>>() {
                     @Override
-                    public void onNext(Integer cityId) {
-                        getView().setCurrentCityId(cityId);
+                    public ObservableSource<City> apply(City city) throws Exception {
+                        return Observable.zip(getDataManager().getForecastsFromNetwork(apiKey, city.getId(), language), Observable.just(city), (forecasts, city1) -> {
+                            city1.setForecastCollection(forecasts);
+                            return city1;
+                        });
+                    }
+                })
+                .observeOn(getObserveScheduler())
+                .subscribeWith(new DisposableObserver<City>() {
+                    @Override
+                    public void onNext(City city) {
+                        getView().hideActualLocationProgressBar();
+                        getView().updateActualLocationText(city);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Timber.e(e, e.getMessage());
+                        getView().hideActualLocationProgressBar();
+                        getView().showNetworkErrorInfo();
                     }
 
                     @Override
                     public void onComplete() {
-                        Timber.i("Current city id load complete");
+                        //ignore
                     }
                 })
         );
     }
 
-    public void saveCurrentCity(int cityId) {
-        addDisposable(getDataManager().saveCurrentCityId(cityId)
+    public void saveCityToDatabase(City city) {
+        getView().showAddLocationProgressBar();
+        addDisposable(getDataManager().saveCityToDatabase(city)
                 .subscribeOn(getSubscribeScheduler())
+                .observeOn(getObserveScheduler())
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
-                        Timber.i("Current city id save complete");
+                        getView().hideAddLocationProgressBar();
+                        getView().reloadData();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Timber.e(e, e.getMessage());
+                        getView().hideAddLocationProgressBar();
+                        getView().showSaveErrorInfo();
                     }
                 }));
     }

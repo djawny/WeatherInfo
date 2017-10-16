@@ -23,9 +23,7 @@ android {
             applicationIdSuffix ".debug"
             debuggable true
         }
-
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -35,12 +33,14 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    //Google
+    //Support
     compile "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
     compile "com.android.support:design:$rootProject.supportLibraryVersion"
     compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
     compile "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
     compile "com.android.support:support-annotations:$rootProject.supportLibraryVersion"
+
+    //Google
     compile "com.google.android.gms:play-services-maps:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-location:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-places:$rootProject.playServicesVersion"
@@ -48,15 +48,29 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
 
     //Square
-    compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
     compile "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
     compile "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
     compile "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
     compile "com.squareup.picasso:picasso:$rootProject.picassoVersion"
+
+    //JakeWharton
+    compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
+    compile 'com.jakewharton.timber:timber:4.5.1'
+
+    //Rx
     compile "io.reactivex.rxjava2:rxandroid:$rootProject.rxjava2Version"
     compile "io.reactivex.rxjava2:rxjava:$rootProject.rxjava2Version"
-    compile 'com.jakewharton.timber:timber:4.5.1'
+
+    //Database
+    compile 'com.j256.ormlite:ormlite-android:5.0'
+    debugCompile 'im.dino:dbinspector:3.4.1@aar'
+
+    //Chart
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+
+    //Image
+    compile 'com.gjiazhe:PanoramaImageView:1.0'
 
     //Testing
     testCompile "junit:junit:$rootProject.junitVersion"
@@ -72,9 +86,4 @@ dependencies {
     androidTestCompile("com.android.support.test:runner:$rootProject.runnerVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
-    //Other
-    compile 'com.j256.ormlite:ormlite-android:5.0'
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-    compile 'com.gjiazhe:PanoramaImageView:1.0'
 }

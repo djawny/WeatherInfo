@@ -1,9 +1,8 @@
-package com.example.daniel.weatherinfo.ui.presenter;
+package com.example.daniel.weatherinfo.ui.locations;
 
 import com.example.daniel.weatherinfo.data.DataManager;
 import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.data.database.model.Forecast;
-import com.example.daniel.weatherinfo.ui.view.CityListActivityView;
 import com.example.daniel.weatherinfo.util.SchedulerProviderImpl;
 
 import org.junit.Before;
@@ -17,13 +16,10 @@ import org.mockito.junit.MockitoRule;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 import io.reactivex.android.plugins.RxAndroidPlugins;
-import io.reactivex.functions.Function;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 
@@ -34,7 +30,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class CityListActivityPresenterTest {
+public class LocationsPresenterTest {
 
     private static final int CITY_ID = 123456;
     private static final String API_KEY = "123bla";
@@ -51,21 +47,21 @@ public class CityListActivityPresenterTest {
     DataManager mDataManager;
 
     @Mock
-    CityListActivityView mCityListActivityView;
+    LocationsView mLocationsView;
 
-    private CityListActivityPresenter mPresenter;
+    private LocationsPresenter mPresenter;
 
     @Before
     public void setUp() throws Exception {
         RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
         RxAndroidPlugins.setInitMainThreadSchedulerHandler(schedulerCallable -> Schedulers.trampoline());
-        mPresenter = new CityListActivityPresenter(mDataManager, new SchedulerProviderImpl());
-        mPresenter.setView(mCityListActivityView);
+        mPresenter = new LocationsPresenter(mDataManager, new SchedulerProviderImpl());
+        mPresenter.onAttach(mLocationsView);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testSetViewWhenNullView() {
-        mPresenter.setView(null);
+    public void testOnAttachWhenNullView() {
+        mPresenter.onAttach(null);
     }
 
     @Test
@@ -74,7 +70,7 @@ public class CityListActivityPresenterTest {
 
         mPresenter.loadCitiesFromDatabase();
 
-        verify(mCityListActivityView).displayCities(ArgumentMatchers.anyList());
+        verify(mLocationsView).displayCities(ArgumentMatchers.anyList());
     }
 
     @Test
@@ -83,7 +79,7 @@ public class CityListActivityPresenterTest {
 
         mPresenter.loadCitiesFromDatabase();
 
-        verify(mCityListActivityView).showNoData();
+        verify(mLocationsView).showNoData();
     }
 
     @Test
@@ -92,7 +88,7 @@ public class CityListActivityPresenterTest {
 
         mPresenter.loadCitiesFromDatabase();
 
-        verify(mCityListActivityView).showLoadErrorInfo();
+        verify(mLocationsView).showLoadErrorInfo();
     }
 
     @Test
@@ -101,7 +97,7 @@ public class CityListActivityPresenterTest {
 
         mPresenter.deleteCityFromDatabase(CITY_ID);
 
-        verify(mCityListActivityView).reloadData();
+        verify(mLocationsView).reloadData();
     }
 
     @Test
@@ -110,7 +106,7 @@ public class CityListActivityPresenterTest {
 
         mPresenter.deleteCityFromDatabase(CITY_ID);
 
-        verify(mCityListActivityView).showDeleteErrorInfo();
+        verify(mLocationsView).showDeleteErrorInfo();
     }
 
     @Test
@@ -121,8 +117,8 @@ public class CityListActivityPresenterTest {
 
         mPresenter.addCityFromNetwork(API_KEY, LATITUDE, LONGITUDE, LANGUAGE);
 
-        verify(mCityListActivityView).hideAddLocationProgressBar();
-        verify(mCityListActivityView).reloadData();
+        verify(mLocationsView).hideAddLocationProgressBar();
+        verify(mLocationsView).reloadData();
     }
 
     @Test
@@ -133,8 +129,8 @@ public class CityListActivityPresenterTest {
 
         mPresenter.addCityFromNetwork(API_KEY, LATITUDE, LONGITUDE, LANGUAGE);
 
-        verify(mCityListActivityView).hideAddLocationProgressBar();
-        verify(mCityListActivityView).showNetworkErrorInfo();
+        verify(mLocationsView).hideAddLocationProgressBar();
+        verify(mLocationsView).showNetworkErrorInfo();
     }
 
     @Test
@@ -144,8 +140,8 @@ public class CityListActivityPresenterTest {
 
         mPresenter.loadCityFromNetwork(API_KEY, LATITUDE, LONGITUDE, LANGUAGE);
 
-        verify(mCityListActivityView).hideActualLocationProgressBar();
-        verify(mCityListActivityView).updateActualLocationText(any(City.class));
+        verify(mLocationsView).hideActualLocationProgressBar();
+        verify(mLocationsView).updateActualLocationText(any(City.class));
     }
 
     @Test
@@ -154,8 +150,8 @@ public class CityListActivityPresenterTest {
 
         mPresenter.loadCityFromNetwork(API_KEY, LATITUDE, LONGITUDE, LANGUAGE);
 
-        verify(mCityListActivityView).hideActualLocationProgressBar();
-        verify(mCityListActivityView).showNetworkErrorInfo();
+        verify(mLocationsView).hideActualLocationProgressBar();
+        verify(mLocationsView).showNetworkErrorInfo();
     }
 
     @Test
@@ -164,8 +160,8 @@ public class CityListActivityPresenterTest {
 
         mPresenter.saveCityToDatabase(new City());
 
-        verify(mCityListActivityView).hideAddLocationProgressBar();
-        verify(mCityListActivityView).reloadData();
+        verify(mLocationsView).hideAddLocationProgressBar();
+        verify(mLocationsView).reloadData();
     }
 
     @Test
@@ -174,7 +170,7 @@ public class CityListActivityPresenterTest {
 
         mPresenter.saveCityToDatabase(new City());
 
-        verify(mCityListActivityView).hideAddLocationProgressBar();
-        verify(mCityListActivityView).showSaveErrorInfo();
+        verify(mLocationsView).hideAddLocationProgressBar();
+        verify(mLocationsView).showSaveErrorInfo();
     }
 }

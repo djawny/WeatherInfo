@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.ui.fragment;
+package com.example.daniel.weatherinfo.ui.main.pager;
 
 import android.os.Build;
 import android.os.Bundle;

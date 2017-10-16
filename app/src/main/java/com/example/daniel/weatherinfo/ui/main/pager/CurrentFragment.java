@@ -1,4 +1,4 @@
-package com.example.daniel.weatherinfo.ui.fragment;
+package com.example.daniel.weatherinfo.ui.main.pager;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +17,8 @@ import com.example.daniel.weatherinfo.data.database.model.City;
 import com.example.daniel.weatherinfo.util.AppConstants;
 import com.example.daniel.weatherinfo.util.TimestampToDateConverter;
 import com.squareup.picasso.Picasso;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -99,7 +101,7 @@ public class CurrentFragment extends Fragment {
         String date = TimestampToDateConverter.apply(city.getWeather().getDate(), AppConstants.DATE_NEW_LINE_TIME);
         mDate.setText(date);
         mDescription.setText(city.getWeather().getDescription());
-        mTemperature.setText(String.format("%.1f °C", city.getWeather().getTemp()));
+        mTemperature.setText(String.format(Locale.getDefault(), "%.1f °C", city.getWeather().getTemp()));
         mWind.setText(String.format(getString(R.string.details_text_wind) + ": %s m/s", city.getWeather().getWindSpeed()));
         mCloudiness.setText(String.format(getString(R.string.details_text_cloudiness) + ": %s %%", city.getWeather().getCloudiness()));
         mPressure.setText(String.format(getString(R.string.details_text_pressure) + ": %s hpa", city.getWeather().getPressure()));
