@@ -2,8 +2,8 @@ package com.example.daniel.weatherinfo.util;
 
 public final class AppConstants {
 
-    public static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
-    public static final long OK_HTTP_TIMEOUT = 20;  //in seconds
+    public static final String OWM_BASE_URL = "http://api.openweathermap.org/data/2.5/";
+    public static final long OK_HTTP_TIMEOUT_SEC = 20;
 
     public final static String DATABASE_NAME = "weather_db";
     public final static int DATABASE_VERSION = 1;
@@ -18,13 +18,15 @@ public final class AppConstants {
 
     public static final int CHART_TEMP_OFFSET = 10;
     public static final int LINE_CHART_FORECAST_SIZE = 10;
+    public static final int LINE_CHART_ANIMATION_DURATION_MILLIS = 1000;
+    public static final int BAR_CHART_ANIMATION_DURATION_MILLIS = 1000;
 
     public static final float MAP_WORLD_ZOOM = 1;
     public static final float MAP_LANDMASS_ZOOM = 5;
     public static final float MAP_CITY_ZOOM = 10;
-    public static final int MAP_ANIMATION_DURATION = 2000;
-    public static final int MAP_ANIMATION_DELAY = 1000;
+    public static final int MAP_ANIMATION_DURATION_MILLIS = 2000;
+    public static final int MAP_ANIMATION_DELAY_MILLIS = 1000;
 
-    public static final int UPDATE_INTERVAL = 5000;
-    public static final int FASTEST_INTERVAL = 1000;
+    public static final int LOCATION_REQUEST_UPDATE_INTERVAL_MILLIS = 5000;
+    public static final int LOCATION_REQUEST_FASTEST_INTERVAL_MILLIS = 1000;
 }

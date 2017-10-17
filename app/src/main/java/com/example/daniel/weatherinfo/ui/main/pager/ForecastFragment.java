@@ -4,19 +4,16 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 import com.example.daniel.weatherinfo.R;
-import com.example.daniel.weatherinfo.data.database.model.City;
-import com.example.daniel.weatherinfo.data.database.model.Forecast;
+import com.example.daniel.weatherinfo.data.chart.CustomXAxisValueFormatter;
 import com.example.daniel.weatherinfo.data.chart.MyBarChart;
 import com.example.daniel.weatherinfo.data.chart.MyLineChart;
-import com.example.daniel.weatherinfo.data.chart.CustomXAxisValueFormatter;
+import com.example.daniel.weatherinfo.data.database.model.City;
+import com.example.daniel.weatherinfo.data.database.model.Forecast;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -31,7 +28,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.daniel.weatherinfo.util.AppConstants.BAR_CHART_ANIMATION_DURATION_MILLIS;
 import static com.example.daniel.weatherinfo.util.AppConstants.CHART_TEMP_OFFSET;
+import static com.example.daniel.weatherinfo.util.AppConstants.LINE_CHART_ANIMATION_DURATION_MILLIS;
 
 public class ForecastFragment extends Fragment {
 
@@ -42,12 +41,6 @@ public class ForecastFragment extends Fragment {
 
     @BindView(R.id.bar_chart)
     BarChart mBarChart;
-
-    @BindView(R.id.card_view_line_chart)
-    CardView mCardViewLC;
-
-    @BindView(R.id.card_view_bar_chart)
-    CardView mCardViewBC;
 
     public ForecastFragment() {
     }
@@ -76,13 +69,12 @@ public class ForecastFragment extends Fragment {
         List<Forecast> forecasts = city.getForecasts();
         drawLineChart(forecasts);
         drawBarChart(forecasts);
-        animateViews();
+        animateCharts();
     }
 
-    public void animateViews() {
-        Animation computerAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.magnification);
-        mCardViewBC.startAnimation(computerAnimation);
-        mCardViewLC.startAnimation(computerAnimation);
+    public void animateCharts() {
+        mLineChart.animateY(LINE_CHART_ANIMATION_DURATION_MILLIS);
+        mBarChart.animateX(BAR_CHART_ANIMATION_DURATION_MILLIS);
     }
 
     private void drawLineChart(List<Forecast> forecasts) {

@@ -68,8 +68,8 @@ public class ApplicationModule {
     @Singleton
     OkHttpClient provideOkHttpClient() {
         return new OkHttpClient.Builder()
-                .connectTimeout(AppConstants.OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
-                .readTimeout(AppConstants.OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
+                .connectTimeout(AppConstants.OK_HTTP_TIMEOUT_SEC, TimeUnit.SECONDS)
+                .readTimeout(AppConstants.OK_HTTP_TIMEOUT_SEC, TimeUnit.SECONDS)
                 .build();
     }
 
@@ -88,7 +88,7 @@ public class ApplicationModule {
     @Provides
     @Named("openWeatherMapBaseUrl")
     String provideBaseUrl() {
-        return AppConstants.BASE_URL;
+        return AppConstants.OWM_BASE_URL;
     }
 
     @Provides

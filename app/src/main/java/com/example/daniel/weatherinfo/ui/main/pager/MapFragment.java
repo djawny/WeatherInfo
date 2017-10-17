@@ -81,6 +81,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         LatLng currentCoordinates = new LatLng(mCity.getLatitude(), mCity.getLongitude());
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCoordinates, AppConstants.MAP_LANDMASS_ZOOM));
         new Handler().postDelayed(() -> mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(AppConstants.MAP_CITY_ZOOM)
-                , AppConstants.MAP_ANIMATION_DURATION, null), AppConstants.MAP_ANIMATION_DELAY);
+                , AppConstants.MAP_ANIMATION_DURATION_MILLIS, null), AppConstants.MAP_ANIMATION_DELAY_MILLIS);
     }
 }

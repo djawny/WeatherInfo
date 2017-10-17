@@ -107,8 +107,8 @@ public class LocationsActivity extends BaseActivity implements LocationsView,
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(AppConstants.UPDATE_INTERVAL);
-        mLocationRequest.setFastestInterval(AppConstants.FASTEST_INTERVAL);
+        mLocationRequest.setInterval(AppConstants.LOCATION_REQUEST_UPDATE_INTERVAL_MILLIS);
+        mLocationRequest.setFastestInterval(AppConstants.LOCATION_REQUEST_FASTEST_INTERVAL_MILLIS);
         mLocationCallback = new LocationCallback();
     }
 
