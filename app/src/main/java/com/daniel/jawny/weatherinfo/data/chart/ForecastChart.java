@@ -1,22 +1,24 @@
 package com.daniel.jawny.weatherinfo.data.chart;
 
 import com.daniel.jawny.weatherinfo.data.database.model.Forecast;
+import com.github.mikephil.charting.data.BarLineScatterCandleBubbleData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseChart {
+public abstract class ForecastChart<T extends BarLineScatterCandleBubbleData<?>> {
     private float mMaxTemp;
     private float mMinTemp;
+    protected T mData;
     private List<String> mXAxisLabels;
 
-    public BaseChart() {
+    public ForecastChart() {
         mMaxTemp = Float.MIN_VALUE;
         mMinTemp = Float.MAX_VALUE;
         mXAxisLabels = new ArrayList<>();
     }
 
-    public abstract BaseChart setData(List<Forecast> forecasts);
+    public abstract void setData(List<Forecast> forecasts);
 
     protected void setTempExtremeValues(float temp) {
         if (temp > mMaxTemp) {
@@ -36,5 +38,9 @@ public abstract class BaseChart {
 
     public List<String> getXAxisLabels() {
         return mXAxisLabels;
+    }
+
+    public T getData() {
+        return mData;
     }
 }

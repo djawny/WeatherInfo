@@ -16,7 +16,7 @@ public final class AppConstants {
     public static final String TIME = "HH:mm:ss";
     public static final String TIME_HOURS = "HH";
 
-    public static final int CHART_TEMP_OFFSET = 10;
+    public static final int CHARTS_TEMP_OFFSET_DEGREES = 10;
     public static final int LINE_CHART_FORECAST_SIZE = 10;
     public static final int LINE_CHART_ANIMATION_DURATION_MILLIS = 1000;
     public static final int BAR_CHART_ANIMATION_DURATION_MILLIS = 1000;

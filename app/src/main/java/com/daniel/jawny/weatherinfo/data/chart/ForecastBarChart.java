@@ -1,7 +1,11 @@
 package com.daniel.jawny.weatherinfo.data.chart;
 
+import android.graphics.Color;
+
 import com.daniel.jawny.weatherinfo.data.database.model.Forecast;
 import com.daniel.jawny.weatherinfo.util.TimestampToDateConverter;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 
 import java.util.ArrayList;
@@ -9,27 +13,38 @@ import java.util.List;
 
 import static com.daniel.jawny.weatherinfo.util.AppConstants.DATE_DAY_MONTH;
 
-public class MyBarChart extends BaseChart {
+public class ForecastBarChart extends ForecastChart<BarData> {
 
-    private List<BarEntry> mEntries;
+    private ForecastBarChart() {
+    }
 
-    public MyBarChart() {
-        mEntries = new ArrayList<>();
+    public static ForecastChart<BarData> create() {
+        return new ForecastBarChart();
     }
 
     @Override
-    public MyBarChart setData(List<Forecast> forecasts) {
+    public void setData(List<Forecast> forecasts) {
+        BarDataSet barDataSet = new BarDataSet(getBarEntries(forecasts), "");
+        mData = new BarData(barDataSet);
+        mData.setValueTextSize(16);
+        mData.setHighlightEnabled(false);
+        mData.setValueTextColor(Color.WHITE);
+        mData.setBarWidth(0.5f);
+        mData.setValueFormatter((value, entry, dataSetIndex, viewPortHandler) -> (int) value + "°C");
+    }
+
+    private List<BarEntry> getBarEntries(List<Forecast> forecasts) {
         float barEntryX = 0;
         int dayPeriodIndex = 1;
         final int dayPeriodSize = 8;
         float dayMaxTemp = Float.MIN_VALUE;
         float temp;
+        List<BarEntry> entries = new ArrayList<>();
 
         float todayMaxTemp = (float) forecasts.get(0).getCity().getWeather().getTempMax();
-        getEntries().add(new BarEntry(barEntryX, todayMaxTemp));
+        entries.add(new BarEntry(barEntryX, todayMaxTemp));
         getXAxisLabels().add(TimestampToDateConverter.apply(forecasts.get(0).getDate(), DATE_DAY_MONTH));
         setTempExtremeValues(todayMaxTemp);
-
         int nextDayStartIndex = getNextDayStartIndex(forecasts);
         for (int i = nextDayStartIndex; i < forecasts.size(); i++) {
             temp = (float) forecasts.get(i).getTemp();
@@ -38,13 +53,13 @@ public class MyBarChart extends BaseChart {
             }
             if (dayPeriodIndex++ == dayPeriodSize) {
                 getXAxisLabels().add(TimestampToDateConverter.apply(forecasts.get(i).getDate(), DATE_DAY_MONTH));
-                getEntries().add(new BarEntry(++barEntryX, dayMaxTemp));
+                entries.add(new BarEntry(++barEntryX, dayMaxTemp));
                 dayPeriodIndex = 1;
                 dayMaxTemp = Float.MIN_VALUE;
             }
             setTempExtremeValues(temp);
         }
-        return this;
+        return entries;
     }
 
     private int getNextDayStartIndex(List<Forecast> forecasts) {
@@ -57,9 +72,5 @@ public class MyBarChart extends BaseChart {
             }
         }
         return startIndex;
-    }
-
-    public List<BarEntry> getEntries() {
-        return mEntries;
     }
 }
