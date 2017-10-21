@@ -3,7 +3,6 @@ package com.daniel.jawny.weatherinfo.ui.main.forecast;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,6 @@ import com.daniel.jawny.weatherinfo.data.chart.CustomXAxisValueFormatter;
 import com.daniel.jawny.weatherinfo.data.chart.ForecastBarChart;
 import com.daniel.jawny.weatherinfo.data.chart.ForecastChart;
 import com.daniel.jawny.weatherinfo.data.chart.ForecastLineChart;
-import com.daniel.jawny.weatherinfo.data.database.model.City;
-import com.daniel.jawny.weatherinfo.data.database.model.Forecast;
 import com.daniel.jawny.weatherinfo.di.component.ActivityComponent;
 import com.daniel.jawny.weatherinfo.ui.base.BaseFragment;
 import com.github.mikephil.charting.charts.BarChart;
@@ -23,8 +20,6 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.LineData;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -80,17 +75,7 @@ public class ForecastFragment extends BaseFragment implements ForecastView {
     }
 
     @Override
-    public void drawCharts(City city) {
-        List<Forecast> forecasts = city.getForecasts();
-        drawForecastLineChart(forecasts);
-        drawForecastBarChart(forecasts);
-        animateCharts();
-    }
-
-    private void drawForecastLineChart(List<Forecast> forecasts) {
-        ForecastChart<LineData> chart = ForecastLineChart.create();
-        chart.setData(forecasts);
-
+    public void drawForecastLineChart(ForecastChart<LineData> chart) {
         mLineChart.setDrawGridBackground(false);
         mLineChart.setScaleEnabled(false);
         mLineChart.getAxisRight().setEnabled(false);
@@ -119,10 +104,8 @@ public class ForecastFragment extends BaseFragment implements ForecastView {
         mLineChart.invalidate();
     }
 
-    private void drawForecastBarChart(List<Forecast> forecasts) {
-        ForecastChart<BarData> chart = ForecastBarChart.create();
-        chart.setData(forecasts);
-
+    @Override
+    public void drawForecastBarChart(ForecastChart<BarData> chart) {
         mBarChart.setDrawGridBackground(false);
         mBarChart.setFitBars(true);
         mBarChart.setScaleEnabled(false);
@@ -153,6 +136,7 @@ public class ForecastFragment extends BaseFragment implements ForecastView {
         mBarChart.invalidate();
     }
 
+    @Override
     public void animateCharts() {
         mLineChart.animateY(LINE_CHART_ANIMATION_DURATION_MILLIS);
         mBarChart.animateX(BAR_CHART_ANIMATION_DURATION_MILLIS);
