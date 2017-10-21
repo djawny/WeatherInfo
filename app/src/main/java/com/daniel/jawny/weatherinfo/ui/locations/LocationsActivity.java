@@ -88,13 +88,12 @@ public class LocationsActivity extends BaseActivity implements LocationsView,
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
         mPresenter.onAttach(this);
-        setToolbar();
-        setLocation();
-        setPlaceAutoCompleteFragment();
+        mPresenter.setUpView();
         mPresenter.loadCitiesFromDatabase();
     }
 
-    private void setToolbar() {
+    @Override
+    public void setToolbar() {
         setSupportActionBar(mToolbar);
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
@@ -103,7 +102,8 @@ public class LocationsActivity extends BaseActivity implements LocationsView,
         }
     }
 
-    private void setLocation() {
+    @Override
+    public void setLocation() {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -112,7 +112,8 @@ public class LocationsActivity extends BaseActivity implements LocationsView,
         mLocationCallback = new LocationCallback();
     }
 
-    private void setPlaceAutoCompleteFragment() {
+    @Override
+    public void setPlaceAutoCompleteFragment() {
         PlaceAutocompleteFragment placeAutocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         AutocompleteFilter onlyCitiesFilter = new AutocompleteFilter.Builder().setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES).build();
         placeAutocompleteFragment.setFilter(onlyCitiesFilter);

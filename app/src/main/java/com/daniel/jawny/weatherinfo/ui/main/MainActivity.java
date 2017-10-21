@@ -21,8 +21,8 @@ import android.widget.TextView;
 
 import com.daniel.jawny.weatherinfo.R;
 import com.daniel.jawny.weatherinfo.data.database.model.City;
-import com.daniel.jawny.weatherinfo.ui.locations.LocationsActivity;
 import com.daniel.jawny.weatherinfo.ui.base.BaseActivity;
+import com.daniel.jawny.weatherinfo.ui.locations.LocationsActivity;
 import com.daniel.jawny.weatherinfo.ui.main.current.CurrentFragment;
 import com.daniel.jawny.weatherinfo.ui.main.forecast.ForecastFragment;
 import com.daniel.jawny.weatherinfo.ui.main.map.MapFragment;
@@ -50,7 +50,6 @@ public class MainActivity extends BaseActivity implements MainView, SwipeRefresh
     public static final String DIALOG = "dialog";
 
     private int mCurrentCityId;
-    private boolean mFirstStartFlag = true;
 
     @BindView(R.id.bg_image_view)
     PanoramaImageView mBackground;
@@ -88,20 +87,19 @@ public class MainActivity extends BaseActivity implements MainView, SwipeRefresh
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
         mPresenter.onAttach(this);
-        setToolbar();
-        setSwipeRefreshListener();
-        setViewPagerListener();
-        setGyroscopeForPanoramaImageView();
-        if (mFirstStartFlag) {
-            mFirstStartFlag = false;
-            mSplashDialog = MainSplashDialog.newInstance();
-            mSplashDialog.show(getSupportFragmentManager(), DIALOG);
-        }
+        mPresenter.setUpView();
         mPresenter.loadCurrentCityId();
         mPresenter.loadCitiesFromDatabase(mCurrentCityId);
     }
 
-    private void setToolbar() {
+    @Override
+    public void showSplashDialog() {
+        mSplashDialog = MainSplashDialog.newInstance();
+        mSplashDialog.show(getSupportFragmentManager(), DIALOG);
+    }
+
+    @Override
+    public void setToolbar() {
         setSupportActionBar(mToolbar);
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
@@ -109,11 +107,13 @@ public class MainActivity extends BaseActivity implements MainView, SwipeRefresh
         }
     }
 
-    private void setSwipeRefreshListener() {
+    @Override
+    public void setSwipeRefreshListener() {
         mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
-    private void setViewPagerListener() {
+    @Override
+    public void setViewPagerListener() {
         mViewPager.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_MOVE:
@@ -128,7 +128,8 @@ public class MainActivity extends BaseActivity implements MainView, SwipeRefresh
         });
     }
 
-    private void setGyroscopeForPanoramaImageView() {
+    @Override
+    public void setGyroscopeForPanoramaImageView() {
         mGyroscopeObserver = new GyroscopeObserver();
         mGyroscopeObserver.setMaxRotateRadian(Math.PI / 2);
         mBackground.setGyroscopeObserver(mGyroscopeObserver);

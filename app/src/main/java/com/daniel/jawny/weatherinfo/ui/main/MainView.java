@@ -7,6 +7,16 @@ import java.util.List;
 
 public interface MainView extends BaseView {
 
+    void showSplashDialog();
+
+    void setToolbar();
+
+    void setSwipeRefreshListener();
+
+    void setViewPagerListener();
+
+    void setGyroscopeForPanoramaImageView();
+
     void displayCityData(City city);
 
     void showNoData();

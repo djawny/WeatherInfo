@@ -25,6 +25,12 @@ public class LocationsPresenter extends BasePresenter<LocationsView> {
         super(dataManager, schedulerProvider);
     }
 
+    public void setUpView() {
+        getView().setToolbar();
+        getView().setLocation();
+        getView().setPlaceAutoCompleteFragment();
+    }
+
     public void loadCitiesFromDatabase() {
         addDisposable(getDataManager()
                 .getCitiesFromDatabase()

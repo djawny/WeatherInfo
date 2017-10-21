@@ -4,7 +4,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,8 @@ import android.view.ViewGroup;
 
 import com.daniel.jawny.weatherinfo.R;
 import com.daniel.jawny.weatherinfo.data.database.model.City;
-import com.daniel.jawny.weatherinfo.ui.main.MainActivity;
+import com.daniel.jawny.weatherinfo.di.component.ActivityComponent;
+import com.daniel.jawny.weatherinfo.ui.base.BaseFragment;
 import com.daniel.jawny.weatherinfo.util.AppConstants;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,10 +25,9 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, MapView {
+public class MapFragment extends BaseFragment implements OnMapReadyCallback, MapView {
 
     private static final String ARG_CITY_ID = "cityId";
-
     private City mCity;
     private GoogleMap mGoogleMap;
 
@@ -57,10 +56,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((MainActivity) getActivity()).getActivityComponent().inject(this);
-        mPresenter.onAttach(this);
-        int cityId = getArguments().getInt(ARG_CITY_ID);
-        mPresenter.loadCityFromDatabaseByCityId(cityId);
+        ActivityComponent activityComponent = getActivityComponent();
+        if (activityComponent != null) {
+            activityComponent.inject(this);
+            mPresenter.onAttach(this);
+            int cityId = getArguments().getInt(ARG_CITY_ID);
+            mPresenter.loadCityFromDatabaseByCityId(cityId);
+        }
     }
 
     @Override

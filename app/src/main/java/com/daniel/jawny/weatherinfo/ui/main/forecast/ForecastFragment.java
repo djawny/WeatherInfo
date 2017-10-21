@@ -15,7 +15,8 @@ import com.daniel.jawny.weatherinfo.data.chart.ForecastChart;
 import com.daniel.jawny.weatherinfo.data.chart.ForecastLineChart;
 import com.daniel.jawny.weatherinfo.data.database.model.City;
 import com.daniel.jawny.weatherinfo.data.database.model.Forecast;
-import com.daniel.jawny.weatherinfo.ui.main.MainActivity;
+import com.daniel.jawny.weatherinfo.di.component.ActivityComponent;
+import com.daniel.jawny.weatherinfo.ui.base.BaseFragment;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -34,7 +35,7 @@ import static com.daniel.jawny.weatherinfo.util.AppConstants.BAR_CHART_ANIMATION
 import static com.daniel.jawny.weatherinfo.util.AppConstants.CHARTS_TEMP_OFFSET_DEGREES;
 import static com.daniel.jawny.weatherinfo.util.AppConstants.LINE_CHART_ANIMATION_DURATION_MILLIS;
 
-public class ForecastFragment extends Fragment implements ForecastView{
+public class ForecastFragment extends BaseFragment implements ForecastView {
 
     private static final String ARG_CITY_ID = "cityId";
 
@@ -69,10 +70,13 @@ public class ForecastFragment extends Fragment implements ForecastView{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((MainActivity) getActivity()).getActivityComponent().inject(this);
-        mPresenter.onAttach(this);
-        int cityId = getArguments().getInt(ARG_CITY_ID);
-        mPresenter.loadCityFromDatabaseByCityId(cityId);
+        ActivityComponent activityComponent = getActivityComponent();
+        if (activityComponent != null) {
+            activityComponent.inject(this);
+            mPresenter.onAttach(this);
+            int cityId = getArguments().getInt(ARG_CITY_ID);
+            mPresenter.loadCityFromDatabaseByCityId(cityId);
+        }
     }
 
     @Override

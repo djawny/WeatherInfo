@@ -21,9 +21,22 @@ import timber.log.Timber;
 @PerActivity
 public class MainPresenter extends BasePresenter<MainView> {
 
+    private boolean mFirstStartFlag = true;
+
     @Inject
     public MainPresenter(DataManager dataManager, SchedulerProvider schedulerProvider) {
         super(dataManager, schedulerProvider);
+    }
+
+    public void setUpView() {
+        if (mFirstStartFlag) {
+            mFirstStartFlag = false;
+            getView().showSplashDialog();
+        }
+        getView().setToolbar();
+        getView().setSwipeRefreshListener();
+        getView().setViewPagerListener();
+        getView().setGyroscopeForPanoramaImageView();
     }
 
     public void loadCitiesFromDatabase(final int mCurrentCityId) {

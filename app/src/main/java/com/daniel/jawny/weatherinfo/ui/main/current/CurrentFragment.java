@@ -2,7 +2,6 @@ package com.daniel.jawny.weatherinfo.ui.main.current;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,8 @@ import android.widget.TextView;
 
 import com.daniel.jawny.weatherinfo.R;
 import com.daniel.jawny.weatherinfo.data.database.model.City;
-import com.daniel.jawny.weatherinfo.ui.main.MainActivity;
+import com.daniel.jawny.weatherinfo.di.component.ActivityComponent;
+import com.daniel.jawny.weatherinfo.ui.base.BaseFragment;
 import com.daniel.jawny.weatherinfo.util.AppConstants;
 import com.daniel.jawny.weatherinfo.util.TimestampToDateConverter;
 import com.squareup.picasso.Picasso;
@@ -26,7 +26,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CurrentFragment extends Fragment implements CurrentView {
+public class CurrentFragment extends BaseFragment implements CurrentView {
 
     private static final String ARG_CITY_ID = "cityId";
 
@@ -88,11 +88,14 @@ public class CurrentFragment extends Fragment implements CurrentView {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((MainActivity) getActivity()).getActivityComponent().inject(this);
-        mPresenter.onAttach(this);
-        int cityId = getArguments().getInt(ARG_CITY_ID);
-        mPresenter.loadCityFromDatabaseByCityId(cityId);
-        animateViews();
+        ActivityComponent activityComponent = getActivityComponent();
+        if (activityComponent != null) {
+            activityComponent.inject(this);
+            mPresenter.onAttach(this);
+            int cityId = getArguments().getInt(ARG_CITY_ID);
+            mPresenter.loadCityFromDatabaseByCityId(cityId);
+            animateViews();
+        }
     }
 
     public void animateViews() {

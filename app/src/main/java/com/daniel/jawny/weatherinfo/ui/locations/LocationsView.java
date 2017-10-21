@@ -7,6 +7,12 @@ import java.util.List;
 
 public interface LocationsView extends BaseView {
 
+    void setToolbar();
+
+    void setLocation();
+
+    void setPlaceAutoCompleteFragment();
+
     void displayCities(List<City> cities);
 
     void showNoData();
