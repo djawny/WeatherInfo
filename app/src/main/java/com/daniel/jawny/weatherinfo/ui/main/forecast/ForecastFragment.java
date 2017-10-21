@@ -15,6 +15,7 @@ import com.daniel.jawny.weatherinfo.data.chart.ForecastChart;
 import com.daniel.jawny.weatherinfo.data.chart.ForecastLineChart;
 import com.daniel.jawny.weatherinfo.data.database.model.City;
 import com.daniel.jawny.weatherinfo.data.database.model.Forecast;
+import com.daniel.jawny.weatherinfo.ui.main.MainActivity;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -24,6 +25,8 @@ import com.github.mikephil.charting.data.LineData;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -31,9 +34,9 @@ import static com.daniel.jawny.weatherinfo.util.AppConstants.BAR_CHART_ANIMATION
 import static com.daniel.jawny.weatherinfo.util.AppConstants.CHARTS_TEMP_OFFSET_DEGREES;
 import static com.daniel.jawny.weatherinfo.util.AppConstants.LINE_CHART_ANIMATION_DURATION_MILLIS;
 
-public class ForecastFragment extends Fragment {
+public class ForecastFragment extends Fragment implements ForecastView{
 
-    private static final String ARG_CITY = "city";
+    private static final String ARG_CITY_ID = "cityId";
 
     @BindView(R.id.line_chart)
     LineChart mLineChart;
@@ -41,13 +44,16 @@ public class ForecastFragment extends Fragment {
     @BindView(R.id.bar_chart)
     BarChart mBarChart;
 
+    @Inject
+    ForecastPresenter mPresenter;
+
     public ForecastFragment() {
     }
 
-    public static ForecastFragment newInstance(City city) {
+    public static ForecastFragment newInstance(int cityId) {
         ForecastFragment fragment = new ForecastFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_CITY, city);
+        args.putInt(ARG_CITY_ID, cityId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,8 +69,14 @@ public class ForecastFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        City city = (City) getArguments().getSerializable(ARG_CITY);
-        assert city != null;
+        ((MainActivity) getActivity()).getActivityComponent().inject(this);
+        mPresenter.onAttach(this);
+        int cityId = getArguments().getInt(ARG_CITY_ID);
+        mPresenter.loadCityFromDatabaseByCityId(cityId);
+    }
+
+    @Override
+    public void drawCharts(City city) {
         List<Forecast> forecasts = city.getForecasts();
         drawForecastLineChart(forecasts);
         drawForecastBarChart(forecasts);
@@ -140,5 +152,16 @@ public class ForecastFragment extends Fragment {
     public void animateCharts() {
         mLineChart.animateY(LINE_CHART_ANIMATION_DURATION_MILLIS);
         mBarChart.animateX(BAR_CHART_ANIMATION_DURATION_MILLIS);
+    }
+
+    @Override
+    public void showDatabaseErrorInfo() {
+        //Todo
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDetach();
     }
 }

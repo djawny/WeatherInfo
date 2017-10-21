@@ -28,7 +28,7 @@ import butterknife.ButterKnife;
 
 public class CurrentFragment extends Fragment implements CurrentView {
 
-    private static final String ARG_CITY = "city";
+    private static final String ARG_CITY_ID = "cityId";
 
     @BindView(R.id.icon)
     ImageView mIcon;
@@ -69,10 +69,10 @@ public class CurrentFragment extends Fragment implements CurrentView {
     public CurrentFragment() {
     }
 
-    public static CurrentFragment newInstance(City city) {
+    public static CurrentFragment newInstance(int cityId) {
         CurrentFragment fragment = new CurrentFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_CITY, city);
+        args.putInt(ARG_CITY_ID, cityId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -89,8 +89,9 @@ public class CurrentFragment extends Fragment implements CurrentView {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ((MainActivity) getActivity()).getActivityComponent().inject(this);
-        City city = (City) getArguments().getSerializable(ARG_CITY);
-        displayCity(city);
+        mPresenter.onAttach(this);
+        int cityId = getArguments().getInt(ARG_CITY_ID);
+        mPresenter.loadCityFromDatabaseByCityId(cityId);
         animateViews();
     }
 
@@ -100,7 +101,8 @@ public class CurrentFragment extends Fragment implements CurrentView {
         mCardViewDetails.startAnimation(computerAnimation);
     }
 
-    public void displayCity(City city) {
+    @Override
+    public void displayCityData(City city) {
         String icon = city.getWeather().getIcon();
         Picasso.with(getActivity())
                 .load("http://openweathermap.org/img/w/" + icon + ".png")
@@ -116,5 +118,16 @@ public class CurrentFragment extends Fragment implements CurrentView {
         mSunrise.setText(String.format(getString(R.string.details_text_sunrise) + ": %s", sunrise));
         String sunset = TimestampToDateConverter.apply(city.getWeather().getSunset(), AppConstants.TIME);
         mSunset.setText(String.format(getString(R.string.details_text_sunset) + ": %s", sunset));
+    }
+
+    @Override
+    public void showDatabaseErrorInfo() {
+        //Todo
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDetach();
     }
 }

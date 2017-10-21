@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.daniel.jawny.weatherinfo.R;
 import com.daniel.jawny.weatherinfo.data.database.model.City;
+import com.daniel.jawny.weatherinfo.ui.main.MainActivity;
 import com.daniel.jawny.weatherinfo.util.AppConstants;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,22 +21,27 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends Fragment implements OnMapReadyCallback, MapView {
 
-    private static final String ARG_CITY = "city";
+    private static final String ARG_CITY_ID = "cityId";
 
     private City mCity;
     private GoogleMap mGoogleMap;
 
+    @Inject
+    MapPresenter mPresenter;
+
     public MapFragment() {
     }
 
-    public static MapFragment newInstance(City city) {
+    public static MapFragment newInstance(int cityId) {
         MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_CITY, city);
+        args.putInt(ARG_CITY_ID, cityId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,7 +57,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mCity = (City) getArguments().getSerializable(ARG_CITY);
+        ((MainActivity) getActivity()).getActivityComponent().inject(this);
+        mPresenter.onAttach(this);
+        int cityId = getArguments().getInt(ARG_CITY_ID);
+        mPresenter.loadCityFromDatabaseByCityId(cityId);
+    }
+
+    @Override
+    public void displayMap(City city) {
+        mCity = city;
         SupportMapFragment mapFragment = getMapFragment();
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
@@ -69,6 +83,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
+    public void showDatabaseErrorInfo() {
+        //Todo
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.getUiSettings().setAllGesturesEnabled(false);
         mGoogleMap = googleMap;
@@ -82,5 +101,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCoordinates, AppConstants.MAP_LANDMASS_ZOOM));
         new Handler().postDelayed(() -> mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(AppConstants.MAP_CITY_ZOOM)
                 , AppConstants.MAP_ANIMATION_DURATION_MILLIS, null), AppConstants.MAP_ANIMATION_DELAY_MILLIS);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDetach();
     }
 }

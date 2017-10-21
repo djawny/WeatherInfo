@@ -12,23 +12,23 @@ import com.daniel.jawny.weatherinfo.ui.main.map.MapFragment;
 public class MainPagerAdapter extends FragmentStatePagerAdapter {
 
     private String[] mTabTitles;
-    private City mCity;
+    private int mCityId;
 
-    public MainPagerAdapter(FragmentManager fm, String[] tabTitles, City city) {
+    public MainPagerAdapter(FragmentManager fm, String[] tabTitles, int cityId) {
         super(fm);
         mTabTitles = tabTitles;
-        mCity = city;
+        mCityId = cityId;
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return CurrentFragment.newInstance(mCity);
+                return CurrentFragment.newInstance(mCityId);
             case 1:
-                return ForecastFragment.newInstance(mCity);
+                return ForecastFragment.newInstance(mCityId);
             case 2:
-                return MapFragment.newInstance(mCity);
+                return MapFragment.newInstance(mCityId);
         }
         return null;
     }
@@ -48,8 +48,8 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
         return mTabTitles[position];
     }
 
-    public void swapData(City city) {
-        mCity = city;
+    public void swapData(int cityId) {
+        mCityId = cityId;
         notifyDataSetChanged();
     }
 }

@@ -228,9 +228,9 @@ public class MainActivity extends BaseActivity implements MainView, SwipeRefresh
             mSwipeRefreshLayout.setVisibility(View.VISIBLE);
         }
         if (mPagerAdapter == null) {
-            initializeViewPager(city);
+            initializeViewPager(city.getId());
         } else {
-            mPagerAdapter.swapData(city);
+            mPagerAdapter.swapData(city.getId());
         }
         mCurrentCityId = city.getId();
         mSpinner.setSelection(getSpinnerItemIndex(city.getName()));
@@ -240,9 +240,9 @@ public class MainActivity extends BaseActivity implements MainView, SwipeRefresh
         dismissSplashDialog();
     }
 
-    private void initializeViewPager(City city) {
+    private void initializeViewPager(int cityId) {
         String[] tabTitles = getResources().getStringArray(R.array.tab_titles);
-        mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), tabTitles, city);
+        mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), tabTitles, cityId);
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
         mViewPager.setOffscreenPageLimit(2);
