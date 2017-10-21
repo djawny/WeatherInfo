@@ -5,9 +5,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.daniel.jawny.weatherinfo.data.database.model.City;
-import com.daniel.jawny.weatherinfo.ui.main.pager.CurrentFragment;
-import com.daniel.jawny.weatherinfo.ui.main.pager.ForecastFragment;
-import com.daniel.jawny.weatherinfo.ui.main.pager.MapFragment;
+import com.daniel.jawny.weatherinfo.ui.main.current.CurrentFragment;
+import com.daniel.jawny.weatherinfo.ui.main.forecast.ForecastFragment;
+import com.daniel.jawny.weatherinfo.ui.main.map.MapFragment;
 
 public class MainPagerAdapter extends FragmentStatePagerAdapter {
 

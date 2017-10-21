@@ -1,4 +1,4 @@
-package com.daniel.jawny.weatherinfo.ui.main.pager;
+package com.daniel.jawny.weatherinfo.ui.main.map;
 
 import android.os.Build;
 import android.os.Bundle;

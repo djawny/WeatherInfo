@@ -1,4 +1,4 @@
-package com.daniel.jawny.weatherinfo.ui.main.pager;
+package com.daniel.jawny.weatherinfo.ui.main.current;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,16 +14,19 @@ import android.widget.TextView;
 
 import com.daniel.jawny.weatherinfo.R;
 import com.daniel.jawny.weatherinfo.data.database.model.City;
+import com.daniel.jawny.weatherinfo.ui.main.MainActivity;
 import com.daniel.jawny.weatherinfo.util.AppConstants;
 import com.daniel.jawny.weatherinfo.util.TimestampToDateConverter;
 import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CurrentFragment extends Fragment {
+public class CurrentFragment extends Fragment implements CurrentView {
 
     private static final String ARG_CITY = "city";
 
@@ -60,6 +63,9 @@ public class CurrentFragment extends Fragment {
     @BindView(R.id.card_view_details)
     CardView mCardViewDetails;
 
+    @Inject
+    CurrentPresenter mPresenter;
+
     public CurrentFragment() {
     }
 
@@ -82,6 +88,7 @@ public class CurrentFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        ((MainActivity) getActivity()).getActivityComponent().inject(this);
         City city = (City) getArguments().getSerializable(ARG_CITY);
         displayCity(city);
         animateViews();
