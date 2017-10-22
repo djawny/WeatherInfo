@@ -33,12 +33,8 @@ public class ForecastPresenter extends BasePresenter<ForecastView> {
                     @Override
                     public void onNext(City city) {
                         List<Forecast> forecasts = city.getForecasts();
-                        ForecastChart<LineData> lineChart = ForecastLineChart.create();
-                        lineChart.setData(forecasts);
-                        ForecastChart<BarData> barChart = ForecastBarChart.create();
-                        barChart.setData(forecasts);
-                        getView().drawForecastLineChart(lineChart);
-                        getView().drawForecastBarChart(barChart);
+                        getView().drawForecastLineChart(forecasts);
+                        getView().drawForecastBarChart(forecasts);
                         getView().animateCharts();
                     }
 

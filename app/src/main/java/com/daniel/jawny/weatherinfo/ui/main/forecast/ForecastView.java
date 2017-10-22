@@ -1,15 +1,15 @@
 package com.daniel.jawny.weatherinfo.ui.main.forecast;
 
-import com.daniel.jawny.weatherinfo.data.chart.ForecastChart;
+import com.daniel.jawny.weatherinfo.data.database.model.Forecast;
 import com.daniel.jawny.weatherinfo.ui.base.BaseView;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.LineData;
+
+import java.util.List;
 
 public interface ForecastView extends BaseView {
 
-    void drawForecastLineChart(ForecastChart<LineData> chart);
+    void drawForecastLineChart(List<Forecast> forecasts);
 
-    void drawForecastBarChart(ForecastChart<BarData> chart);
+    void drawForecastBarChart(List<Forecast> forecasts);
 
     void animateCharts();
 

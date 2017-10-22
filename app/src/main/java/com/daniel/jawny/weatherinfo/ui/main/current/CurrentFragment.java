@@ -96,10 +96,10 @@ public class CurrentFragment extends BaseFragment implements CurrentView {
             mPresenter.onAttach(this);
             int cityId = getArguments().getInt(ARG_CITY_ID);
             mPresenter.loadCityFromDatabaseByCityId(cityId);
-            animateViews();
         }
     }
 
+    @Override
     public void animateViews() {
         Animation computerAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.magnification);
         mCardViewGeneral.startAnimation(computerAnimation);

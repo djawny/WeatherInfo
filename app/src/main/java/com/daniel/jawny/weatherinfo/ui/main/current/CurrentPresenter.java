@@ -25,6 +25,7 @@ public class CurrentPresenter extends BasePresenter<CurrentView> {
                     @Override
                     public void onNext(City city) {
                         getView().displayCityData(city);
+                        getView().animateViews();
                     }
 
                     @Override

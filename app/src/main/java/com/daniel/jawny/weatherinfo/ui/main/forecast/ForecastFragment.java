@@ -13,6 +13,7 @@ import com.daniel.jawny.weatherinfo.data.chart.CustomXAxisValueFormatter;
 import com.daniel.jawny.weatherinfo.data.chart.ForecastBarChart;
 import com.daniel.jawny.weatherinfo.data.chart.ForecastChart;
 import com.daniel.jawny.weatherinfo.data.chart.ForecastLineChart;
+import com.daniel.jawny.weatherinfo.data.database.model.Forecast;
 import com.daniel.jawny.weatherinfo.di.component.ActivityComponent;
 import com.daniel.jawny.weatherinfo.ui.base.BaseFragment;
 import com.daniel.jawny.weatherinfo.util.SnackBarHandler;
@@ -22,6 +23,8 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.LineData;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -77,7 +80,10 @@ public class ForecastFragment extends BaseFragment implements ForecastView {
     }
 
     @Override
-    public void drawForecastLineChart(ForecastChart<LineData> chart) {
+    public void drawForecastLineChart(List<Forecast> forecasts) {
+        ForecastChart<LineData> chart = ForecastLineChart.create();
+        chart.setData(forecasts);
+
         mLineChart.setDrawGridBackground(false);
         mLineChart.setScaleEnabled(false);
         mLineChart.getAxisRight().setEnabled(false);
@@ -107,7 +113,10 @@ public class ForecastFragment extends BaseFragment implements ForecastView {
     }
 
     @Override
-    public void drawForecastBarChart(ForecastChart<BarData> chart) {
+    public void drawForecastBarChart(List<Forecast> forecasts) {
+        ForecastChart<BarData> chart = ForecastBarChart.create();
+        chart.setData(forecasts);
+
         mBarChart.setDrawGridBackground(false);
         mBarChart.setFitBars(true);
         mBarChart.setScaleEnabled(false);

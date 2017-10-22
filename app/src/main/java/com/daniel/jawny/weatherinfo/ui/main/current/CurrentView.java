@@ -8,4 +8,6 @@ public interface CurrentView extends BaseView {
     void showDatabaseErrorInfo();
 
     void displayCityData(City city);
+
+    void animateViews();
 }
