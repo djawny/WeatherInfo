@@ -58,11 +58,13 @@ public class MainPresenter extends BasePresenter<MainView> {
                         } else {
                             getView().showNoData();
                         }
+                        getView().dismissSplashDialog();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         getView().showDatabaseErrorInfo();
+                        getView().dismissSplashDialog();
                     }
 
                     @Override
@@ -130,36 +132,43 @@ public class MainPresenter extends BasePresenter<MainView> {
         );
     }
 
-    public void refreshCityFromNetwork(final String apiKey, final int cityId, final String language) {
-        addDisposable(getDataManager()
-                .getCityFromNetwork(apiKey, cityId, language)
-                .subscribeOn(getSubscribeScheduler())
-                .flatMap(new Function<City, ObservableSource<City>>() {
-                    @Override
-                    public ObservableSource<City> apply(City city) throws Exception {
-                        return Observable.zip(getDataManager().getForecastsFromNetwork(apiKey, city.getId(), language), Observable.just(city), (forecasts, city1) -> {
-                            city1.setForecastCollection(forecasts);
-                            return city1;
-                        });
-                    }
-                }).flatMapCompletable(new Function<City, Completable>() {
-                    @Override
-                    public Completable apply(City city) throws Exception {
-                        return getDataManager().saveCityToDatabase(city);
-                    }
-                })
-                .observeOn(getObserveScheduler())
-                .subscribeWith(new DisposableCompletableObserver() {
-                    @Override
-                    public void onComplete() {
-                        getView().reloadData(cityId);
-                    }
+    public void refreshCityFromNetwork(final String apiKey, final int cityId, final String language, boolean isOnline) {
+        if (isOnline) {
+            addDisposable(getDataManager()
+                    .getCityFromNetwork(apiKey, cityId, language)
+                    .subscribeOn(getSubscribeScheduler())
+                    .flatMap(new Function<City, ObservableSource<City>>() {
+                        @Override
+                        public ObservableSource<City> apply(City city) throws Exception {
+                            return Observable.zip(getDataManager().getForecastsFromNetwork(apiKey, city.getId(), language), Observable.just(city), (forecasts, city1) -> {
+                                city1.setForecastCollection(forecasts);
+                                return city1;
+                            });
+                        }
+                    }).flatMapCompletable(new Function<City, Completable>() {
+                        @Override
+                        public Completable apply(City city) throws Exception {
+                            return getDataManager().saveCityToDatabase(city);
+                        }
+                    })
+                    .observeOn(getObserveScheduler())
+                    .subscribeWith(new DisposableCompletableObserver() {
+                        @Override
+                        public void onComplete() {
+                            getView().reloadData(cityId);
+                            getView().hideSwipeRefreshLayoutProgress();
+                        }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        getView().showNetworkErrorInfo();
-                    }
-                }));
+                        @Override
+                        public void onError(Throwable e) {
+                            getView().showNetworkErrorInfo();
+                            getView().hideSwipeRefreshLayoutProgress();
+                        }
+                    }));
+        } else {
+            getView().showNetworkOfflineInfo();
+            getView().hideSwipeRefreshLayoutProgress();
+        }
     }
 
     public void loadCurrentCityId() {

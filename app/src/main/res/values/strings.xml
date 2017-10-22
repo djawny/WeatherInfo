@@ -4,7 +4,7 @@
     <string name="header_daily_forecast">Daily (max temp.)</string>
     <string name="header_details">Details</string>
     <string name="message_no_data">No data to display.Please add location.</string>
-    <string name="message_network_connection_error">No available network. Please check your network status.</string>
+    <string name="message_network_connection_error">No available network. Please check your network status and try again.</string>
     <string name="message_error_loading_deleting_saving_data">Application error. Please reinstall application.</string>
     <string name="message_error_loading_data_from_network">Network error. Please try again later.</string>
     <string name="text_locations">Locations</string>

@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.daniel.jawny.weatherinfo.R;
 import com.daniel.jawny.weatherinfo.data.database.model.City;
 import com.daniel.jawny.weatherinfo.ui.base.BaseAdapter;
-import com.daniel.jawny.weatherinfo.util.BackgroundProvider;
+import com.daniel.jawny.weatherinfo.util.BackgroundUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -119,7 +119,7 @@ public class LocationsAdapter extends BaseAdapter<City> {
                     .into(mIcon);
             mTemperature.setText(String.format(Locale.getDefault(), "%.1f °C", city.getWeather().getTemp()));
             mName.setText(city.getName());
-            mBackground.setImageResource(BackgroundProvider.apply(city.getWeather().getIcon()));
+            mBackground.setImageResource(BackgroundUtils.getImageResId(city.getWeather().getIcon()));
         }
 
         public RelativeLayout getItemContentLayout() {

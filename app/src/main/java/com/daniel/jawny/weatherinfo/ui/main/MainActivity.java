@@ -26,9 +26,10 @@ import com.daniel.jawny.weatherinfo.ui.locations.LocationsActivity;
 import com.daniel.jawny.weatherinfo.ui.main.current.CurrentFragment;
 import com.daniel.jawny.weatherinfo.ui.main.forecast.ForecastFragment;
 import com.daniel.jawny.weatherinfo.ui.main.map.MapFragment;
-import com.daniel.jawny.weatherinfo.util.BackgroundProvider;
-import com.daniel.jawny.weatherinfo.util.LocalLanguageProvider;
-import com.daniel.jawny.weatherinfo.util.NetworkAvailabilityChecker;
+import com.daniel.jawny.weatherinfo.util.BackgroundUtils;
+import com.daniel.jawny.weatherinfo.util.LanguageUtils;
+import com.daniel.jawny.weatherinfo.util.NetworkInfoUtils;
+import com.daniel.jawny.weatherinfo.util.SnackBarHandler;
 import com.gjiazhe.panoramaimageview.GyroscopeObserver;
 import com.gjiazhe.panoramaimageview.PanoramaImageView;
 
@@ -235,10 +236,8 @@ public class MainActivity extends BaseActivity implements MainView, SwipeRefresh
         }
         mCurrentCityId = city.getId();
         mSpinner.setSelection(getSpinnerItemIndex(city.getName()));
-        mBackground.setImageResource(BackgroundProvider.apply(city.getWeather().getIcon()));
+        mBackground.setImageResource(BackgroundUtils.getImageResId(city.getWeather().getIcon()));
         mPresenter.saveCurrentCity(mCurrentCityId);
-        hideSwipeRefreshLayoutProgressSpinner();
-        dismissSplashDialog();
     }
 
     private void initializeViewPager(int cityId) {
@@ -257,10 +256,10 @@ public class MainActivity extends BaseActivity implements MainView, SwipeRefresh
         mSwipeRefreshLayout.setVisibility(View.GONE);
         mStatusInfo.setVisibility(View.VISIBLE);
         mBackground.setImageResource(R.drawable.default_bg);
-        dismissSplashDialog();
     }
 
-    private void dismissSplashDialog() {
+    @Override
+    public void dismissSplashDialog() {
         if (mSplashDialog != null) {
             mSplashDialog.dismiss();
         }
@@ -278,36 +277,32 @@ public class MainActivity extends BaseActivity implements MainView, SwipeRefresh
 
     @Override
     public void showDatabaseErrorInfo() {
-        showSnackBar(getString(R.string.message_error_loading_deleting_saving_data), Snackbar.LENGTH_LONG);
+        SnackBarHandler.show(this, getString(R.string.message_error_loading_deleting_saving_data), Snackbar.LENGTH_LONG);
     }
 
     @Override
     public void showNetworkErrorInfo() {
-        hideSwipeRefreshLayoutProgressSpinner();
-        showSnackBar(getString(R.string.message_error_loading_data_from_network), Snackbar.LENGTH_LONG);
+        SnackBarHandler.show(this, getString(R.string.message_error_loading_data_from_network), Snackbar.LENGTH_LONG);
+    }
+
+    @Override
+    public void showNetworkOfflineInfo() {
+        SnackBarHandler.show(this, getString(R.string.message_network_connection_error), Snackbar.LENGTH_LONG);
     }
 
     @Override
     public void onRefresh() {
-        try {
-            if (NetworkAvailabilityChecker.apply(this)) {
-                mPresenter.refreshCityFromNetwork(getString(R.string.open_weather_map_api_key), mCurrentCityId, LocalLanguageProvider.apply());
-            } else {
-                hideSwipeRefreshLayoutProgressSpinner();
-                showSnackBar(getString(R.string.message_network_connection_error), Snackbar.LENGTH_LONG);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        mPresenter.refreshCityFromNetwork(getString(R.string.open_weather_map_api_key), mCurrentCityId,
+                LanguageUtils.getLocalLang(), NetworkInfoUtils.isOnline(this));
     }
 
     @Override
     public void reloadData(int cityId) {
         mPresenter.loadCityFromDatabaseByCityId(cityId);
-        hideSwipeRefreshLayoutProgressSpinner();
     }
 
-    public void hideSwipeRefreshLayoutProgressSpinner() {
+    @Override
+    public void hideSwipeRefreshLayoutProgress() {
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }

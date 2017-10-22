@@ -5,9 +5,9 @@ import android.text.format.DateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-public final class TimestampToDateConverter {
+public final class DateUtils {
 
-    public static String apply(long timeStamp, String format) {
+    public static String getTimeStampDate(long timeStamp, String format) {
         String date = null;
         try {
             Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));

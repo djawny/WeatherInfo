@@ -3,7 +3,7 @@ package com.daniel.jawny.weatherinfo.data.chart;
 import android.graphics.Color;
 
 import com.daniel.jawny.weatherinfo.data.database.model.Forecast;
-import com.daniel.jawny.weatherinfo.util.TimestampToDateConverter;
+import com.daniel.jawny.weatherinfo.util.DateUtils;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -45,7 +45,7 @@ public class ForecastLineChart extends ForecastChart<LineData> {
             temp = (float) forecasts.get(i).getTemp();
             setTempExtremeValues(temp);
             entries.add(new Entry(i, temp));
-            getXAxisLabels().add(TimestampToDateConverter.apply(forecasts.get(i).getDate(), TIME_HOURS));
+            getXAxisLabels().add(DateUtils.getTimeStampDate(forecasts.get(i).getDate(), TIME_HOURS));
         }
         return entries;
     }

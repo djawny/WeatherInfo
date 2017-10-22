@@ -22,7 +22,8 @@ import com.daniel.jawny.weatherinfo.R;
 import com.daniel.jawny.weatherinfo.data.database.model.City;
 import com.daniel.jawny.weatherinfo.ui.base.BaseActivity;
 import com.daniel.jawny.weatherinfo.util.AppConstants;
-import com.daniel.jawny.weatherinfo.util.LocalLanguageProvider;
+import com.daniel.jawny.weatherinfo.util.LanguageUtils;
+import com.daniel.jawny.weatherinfo.util.SnackBarHandler;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -122,7 +123,7 @@ public class LocationsActivity extends BaseActivity implements LocationsView,
             @Override
             public void onPlaceSelected(Place place) {
                 LatLng latLng = place.getLatLng();
-                mPresenter.addCityFromNetwork(getString(R.string.open_weather_map_api_key), latLng.latitude, latLng.longitude, LocalLanguageProvider.apply());
+                mPresenter.addCityFromNetwork(getString(R.string.open_weather_map_api_key), latLng.latitude, latLng.longitude, LanguageUtils.getLocalLang());
             }
 
             @Override
@@ -177,22 +178,23 @@ public class LocationsActivity extends BaseActivity implements LocationsView,
 
     @Override
     public void showLoadErrorInfo() {
-        showSnackBar(getString(R.string.message_error_loading_deleting_saving_data), Snackbar.LENGTH_LONG);
+        SnackBarHandler.show(this, getString(R.string.message_error_loading_deleting_saving_data), Snackbar.LENGTH_LONG);
+
     }
 
     @Override
     public void showDeleteErrorInfo() {
-        showSnackBar(getString(R.string.message_error_loading_deleting_saving_data), Snackbar.LENGTH_LONG);
+        SnackBarHandler.show(this, getString(R.string.message_error_loading_deleting_saving_data), Snackbar.LENGTH_LONG);
     }
 
     @Override
     public void showSaveErrorInfo() {
-        showSnackBar(getString(R.string.message_error_loading_deleting_saving_data), Snackbar.LENGTH_LONG);
+        SnackBarHandler.show(this, getString(R.string.message_error_loading_deleting_saving_data), Snackbar.LENGTH_LONG);
     }
 
     @Override
     public void showNetworkErrorInfo() {
-        showSnackBar(getString(R.string.message_error_loading_data_from_network), Snackbar.LENGTH_LONG);
+        SnackBarHandler.show(this, getString(R.string.message_error_loading_data_from_network), Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -285,9 +287,9 @@ public class LocationsActivity extends BaseActivity implements LocationsView,
             if (mLocationPermissionGranted) {
                 mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, location -> {
                     if (location != null) {
-                        mPresenter.loadCityFromNetwork(getString(R.string.open_weather_map_api_key), location.getLatitude(), location.getLongitude(), LocalLanguageProvider.apply());
+                        mPresenter.loadCityFromNetwork(getString(R.string.open_weather_map_api_key), location.getLatitude(), location.getLongitude(), LanguageUtils.getLocalLang());
                     } else {
-                        showSnackBar(getString(R.string.message_error_finding_location), Snackbar.LENGTH_LONG);
+                        SnackBarHandler.show(this, getString(R.string.message_error_finding_location), Snackbar.LENGTH_LONG);
                         mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
                     }
                 });

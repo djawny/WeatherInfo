@@ -4,7 +4,7 @@
     <string name="header_daily_forecast">Dzienna (temp. maksymalna)</string>
     <string name="header_details">Szczegóły</string>
     <string name="message_no_data">Brak danych. Proszę dodać lokalizację.</string>
-    <string name="message_network_connection_error">Błąd sieci. Proszę sprawdzić swoje ustawienia sieciowe.</string>
+    <string name="message_network_connection_error">Błąd sieci. Proszę sprawdzić ustawienia sieciowe i spróbować ponownie.</string>
     <string name="message_error_loading_deleting_saving_data">Błąd aplikacji. Proszę przeinstalować aplikację.</string>
     <string name="message_error_loading_data_from_network">Błąd sieci. Proszę za chwile spróbować ponownie.</string>
     <string name="text_locations">Lokalizacje</string>
@@ -19,7 +19,7 @@
     <string name="text_actual_location">Bieżąca lokalizacja</string>
     <string name="text_find_actual_location">Zlokalizuj</string>
     <string name="text_locating">Lokalizowanie…</string>
-    <string name="message_error_finding_location">Błąd lokalizacji. Proszę sprawdzić swoje ustawienia lokalizacji i spróbować ponownie.</string>
+    <string name="message_error_finding_location">Błąd lokalizacji. Proszę sprawdzić ustawienia lokalizacji i spróbować ponownie.</string>
 
     <string-array name="tab_titles">
         <item>Bieżąca</item>

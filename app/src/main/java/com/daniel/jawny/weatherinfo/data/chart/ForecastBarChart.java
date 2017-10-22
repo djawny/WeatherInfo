@@ -3,7 +3,7 @@ package com.daniel.jawny.weatherinfo.data.chart;
 import android.graphics.Color;
 
 import com.daniel.jawny.weatherinfo.data.database.model.Forecast;
-import com.daniel.jawny.weatherinfo.util.TimestampToDateConverter;
+import com.daniel.jawny.weatherinfo.util.DateUtils;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -43,7 +43,7 @@ public class ForecastBarChart extends ForecastChart<BarData> {
 
         float todayMaxTemp = (float) forecasts.get(0).getCity().getWeather().getTempMax();
         entries.add(new BarEntry(barEntryX, todayMaxTemp));
-        getXAxisLabels().add(TimestampToDateConverter.apply(forecasts.get(0).getDate(), DATE_DAY_MONTH));
+        getXAxisLabels().add(DateUtils.getTimeStampDate(forecasts.get(0).getDate(), DATE_DAY_MONTH));
         setTempExtremeValues(todayMaxTemp);
         int nextDayStartIndex = getNextDayStartIndex(forecasts);
         for (int i = nextDayStartIndex; i < forecasts.size(); i++) {
@@ -52,7 +52,7 @@ public class ForecastBarChart extends ForecastChart<BarData> {
                 dayMaxTemp = temp;
             }
             if (dayPeriodIndex++ == dayPeriodSize) {
-                getXAxisLabels().add(TimestampToDateConverter.apply(forecasts.get(i).getDate(), DATE_DAY_MONTH));
+                getXAxisLabels().add(DateUtils.getTimeStampDate(forecasts.get(i).getDate(), DATE_DAY_MONTH));
                 entries.add(new BarEntry(++barEntryX, dayMaxTemp));
                 dayPeriodIndex = 1;
                 dayMaxTemp = Float.MIN_VALUE;

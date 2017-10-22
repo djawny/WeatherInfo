@@ -2,6 +2,7 @@ package com.daniel.jawny.weatherinfo.ui.main.current;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,8 @@ import com.daniel.jawny.weatherinfo.data.database.model.City;
 import com.daniel.jawny.weatherinfo.di.component.ActivityComponent;
 import com.daniel.jawny.weatherinfo.ui.base.BaseFragment;
 import com.daniel.jawny.weatherinfo.util.AppConstants;
-import com.daniel.jawny.weatherinfo.util.TimestampToDateConverter;
+import com.daniel.jawny.weatherinfo.util.SnackBarHandler;
+import com.daniel.jawny.weatherinfo.util.DateUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
@@ -110,22 +112,22 @@ public class CurrentFragment extends BaseFragment implements CurrentView {
         Picasso.with(getActivity())
                 .load("http://openweathermap.org/img/w/" + icon + ".png")
                 .into(mIcon);
-        String date = TimestampToDateConverter.apply(city.getWeather().getDate(), AppConstants.DATE_NEW_LINE_TIME);
+        String date = DateUtils.getTimeStampDate(city.getWeather().getDate(), AppConstants.DATE_NEW_LINE_TIME);
         mDate.setText(date);
         mDescription.setText(city.getWeather().getDescription());
         mTemperature.setText(String.format(Locale.getDefault(), "%.1f °C", city.getWeather().getTemp()));
         mWind.setText(String.format(getString(R.string.details_text_wind) + ": %s m/s", city.getWeather().getWindSpeed()));
         mCloudiness.setText(String.format(getString(R.string.details_text_cloudiness) + ": %s %%", city.getWeather().getCloudiness()));
         mPressure.setText(String.format(getString(R.string.details_text_pressure) + ": %s hpa", city.getWeather().getPressure()));
-        String sunrise = TimestampToDateConverter.apply(city.getWeather().getSunrise(), AppConstants.TIME);
+        String sunrise = DateUtils.getTimeStampDate(city.getWeather().getSunrise(), AppConstants.TIME);
         mSunrise.setText(String.format(getString(R.string.details_text_sunrise) + ": %s", sunrise));
-        String sunset = TimestampToDateConverter.apply(city.getWeather().getSunset(), AppConstants.TIME);
+        String sunset = DateUtils.getTimeStampDate(city.getWeather().getSunset(), AppConstants.TIME);
         mSunset.setText(String.format(getString(R.string.details_text_sunset) + ": %s", sunset));
     }
 
     @Override
     public void showDatabaseErrorInfo() {
-        //Todo
+        SnackBarHandler.show(getActivity(), getString(R.string.message_error_loading_deleting_saving_data), Snackbar.LENGTH_LONG);
     }
 
     @Override

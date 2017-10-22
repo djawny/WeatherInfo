@@ -28,12 +28,4 @@ public abstract class BaseActivity extends AppCompatActivity {
     public ActivityComponent getActivityComponent() {
         return mActivityComponent;
     }
-
-    public void showSnackBar(String message, int length) {
-        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), message, length);
-        View sbView = snackbar.getView();
-        TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(ContextCompat.getColor(this, R.color.white));
-        snackbar.show();
-    }
 }

@@ -2,9 +2,9 @@ package com.daniel.jawny.weatherinfo.util;
 
 import com.daniel.jawny.weatherinfo.R;
 
-public final class BackgroundProvider {
+public final class BackgroundUtils {
 
-    public static int apply(String cityWeatherIcon) {
+    public static int getImageResId(String cityWeatherIcon) {
         int imageResource;
         switch (cityWeatherIcon) {
             case "01d": //clear sky

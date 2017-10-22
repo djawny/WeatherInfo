@@ -25,9 +25,15 @@ public interface MainView extends BaseView {
 
     void showNetworkErrorInfo();
 
+    void showNetworkOfflineInfo();
+
     void reloadData(int cityId);
 
     void setSpinnerList(List<City> cities);
 
     void setCurrentCityId(Integer cityId);
+
+    void hideSwipeRefreshLayoutProgress();
+
+    void dismissSplashDialog();
 }

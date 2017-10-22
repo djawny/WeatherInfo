@@ -147,7 +147,7 @@ public class MainPresenterTest {
         when(mDataManager.getForecastsFromNetwork(anyString(), anyInt(), anyString())).thenReturn(Observable.just(MANY_FORECASTS));
         when(mDataManager.saveCityToDatabase(any(City.class))).thenReturn(Completable.complete());
 
-        mPresenter.refreshCityFromNetwork(API_KEY, CITY_ID, LANGUAGE);
+        mPresenter.refreshCityFromNetwork(API_KEY, CITY_ID, LANGUAGE,true);
 
         verify(mMainView).reloadData(anyInt());
     }
@@ -158,7 +158,7 @@ public class MainPresenterTest {
         when(mDataManager.getForecastsFromNetwork(anyString(), anyInt(), anyString())).thenReturn(Observable.just(MANY_FORECASTS));
         when(mDataManager.saveCityToDatabase(any(City.class))).thenReturn(Completable.error(new Throwable()));
 
-        mPresenter.refreshCityFromNetwork(API_KEY, CITY_ID, LANGUAGE);
+        mPresenter.refreshCityFromNetwork(API_KEY, CITY_ID, LANGUAGE,true);
 
         verify(mMainView).showNetworkErrorInfo();
     }

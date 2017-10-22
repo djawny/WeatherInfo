@@ -3,6 +3,7 @@ package com.daniel.jawny.weatherinfo.ui.main.forecast;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.daniel.jawny.weatherinfo.data.chart.ForecastChart;
 import com.daniel.jawny.weatherinfo.data.chart.ForecastLineChart;
 import com.daniel.jawny.weatherinfo.di.component.ActivityComponent;
 import com.daniel.jawny.weatherinfo.ui.base.BaseFragment;
+import com.daniel.jawny.weatherinfo.util.SnackBarHandler;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -144,7 +146,7 @@ public class ForecastFragment extends BaseFragment implements ForecastView {
 
     @Override
     public void showDatabaseErrorInfo() {
-        //Todo
+        SnackBarHandler.show(getActivity(), getString(R.string.message_error_loading_deleting_saving_data), Snackbar.LENGTH_LONG);
     }
 
     @Override
