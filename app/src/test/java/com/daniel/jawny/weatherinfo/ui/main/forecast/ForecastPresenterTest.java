@@ -13,7 +13,6 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import io.reactivex.Observable;
