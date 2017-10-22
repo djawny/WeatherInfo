@@ -65,6 +65,15 @@ public class LocationsPresenterTest {
     }
 
     @Test
+    public void testSetUpView() {
+        mPresenter.setUpView();
+
+        verify(mLocationsView).setToolbar();
+        verify(mLocationsView).setLocation();
+        verify(mLocationsView).setPlaceAutoCompleteFragment();
+    }
+
+    @Test
     public void testLoadCitiesFromDatabaseWhenNoEmptyList() {
         when(mDataManager.getCitiesFromDatabase()).thenReturn(Observable.just(MANY_CITIES));
 

@@ -16,12 +16,11 @@ import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableObserver;
-import timber.log.Timber;
 
 @PerActivity
 public class MainPresenter extends BasePresenter<MainView> {
 
-    private boolean mFirstStartFlag = true;
+    private boolean mFirstStart = true;
 
     @Inject
     public MainPresenter(DataManager dataManager, SchedulerProvider schedulerProvider) {
@@ -29,8 +28,8 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void setUpView() {
-        if (mFirstStartFlag) {
-            mFirstStartFlag = false;
+        if (mFirstStart) {
+            mFirstStart = false;
             getView().showSplashDialog();
         }
         getView().setToolbar();
@@ -172,40 +171,14 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void loadCurrentCityId() {
-        addDisposable(getDataManager()
+        getDataManager()
                 .getCurrentCityId()
-                .subscribeWith(new DisposableObserver<Integer>() {
-                    @Override
-                    public void onNext(Integer cityId) {
-                        getView().setCurrentCityId(cityId);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e, e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Timber.i("Current city id load complete");
-                    }
-                })
-        );
+                .subscribe(cityId -> getView().setCurrentCityId(cityId));
     }
 
-    public void saveCurrentCity(int cityId) {
-        addDisposable(getDataManager().saveCurrentCityId(cityId)
+    public void saveCurrentCityId(int cityId) {
+        getDataManager().saveCurrentCityId(cityId)
                 .subscribeOn(getSubscribeScheduler())
-                .subscribeWith(new DisposableCompletableObserver() {
-                    @Override
-                    public void onComplete() {
-                        Timber.i("Current city id save complete");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e, e.getMessage());
-                    }
-                }));
+                .subscribe(() -> getView().logCurrentCityIdSaved());
     }
 }

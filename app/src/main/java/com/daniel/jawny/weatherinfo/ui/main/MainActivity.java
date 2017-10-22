@@ -40,6 +40,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 import static com.daniel.jawny.weatherinfo.ui.locations.LocationsActivity.CITY_ID;
 import static com.daniel.jawny.weatherinfo.ui.locations.LocationsActivity.CITY_LIST_HAS_BEEN_CHANGED_FLAG;
@@ -237,7 +238,7 @@ public class MainActivity extends BaseActivity implements MainView, SwipeRefresh
         mCurrentCityId = city.getId();
         mSpinner.setSelection(getSpinnerItemIndex(city.getName()));
         mBackground.setImageResource(BackgroundUtils.getImageResId(city.getWeather().getIcon()));
-        mPresenter.saveCurrentCity(mCurrentCityId);
+        mPresenter.saveCurrentCityId(mCurrentCityId);
     }
 
     private void initializeViewPager(int cityId) {
@@ -263,6 +264,11 @@ public class MainActivity extends BaseActivity implements MainView, SwipeRefresh
         if (mSplashDialog != null) {
             mSplashDialog.dismiss();
         }
+    }
+
+    @Override
+    public void logCurrentCityIdSaved() {
+        Timber.i("City id saved");
     }
 
     private int getSpinnerItemIndex(String myString) {

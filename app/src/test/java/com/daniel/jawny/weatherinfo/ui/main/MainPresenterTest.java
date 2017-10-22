@@ -63,6 +63,17 @@ public class MainPresenterTest {
     }
 
     @Test
+    public void testSetUpView() {
+        mPresenter.setUpView();
+
+        verify(mMainView).showSplashDialog();
+        verify(mMainView).setToolbar();
+        verify(mMainView).setSwipeRefreshListener();
+        verify(mMainView).setViewPagerListener();
+        verify(mMainView).setGyroscopeForPanoramaImageView();
+    }
+
+    @Test
     public void testLoadCitiesFromDatabaseWhenNoEmptyListNoCurrentCity() {
         when(mDataManager.getCitiesFromDatabase()).thenReturn(Observable.just(MANY_CITIES));
 
@@ -147,9 +158,10 @@ public class MainPresenterTest {
         when(mDataManager.getForecastsFromNetwork(anyString(), anyInt(), anyString())).thenReturn(Observable.just(MANY_FORECASTS));
         when(mDataManager.saveCityToDatabase(any(City.class))).thenReturn(Completable.complete());
 
-        mPresenter.refreshCityFromNetwork(API_KEY, CITY_ID, LANGUAGE,true);
+        mPresenter.refreshCityFromNetwork(API_KEY, CITY_ID, LANGUAGE, true);
 
         verify(mMainView).reloadData(anyInt());
+        verify(mMainView).hideSwipeRefreshLayoutProgress();
     }
 
     @Test
@@ -158,17 +170,35 @@ public class MainPresenterTest {
         when(mDataManager.getForecastsFromNetwork(anyString(), anyInt(), anyString())).thenReturn(Observable.just(MANY_FORECASTS));
         when(mDataManager.saveCityToDatabase(any(City.class))).thenReturn(Completable.error(new Throwable()));
 
-        mPresenter.refreshCityFromNetwork(API_KEY, CITY_ID, LANGUAGE,true);
+        mPresenter.refreshCityFromNetwork(API_KEY, CITY_ID, LANGUAGE, true);
 
         verify(mMainView).showNetworkErrorInfo();
+        verify(mMainView).hideSwipeRefreshLayoutProgress();
     }
 
     @Test
-    public void testLoadCurrentCityIdWhenNoException() {
+    public void testRefreshCityFromNetworkWhenOffline() {
+        mPresenter.refreshCityFromNetwork(API_KEY, CITY_ID, LANGUAGE, false);
+
+        verify(mMainView).showNetworkOfflineInfo();
+        verify(mMainView).hideSwipeRefreshLayoutProgress();
+    }
+
+    @Test
+    public void testLoadCurrentCityId() {
         when(mDataManager.getCurrentCityId()).thenReturn(Observable.just(CITY_ID));
 
         mPresenter.loadCurrentCityId();
 
         verify(mMainView).setCurrentCityId(anyInt());
+    }
+
+    @Test
+    public void testSaveCurrentCityId() {
+        when(mDataManager.saveCurrentCityId(anyInt())).thenReturn(Completable.complete());
+
+        mPresenter.saveCurrentCityId(CITY_ID);
+
+        verify(mMainView).logCurrentCityIdSaved();
     }
 }

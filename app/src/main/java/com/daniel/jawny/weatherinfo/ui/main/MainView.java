@@ -36,4 +36,6 @@ public interface MainView extends BaseView {
     void hideSwipeRefreshLayoutProgress();
 
     void dismissSplashDialog();
+
+    void logCurrentCityIdSaved();
 }
