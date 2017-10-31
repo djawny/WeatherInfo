@@ -10,10 +10,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableObserver;
 
@@ -136,20 +133,11 @@ public class MainPresenter extends BasePresenter<MainView> {
             addDisposable(getDataManager()
                     .getCityFromNetwork(apiKey, cityId, language)
                     .subscribeOn(getSubscribeScheduler())
-                    .flatMap(new Function<City, ObservableSource<City>>() {
-                        @Override
-                        public ObservableSource<City> apply(City city) throws Exception {
-                            return Observable.zip(getDataManager().getForecastsFromNetwork(apiKey, city.getId(), language), Observable.just(city), (forecasts, city1) -> {
-                                city1.setForecastCollection(forecasts);
-                                return city1;
-                            });
-                        }
-                    }).flatMapCompletable(new Function<City, Completable>() {
-                        @Override
-                        public Completable apply(City city) throws Exception {
-                            return getDataManager().saveCityToDatabase(city);
-                        }
-                    })
+                    .flatMap(city -> Observable.zip(getDataManager().getForecastsFromNetwork(apiKey, city.getId(), language), Observable.just(city), (forecasts, city1) -> {
+                        city1.setForecastCollection(forecasts);
+                        return city1;
+                    }))
+                    .flatMapCompletable(city -> getDataManager().saveCityToDatabase(city))
                     .observeOn(getObserveScheduler())
                     .subscribeWith(new DisposableCompletableObserver() {
                         @Override

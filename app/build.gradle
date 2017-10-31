@@ -1,9 +1,7 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
     defaultConfig {
         applicationId "com.daniel.jawny.weatherinfo"
         minSdkVersion rootProject.minSdkVersion
@@ -24,6 +22,7 @@ android {
             debuggable true
         }
     }
+    buildToolsVersion rootProject.buildToolsVersion
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -31,59 +30,59 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     //Support
-    compile "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
-    compile "com.android.support:design:$rootProject.supportLibraryVersion"
-    compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
-    compile "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
-    compile "com.android.support:support-annotations:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:design:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:support-annotations:$rootProject.supportLibraryVersion"
 
     //Google
-    compile "com.google.android.gms:play-services-maps:$rootProject.playServicesVersion"
-    compile "com.google.android.gms:play-services-location:$rootProject.playServicesVersion"
-    compile "com.google.android.gms:play-services-places:$rootProject.playServicesVersion"
-    compile "com.google.dagger:dagger:$rootProject.daggerVersion"
+    implementation "com.google.android.gms:play-services-maps:$rootProject.playServicesVersion"
+    implementation "com.google.android.gms:play-services-location:$rootProject.playServicesVersion"
+    implementation "com.google.android.gms:play-services-places:$rootProject.playServicesVersion"
+    implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
 
     //Square
-    compile "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
-    compile "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
-    compile "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
-    compile "com.squareup.picasso:picasso:$rootProject.picassoVersion"
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
+    implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
 
     //JakeWharton
-    compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+    implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
-    compile 'com.jakewharton.timber:timber:4.5.1'
+    implementation 'com.jakewharton.timber:timber:4.5.1'
 
     //Rx
-    compile "io.reactivex.rxjava2:rxandroid:$rootProject.rxjava2Version"
-    compile "io.reactivex.rxjava2:rxjava:$rootProject.rxjava2Version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxjava2Version"
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjava2Version"
 
     //Database
-    compile 'com.j256.ormlite:ormlite-android:5.0'
-    debugCompile 'im.dino:dbinspector:3.4.1@aar'
+    implementation 'com.j256.ormlite:ormlite-android:5.0'
+    debugImplementation 'im.dino:dbinspector:3.4.1@aar'
 
     //Chart
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 
     //Image
-    compile 'com.gjiazhe:PanoramaImageView:1.0'
+    implementation 'com.gjiazhe:PanoramaImageView:1.0'
 
     //Testing
-    testCompile "junit:junit:$rootProject.junitVersion"
-    androidTestCompile "junit:junit:$rootProject.junitVersion"
-    testCompile "org.mockito:mockito-core:$rootProject.mockitoVersion"
-    androidTestCompile "org.mockito:mockito-android:$rootProject.mockitoVersion"
-    androidTestCompile("com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion", {
+    testImplementation "junit:junit:$rootProject.junitVersion"
+    androidTestImplementation "junit:junit:$rootProject.junitVersion"
+    testImplementation "org.mockito:mockito-core:$rootProject.mockitoVersion"
+    androidTestImplementation "org.mockito:mockito-android:$rootProject.mockitoVersion"
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    androidTestCompile("com.android.support.test:rules:$rootProject.rulesVersion", {
+    androidTestImplementation("com.android.support.test:rules:$rootProject.rulesVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    androidTestCompile("com.android.support.test:runner:$rootProject.runnerVersion", {
+    androidTestImplementation("com.android.support.test:runner:$rootProject.runnerVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }

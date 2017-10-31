@@ -5,8 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
-        classpath 'me.tatarka:gradle-retrolambda:3.7.0'
+        classpath 'com.android.tools.build:gradle:3.0.0'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -16,8 +15,8 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        google()
         maven { url "https://jitpack.io" }
-        maven { url "https://maven.google.com" }
     }
 }
 
@@ -30,10 +29,10 @@ ext {
     minSdkVersion = 15
     targetSdkVersion = 26
     compileSdkVersion = 26
-    buildToolsVersion = '25.0.2'
+    buildToolsVersion = '26.0.2'
 
     //dependencies
-    supportLibraryVersion = '26.1.0'
+    supportLibraryVersion = '27.0.0'
     playServicesVersion = '11.4.2'
     daggerVersion = '2.12'
     butterKnifeVersion = '8.8.1'
